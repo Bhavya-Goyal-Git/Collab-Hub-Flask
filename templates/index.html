@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Collab Hub!</title>
+    <!-- Favicon linking -->
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{ url_for('static',filename='stockImages/faviconFinal.png')}}"
+    />
+    <!-- Css linking -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static',filename='cssStyles/index.css')}}"
+    />
+    <!-- Js Typing animation -->
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <!-- Font Awesome Cdn for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <!-- NavBar Stuff -->
+    <nav>
+      <div class="nav-img-container">
+        <a href="{{url_for('home_page')}}"
+          ><img
+            class="nav-logo"
+            src="{{ url_for('static',filename='stockImages/Logo.jpeg')}}"
+        /></a>
+      </div>
+      <div class="nav-btn-container">
+        <a class="nav-btn" href="">Login</a>
+        <a class="nav-btn" href="">Sign Up</a>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-area">
+      <div class="hero-text-container">
+        <h1 class="hero-heading">
+          <span class="typer"></span>
+        </h1>
+        <h4 class="hero-subheading">
+          " Transform Your Campaigns with Seamless, Secure and Quick
+          Influencer-Sponsor Connections "
+        </h4>
+        <p class="hero-text">
+          Welcome to
+          <span style="color: rgba(255, 255, 0, 0.751)">Collab Hub:</span> The
+          premier platform for connecting Influencers with Sponsors. Elevate
+          your campaigns with seamless partnerships and unmatched opportunities.
+          Join us today to conquer the market.
+        </p>
+        <div class="hero-btn-container">
+          <a href="" class="hero-btn">Sign Up as Influencer</a>
+          <a href="" class="hero-btn">Sign Up as Sponsor</a>
+        </div>
+      </div>
+      <div class="hero-img-container">
+        <div class="hero-img-shape">
+          <img
+            class="hero-img"
+            src="{{ url_for('static',filename='stockImages/influencer.png')}}"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- counters -->
+    <div class="counters">
+      <div class="counter">
+        <i class="fa-solid fa-users" id="counter-icon1"></i>
+        <h1>
+          <span class="scroll-counter" data-counter-time="2000">150</span>+
+        </h1>
+        <h3 class="counter-title1">Registered Influencers</h3>
+      </div>
+      <div class="counter">
+        <i class="fa-solid fa-city" id="counter-icon2"></i>
+        <h1>
+          <span class="scroll-counter" data-counter-time="2000">100</span>+
+        </h1>
+        <h3 class="counter-title2">Sponsors Registered</h3>
+      </div>
+      <div class="counter">
+        <i class="fa-solid fa-handshake-simple" id="counter-icon3"></i>
+        <h1>
+          <span class="scroll-counter" data-counter-time="2000">250</span>+
+        </h1>
+        <h3 class="counter-title3">Successfull Campaigns</h3>
+      </div>
+    </div>
+
+    <!-- Features section -->
+    <div class="features-section">
+      <div class="features-img-container">
+        <div class="features-img-shape">
+          <img
+            src="{{ url_for('static',filename='stockImages/feature.png')}}"
+          />
+        </div>
+      </div>
+      <div class="features-text-container">
+        <h1>Our <span>Features</span></h1>
+        <div class="cards">
+          <div class="card card-fill">
+            <div class="star">1</div>
+            <h1 class="card-title">Advanced Search</h1>
+            <p class="card-info">
+              Search for relevant campaigns/ influencers through various
+              available filters.
+            </p>
+          </div>
+          <div class="card">
+            <div class="star">2</div>
+            <h1 class="card-title">Secure Messaging</h1>
+            <p class="card-info">
+              Chat with your campaign partner in a secure window.
+            </p>
+          </div>
+          <div class="card">
+            <div class="star">3</div>
+            <h1 class="card-title">Payment Management</h1>
+            <p class="card-info">
+              Add/Recieve money through built in wallets, with 24 hour withdraw
+              services.
+            </p>
+          </div>
+          <div class="card card-fill">
+            <div class="star">4</div>
+            <h1 class="card-title">Analytics</h1>
+            <p class="card-info">
+              Go through profile stats to view your performance on the platform.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- How it works Section -->
+    <div class="howitworks-section">
+      <div class="howitworks-text-container">
+        <h1>How It <span>Works?</span></h1>
+        <div class="cards">
+          <div class="card card-fill">
+            <div class="star">1</div>
+            <h1 class="card-title">Create Profile</h1>
+            <p class="card-info">
+              Sign Up and create a profile showcasing your brand or influencer
+              skills.
+            </p>
+          </div>
+          <div class="card">
+            <div class="star">2</div>
+            <h1 class="card-title">Complete Details</h1>
+            <p class="card-info">
+              Complete your profile details to appear in searches and find
+              campaign partners.
+            </p>
+          </div>
+          <div class="card">
+            <div class="star">3</div>
+            <h1 class="card-title">Find Your Match</h1>
+            <p class="card-info">
+              Use our advanced search and recommendation system to find the
+              perfect match.
+            </p>
+          </div>
+          <div class="card card-fill">
+            <div class="star">4</div>
+            <h1 class="card-title">Collaborate</h1>
+            <p class="card-info">
+              Connect, negotiate, and launch successfull campaigns together.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="howitworks-img-container">
+        <div class="howitworks-img-shape">
+          <img
+            src="{{ url_for('static',filename='stockImages/howitworks.png')}}"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Testimonials  -->
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-logo-container">
+        <img src="{{ url_for('static',filename='stockImages/Logo.jpeg')}}" />
+      </div>
+      <div class="footer-textarea">
+        <h4>Contact <span>Us</span></h4>
+        <p><span>Email : </span>xyx123@xyz.com</p>
+        <p><span>Phone : </span>0121 - 257718721</p>
+        <div class="copyright-holder">
+          <h5>&copy;Copyright 2024, Collab Hub, India.</h5>
+        </div>
+      </div>
+    </footer>
+  </body>
+  <script src="{{url_for('static',filename='/jsScripts/index.js')}}"></script>
+</html>

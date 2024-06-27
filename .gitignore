@@ -1,2 +1,8 @@
 #Virtual Environment Stuff :
 venv/
+
+#Database Instance
+instance/
+
+#Python cache files
+__pycache__

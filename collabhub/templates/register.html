@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <!-- Favicon linking -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static',filename='stockImages/faviconFinal.png')}}" />
+    <!-- Css linking -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/main_nav.css')}}" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/register.css')}}" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/notifications.css')}}" />
+    <!-- For icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    {% include 'main_nav.html' %}
+    {% include 'notifications.html' %}
+    <div class="form-container">
+        <form method="post">
+            {{ form.hidden_tag() }}
+            <div class="heading">
+                <h1>User <span>Sign Up</span></h1>
+                <div class="role-container">
+                    <h3>Register as:</h3>
+                    <span id="sponsor">Sponsor </span>{{ form.role(class="form-role") }} {{ form.role.label }} <span
+                        id="influencer">
+                        Influencer</span>
+                </div>
+            </div>
+
+            {{ form.username(class="form-input")}}
+            {{ form.username.label }}
+            {{ form.email_address(class="form-input")}}
+            {{ form.email_address.label }}
+            {{ form.password(class="form-input")}}
+            {{ form.password.label }}
+            <i class="fa-solid fa-eye" id="icon1"></i>
+            {{ form.confirm_password(class="form-input")}}
+            {{ form.confirm_password.label }}
+            <i class="fa-solid fa-eye" id="icon2"></i>
+
+            {{ form.submit(class="form-submit")}}
+        </form>
+    </div>
+</body>
+
+<script>
+    // Handling floating placeholders
+    const inputs = document.querySelectorAll(".form-input");
+    inputs.forEach((inp) => {
+        inp.addEventListener("input", () => {
+            if (inp.value !== "") {
+                inp.nextElementSibling.classList.add("inactive");
+            }
+            else if (inp.value === "") {
+                inp.nextElementSibling.classList.remove("inactive");
+            }
+        })
+    })
+    window.addEventListener("load", () => {
+        inputs.forEach((inp) => {
+            if (inp.value !== "") {
+                inp.nextElementSibling.classList.add("inactive");
+            }
+            else if (inp.value === "") {
+                inp.nextElementSibling.classList.remove("inactive");
+            }
+        })
+    })
+    //Handling password viewability
+    let e1 = true, e2 = true;
+    const eye1 = document.querySelector("#icon1");
+    const eye2 = document.querySelector("#icon2");
+    eye1.addEventListener("click", () => {
+        if (e1) {
+            inputs[2].setAttribute("type", "text");
+            eye1.classList.remove("fa-eye");
+            eye1.classList.add("fa-eye-slash");
+            e1 = false
+        }
+        else {
+            inputs[2].setAttribute("type", "password");
+            eye1.classList.remove("fa-eye-slash");
+            eye1.classList.add("fa-eye");
+            e1 = true
+        }
+    })
+    eye2.addEventListener("click", () => {
+        if (e2) {
+            inputs[3].setAttribute("type", "text");
+            eye2.classList.remove("fa-eye");
+            eye2.classList.add("fa-eye-slash");
+            e2 = false
+        }
+        else {
+            inputs[3].setAttribute("type", "password");
+            eye2.classList.remove("fa-eye-slash");
+            eye2.classList.add("fa-eye");
+            e2 = true
+        }
+    })
+</script>
+<script src="{{ url_for('static',filename='jsScripts/notifications.js')}}"></script>
+
+</html>

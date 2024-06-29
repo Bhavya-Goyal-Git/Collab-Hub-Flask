@@ -1,0 +1,21 @@
+<div class="notifications">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="toast toast-{{category}} toast-nondisplay">
+        {% if category=="success" %}
+        <i class="fa-solid fa-circle-check" id="toast-icon-1"></i>
+        {% else %}
+        {% if category=="danger" %}
+        <i class="fa-solid fa-triangle-exclamation" id="toast-icon-1"></i>
+        {% else %}
+        <i class="fa-solid fa-circle-info" id="toast-icon-1"></i>
+        {% endif %}
+        {% endif %}
+        <p>{{ message }}</p>
+        <i class="fa-solid fa-xmark" id="toast-icon-2"></i>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+</div>

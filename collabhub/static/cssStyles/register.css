@@ -1,0 +1,165 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #121212;
+    color: white;
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.form-container {
+    background-color: #282828e5;
+    margin: 90px auto 90px;
+    padding: 20px;
+    border-radius: 15px;
+    width: 60%;
+    box-shadow: 3px 3px 5px black;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.heading h1 {
+    font-size: 5.5rem;
+    margin-left: 10px;
+}
+
+.heading h1 span {
+    color: #8c60ec;
+}
+
+.heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.role-container h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.role-container span {
+    transform: translateY(-10px);
+    display: inline-block;
+    font-size: 1.1rem;
+}
+
+.role-container #influencer {
+    color: white;
+}
+
+.role-container #sponsor {
+    color: #a27af0;
+}
+
+label[for="role"] {
+    background-color: #717171;
+    width: 55px;
+    height: 28px;
+    border-radius: 50px;
+    cursor: pointer;
+    position: relative;
+    transition: 0.2s;
+    display: inline-block;
+}
+
+label[for="role"]::before {
+    position: absolute;
+    content: '';
+    background-color: #ffffffd0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    margin: 3px;
+    transition: 0.2s;
+}
+
+.form-role:checked+label[for="role"]::before {
+    transform: translateX(26px);
+}
+
+.form-role {
+    display: none;
+}
+
+.role-container:has(.form-role:checked) #influencer {
+    color: #a27af0;
+}
+
+.role-container:has(.form-role:checked) #sponsor {
+    color: white;
+}
+
+.form-input {
+    width: 70%;
+    padding: 12px 15px;
+    border-radius: 18px;
+    margin: 10px auto;
+    background-color: #3f3f3fd5;
+    color: white;
+    border: 3px solid transparent;
+    font-size: 1.1rem;
+    outline: none;
+    transition: 0.2s;
+}
+
+.form-input:focus {
+    border-color: #8c60ec;
+    box-shadow: 3px 3px 5px black;
+}
+
+.form-submit {
+    width: 73%;
+    padding: 12px;
+    border-radius: 18px;
+    margin: 20px auto;
+    background-color: #a27af0;
+    color: black;
+    font-size: 1.1rem;
+    border: 3px solid #a27af0;
+    cursor: pointer;
+}
+
+.form-submit:hover {
+    background-color: #7446e7;
+    color: rgba(255, 255, 255, 0.847);
+}
+
+label:not([for="role"]) {
+    transform: translate(140px, -47px);
+    font-size: 1.2rem;
+    z-index: 2;
+    position: relative;
+    color: rgba(255, 255, 255, 0.69);
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.form-input:focus+label:not([for="role"]) {
+    color: #8c60ec;
+    transform: translate(95px, -87px) scale(0.9);
+}
+
+.inactive {
+    color: #8c60ec !important;
+    transform: translate(95px, -87px) scale(0.9) !important;
+}
+
+form i {
+    position: relative;
+    transform: translate(767px, -64px);
+    cursor: pointer;
+    z-index: 2;
+    color: rgba(255, 255, 255, 0.677);
+}

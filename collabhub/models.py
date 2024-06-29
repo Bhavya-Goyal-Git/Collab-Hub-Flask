@@ -1,12 +1,15 @@
-from collabhub import db
+from collabhub import db, bcrypt, login_manager
 from sqlalchemy import CheckConstraint, ForeignKey, String, Column
 from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped, relationship
 from typing import List
 from datetime import date
+from flask_login import UserMixin
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(int(user_id))
 
-
-class User(db.Model):
+class User(db.Model,UserMixin):
    id:Mapped[int] = mapped_column(primary_key=True)
    username:Mapped[str] = mapped_column(String(20),nullable=False,unique=True)
    email_address:Mapped[str] = mapped_column(nullable=False,unique=True)
@@ -20,6 +23,14 @@ class User(db.Model):
 
    infludata:Mapped['Influencerdata'] = relationship(uselist=False)
    sponsdata:Mapped['Sponsordata'] =  relationship(uselist=False)
+
+   @property
+   def password(self):
+      raise AttributeError("Non Accessible attribute")
+   
+   @password.setter
+   def password(self,password_to_set):
+      self.password_hash = bcrypt.generate_password_hash(password_to_set).decode("utf-8")
 
 class Category(db.Model) :
    id:Mapped[int] = mapped_column(primary_key=True)

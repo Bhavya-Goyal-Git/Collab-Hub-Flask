@@ -7,7 +7,7 @@ from flask_login import UserMixin
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get(int(user_id))
+    return User.query.get(int(user_id))
 
 class User(db.Model,UserMixin):
    id:Mapped[int] = mapped_column(primary_key=True)
@@ -31,6 +31,10 @@ class User(db.Model,UserMixin):
    @password.setter
    def password(self,password_to_set):
       self.password_hash = bcrypt.generate_password_hash(password_to_set).decode("utf-8")
+
+   def check_password(self,attempted_password):
+      return bcrypt.check_password_hash(self.password_hash,attempted_password)
+
 
 class Category(db.Model) :
    id:Mapped[int] = mapped_column(primary_key=True)

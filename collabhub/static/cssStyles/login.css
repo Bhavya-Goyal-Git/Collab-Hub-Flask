@@ -4,10 +4,9 @@
 }
 
 body {
+    overflow-x: hidden;
     background-color: #121212;
     color: white;
-    width: 100vw;
-    overflow-x: hidden;
 }
 
 ::-webkit-scrollbar {
@@ -17,7 +16,7 @@ body {
 .form-container {
     background-color: #282828e5;
     margin: 90px auto 90px;
-    padding: 20px;
+    padding: 20px 0 20px 0;
     border-radius: 15px;
     width: 60%;
     box-shadow: 3px 3px 5px black;
@@ -30,7 +29,8 @@ form {
 
 .heading h1 {
     font-size: 5.5rem;
-    margin-left: 10px;
+    margin: 0 auto;
+
 }
 
 .heading h1 span {
@@ -42,63 +42,6 @@ form {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 25px;
-}
-
-.role-container h3 {
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-.role-container span {
-    transform: translateY(-10px);
-    display: inline-block;
-    font-size: 1.1rem;
-}
-
-.role-container #influencer {
-    color: white;
-}
-
-.role-container #sponsor {
-    color: #a27af0;
-}
-
-label[for="role"] {
-    background-color: #717171;
-    width: 55px;
-    height: 28px;
-    border-radius: 50px;
-    cursor: pointer;
-    position: relative;
-    transition: 0.2s;
-    display: inline-block;
-}
-
-label[for="role"]::before {
-    position: absolute;
-    content: '';
-    background-color: #ffffffd0;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    margin: 3px;
-    transition: 0.2s;
-}
-
-.form-role:checked+label[for="role"]::before {
-    transform: translateX(26px);
-}
-
-.form-role {
-    display: none;
-}
-
-.role-container:has(.form-role:checked) #influencer {
-    color: #a27af0;
-}
-
-.role-container:has(.form-role:checked) #sponsor {
-    color: white;
 }
 
 .form-input {
@@ -136,7 +79,7 @@ label[for="role"]::before {
     color: rgba(255, 255, 255, 0.847);
 }
 
-label:not([for="role"]) {
+label {
     transform: translate(140px, -47px);
     font-size: 1.2rem;
     z-index: 2;
@@ -146,7 +89,7 @@ label:not([for="role"]) {
     cursor: pointer;
 }
 
-.form-input:focus+label:not([for="role"]) {
+.form-input:focus+label {
     color: #8c60ec;
     transform: translate(95px, -87px) scale(0.9);
 }

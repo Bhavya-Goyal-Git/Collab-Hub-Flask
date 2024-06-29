@@ -5,7 +5,7 @@
         src="{{ url_for('static',filename='stockImages/Logo.jpeg')}}" /></a>
   </div>
   <div class="nav-btn-container">
-    <a class="nav-btn" href="#">Login</a>
+    <a class="nav-btn" href="{{url_for('login_page')}}">Login</a>
     <a class="nav-btn" href="{{url_for('register_page')}}">Sign Up</a>
   </div>
 </nav>

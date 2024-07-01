@@ -1,56 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'pagebase.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <!-- Favicon linking -->
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static',filename='stockImages/faviconFinal.png')}}" />
-    <!-- Css linking -->
-    <link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/main_nav.css')}}" />
-    <link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/register.css')}}" />
-    <link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/notifications.css')}}" />
-    <!-- For icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
+{% block pageTitle %}
+Register
+{% endblock pageTitle %}
 
-<body>
-    {% include 'main_nav.html' %}
-    {% include 'notifications.html' %}
-    <div class="form-container">
-        <form method="post">
-            {{ form.hidden_tag() }}
-            <div class="heading">
-                <h1>User <span>Sign Up</span></h1>
-                <div class="role-container">
-                    <h3>Register as:</h3>
-                    <span id="sponsor">Sponsor </span>{{ form.role(class="form-role") }} {{ form.role.label }} <span
-                        id="influencer">
-                        Influencer</span>
-                </div>
+{% block pageStyles %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/register.css')}}" />
+{% endblock pageStyles %}
+
+{% block pageBody %}
+<div class="form-container">
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <div class="heading">
+            <h1>User <span>Sign Up</span></h1>
+            <div class="role-container">
+                <h3>Register as:</h3>
+                <span id="sponsor">Sponsor </span>{{ form.role(class="form-role") }} {{ form.role.label }} <span
+                    id="influencer">
+                    Influencer</span>
             </div>
+        </div>
 
-            {{ form.username(class="form-input")}}
-            {{ form.username.label }}
-            {{ form.email_address(class="form-input")}}
-            {{ form.email_address.label }}
-            {{ form.password(class="form-input")}}
-            {{ form.password.label }}
-            <i class="fa-solid fa-eye" id="icon1"></i>
-            {{ form.confirm_password(class="form-input")}}
-            {{ form.confirm_password.label }}
-            <i class="fa-solid fa-eye" id="icon2"></i>
+        {{ form.username(class="form-input")}}
+        {{ form.username.label }}
+        {{ form.email_address(class="form-input")}}
+        {{ form.email_address.label }}
+        {{ form.password(class="form-input")}}
+        {{ form.password.label }}
+        <i class="fa-solid fa-eye" id="icon1"></i>
+        {{ form.confirm_password(class="form-input")}}
+        {{ form.confirm_password.label }}
+        <i class="fa-solid fa-eye" id="icon2"></i>
 
-            {{ form.submit(class="form-submit")}}
+        {{ form.submit(class="form-submit")}}
 
-            <p class="some-data">Already a User? <a href="{{url_for('login_page')}}">Login here</a></p>
-        </form>
-    </div>
-</body>
+        <p class="some-data">Already a User? <a href="{{url_for('login_page')}}">Login here</a></p>
+    </form>
+</div>
+{% endblock pageBody %}
 
+{% block pageScripts %}
 <script>
     // Handling floating placeholders
     const inputs = document.querySelectorAll(".form-input");
@@ -107,6 +97,4 @@
         }
     })
 </script>
-<script src="{{ url_for('static',filename='jsScripts/notifications.js')}}"></script>
-
-</html>
+{% endblock pageScripts %}

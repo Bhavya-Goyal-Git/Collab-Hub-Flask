@@ -1,7 +1,7 @@
-from collabhub import app, db
-from flask import render_template, flash, redirect, url_for
+from collabhub import app, db, list_of_countries
+from flask import render_template, flash, redirect, request, url_for
 from collabhub.forms import RegisterForm, LoginForm
-from collabhub.models import User
+from collabhub.models import User, Category, Niche, Influencerdata
 from flask_login import login_user, logout_user, current_user, login_required
 
 @app.route("/")
@@ -20,7 +20,10 @@ def register_page():
         flash("User Registeration Successfull!",category="success")
         login_user(new_user)
         flash(f"Logged in as {new_user.username}",category="success")
-        return redirect("/register")
+        if new_user.role == "influencer":
+            return redirect(f"/influencer/updateprofile/{new_user.id}")
+        else:
+            pass #redirect to sponsor updateprofile
 
     if form.errors != {}: #checking validation errors
         for ErrMsg in form.errors.values():
@@ -36,8 +39,8 @@ def login_page():
         if user:
             if user.check_password(form.password.data):
                 login_user(user)
-                flash(f"Login Successful! Welcome,{user.username}",category="success")
-                return redirect("/register")
+                flash(f"Login Successful! Welcome, {user.username}",category="success")
+                return redirect("/")
             else:
                 flash("ERROR IN LOGIN : Password Does Not Match!",category="danger")
         else:
@@ -45,4 +48,53 @@ def login_page():
 
     return render_template("login.html",form=form)
             
-        
+@app.route("/logout")
+def logout_page():
+    logout_user()
+    flash("You have been logged out!",category="info")
+    return redirect(url_for("home_page"))
+
+@app.route("/influencer/updateprofile/<int:user_id>", methods = ["GET","POST"])
+def influencer_completeprofile_page(user_id):
+    user = User.query.get(user_id)
+    if request.method=="POST":
+        if request.form["name"]=="":
+            flash("ERROR IN DATA UPDATION! No Name Given",category="danger")
+            return redirect(f"/influencer/updateprofile/{user_id}")
+        elif request.form.getlist("niches") == []:
+            flash("ERROR IN DATA UPDATION! No Niches Selected",category="danger")
+            return redirect(f"/influencer/updateprofile/{user_id}")
+        if user.infludata:
+            user.infludata.name = request.form["name"]
+            user.infludata.country = request.form["country"]
+            user.infludata.influencer_category = Category.query.get(int(request.form["category"]))
+            while len(user.infludata.influencer_niches)!=0:
+                user.infludata.influencer_niches.pop()
+            nichelist = []
+            for element in request.form.getlist("niches"):
+                nichelist.append(Niche.query.get(int(element)))
+            for niche in nichelist:
+                user.infludata.influencer_niches.append(niche)
+            db.session.add(user)
+            db.session.commit()
+            flash("Data Updated SuccessFully!!",category="success")
+            return redirect("/")
+        else:
+            data = Influencerdata(user_id=user_id,name=request.form["name"],country=request.form["country"])
+            category = Category.query.get(int(request.form["category"]))
+            data.influencer_category = category
+            nichelist = []
+            for element in request.form.getlist("niches"):
+                nichelist.append(Niche.query.get(int(element)))
+            for niche in nichelist:
+                data.influencer_niches.append(niche)
+            db.session.add(data)
+            db.session.commit()
+            flash("Data Uploaded Successfully!!",category="success")
+            return redirect("/")
+
+    categories = Category.query.all()
+    niches = Niche.query.all()
+    return render_template("influencer_updateprofile.html",categories=categories,niches=niches,list_of_countries=list_of_countries,user=user)
+
+

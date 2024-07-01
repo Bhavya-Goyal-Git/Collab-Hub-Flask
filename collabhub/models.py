@@ -40,9 +40,12 @@ class Category(db.Model) :
    id:Mapped[int] = mapped_column(primary_key=True)
    title:Mapped[str] = mapped_column(String(20),nullable=False,unique=True)
 
+   niches:Mapped[List['Niche']] = relationship()
+
 class Niche(db.Model) :
    id:Mapped[int] = mapped_column(primary_key=True)
    title:Mapped[str] = mapped_column(String(20),nullable=False,unique=True)
+   associated_category:Mapped[int] = mapped_column(ForeignKey("category.id"))
 
 class Socials(db.Model) :
    id:Mapped[int] = mapped_column(primary_key=True)
@@ -112,7 +115,7 @@ class Adrequest(db.Model):
    status:Mapped[str] = mapped_column(nullable=False)
 
    __table_args__ =(
-      CheckConstraint("status IN ('pending', 'accepted', 'rejected', 'negotiation')", name='check_ad_status_valid'),
+      CheckConstraint("status IN ('pending', 'accepted', 'rejected', 'negotiation', 'completed')", name='check_ad_status_valid'),
    )
 
    ad_campaign:Mapped['Campaign'] = relationship(back_populates="ad_requests")

@@ -1,0 +1,74 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap");
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+nav {
+    height: 65px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #121212;
+    border-bottom: 1px solid #282828;
+    position: fixed;
+    top: 0;
+    z-index: 5;
+}
+
+.nav-img-container {
+    height: 50px;
+    margin-left: 10px;
+}
+
+.nav-logo {
+    height: 50px;
+}
+
+.nav-btn-container {
+    margin-right: 20px;
+}
+
+.nav-btn {
+    background-color: #a27af0;
+    border-radius: 7px;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+    font-size: 1.2rem;
+    margin-left: 10px;
+}
+
+.nav-btn:hover {
+    background-color: #7446e7;
+    color: whitesmoke;
+}
+
+.addon-div {
+    height: 65px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.778);
+    text-decoration: none;
+    font-size: 1.1rem;
+}
+
+.nav-link:hover {
+    color: #7446e7;
+    text-shadow: 0 0 3px #7446e7a0;
+}
+
+body {
+    color: white;
+    background-color: #121212;
+    font-family: "Libre Franklin", sans-serif;
+}

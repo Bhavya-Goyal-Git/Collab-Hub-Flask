@@ -2,7 +2,7 @@
 let notifications = document.querySelector(".notifications");
 let toasts = notifications.children
 
-window.addEventListener("load", () => {
+window.addEventListener("DOMContentLoaded", () => {
     for (let i = 0; i < toasts.length; i++) {
         const toast = toasts[i];
         toast.classList.remove("toast-nondisplay");

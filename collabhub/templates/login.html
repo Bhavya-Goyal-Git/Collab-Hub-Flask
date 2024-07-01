@@ -1,41 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'pagebase.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <!-- Favicon linking -->
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static',filename='stockImages/faviconFinal.png')}}" />
-    <!-- Css linking -->
-    <link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/main_nav.css')}}" />
-    <link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/login.css')}}" />
-    <link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/notifications.css')}}" />
-    <!-- For icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
+{% block pageTitle %}
+Login
+{% endblock pageTitle %}
 
-<body>
-    {% include 'main_nav.html' %}
-    {% include 'notifications.html' %}
-    <div class="form-container">
-        <form method="post">
-            {{ form.hidden_tag() }}
-            <div class="heading">
-                <h1>Log <span>In</span></h1>
-            </div>
-            {{ form.username(class="form-input")}}
-            {{ form.username.label }}
-            {{ form.password(class="form-input")}}
-            {{ form.password.label }}
-            <i class="fa-solid fa-eye" id="icon1"></i>
-            {{ form.submit(class="form-submit")}}
-            <p class="some-data">Don't have an account? <a href="{{url_for('register_page')}}">Register here</a></p>
-        </form>
-    </div>
-</body>
+{% block pageStyles %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/login.css')}}" />
+{% endblock pageStyles %}
+
+{% block pageBody %}
+<div class="form-container">
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <div class="heading">
+            <h1>Log <span>In</span></h1>
+        </div>
+        {{ form.username(class="form-input")}}
+        {{ form.username.label }}
+        {{ form.password(class="form-input")}}
+        {{ form.password.label }}
+        <i class="fa-solid fa-eye" id="icon1"></i>
+        {{ form.submit(class="form-submit")}}
+        <p class="some-data">Don't have an account? <a href="{{url_for('register_page')}}">Register here</a></p>
+    </form>
+</div>
+{% endblock pageBody %}
+
+{% block pageScripts %}
 <script>
     const inputs = document.querySelectorAll(".form-input");
     inputs.forEach((inp) => {
@@ -76,6 +67,4 @@
         }
     })
 </script>
-<script src="{{ url_for('static',filename='jsScripts/notifications.js')}}"></script>
-
-</html>
+{% endblock pageScripts %}

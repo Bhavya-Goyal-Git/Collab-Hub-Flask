@@ -3,6 +3,9 @@ from flask import render_template, flash, redirect, request, url_for
 from collabhub.forms import RegisterForm, LoginForm
 from collabhub.models import User, Category, Niche, Influencerdata
 from flask_login import login_user, logout_user, current_user, login_required
+from werkzeug.utils import secure_filename
+import os
+import uuid
 
 @app.route("/")
 def home_page():
@@ -40,7 +43,12 @@ def login_page():
             if user.check_password(form.password.data):
                 login_user(user)
                 flash(f"Login Successful! Welcome, {user.username}",category="success")
-                return redirect("/")
+                if user.role == "influencer":
+                    return redirect(f"/influencer/{user.id}/home")
+                elif user.role == "sponsor":
+                    pass
+                else:
+                    pass #admin
             else:
                 flash("ERROR IN LOGIN : Password Does Not Match!",category="danger")
         else:
@@ -67,6 +75,7 @@ def influencer_completeprofile_page(user_id):
         if user.infludata:
             user.infludata.name = request.form["name"]
             user.infludata.country = request.form["country"]
+            user.infludata.about = request.form["about"]
             user.infludata.influencer_category = Category.query.get(int(request.form["category"]))
             while len(user.infludata.influencer_niches)!=0:
                 user.infludata.influencer_niches.pop()
@@ -78,9 +87,9 @@ def influencer_completeprofile_page(user_id):
             db.session.add(user)
             db.session.commit()
             flash("Data Updated SuccessFully!!",category="success")
-            return redirect("/")
+            return redirect(f"/influencer/{user.id}/home")
         else:
-            data = Influencerdata(user_id=user_id,name=request.form["name"],country=request.form["country"])
+            data = Influencerdata(user_id=user_id,name=request.form["name"],country=request.form["country"],about=request.form["about"])
             category = Category.query.get(int(request.form["category"]))
             data.influencer_category = category
             nichelist = []
@@ -91,10 +100,45 @@ def influencer_completeprofile_page(user_id):
             db.session.add(data)
             db.session.commit()
             flash("Data Uploaded Successfully!!",category="success")
-            return redirect("/")
+            return redirect(f"/influencer/{user.id}/home")
 
     categories = Category.query.all()
     niches = Niche.query.all()
     return render_template("influencer_updateprofile.html",categories=categories,niches=niches,list_of_countries=list_of_countries,user=user)
 
+@app.route("/influencer/<int:user_id>") #profile page (publically visible)
+def influencer_profilepage(user_id):
+    user = User.query.get(user_id)
+    return render_template("influencer_profilepage.html",user=user)
 
+@app.route("/influencer/<int:user_id>/home") #home page with links
+def influencer_homepage(user_id):
+    user = User.query.get(user_id)
+    return render_template("influencer_homepage.html",user=user)
+
+@app.route("/<int:user_id>/updateprofilepic", methods=["GET","POST"])
+def update_profilepic(user_id):
+    user = User.query.get(user_id)
+    if request.method =="POST":
+        myfile = request.files["profile_pic"]
+        if myfile:
+            extension = os.path.splitext(myfile.filename)[-1]
+            if extension in app.config["ALLOWED_EXTENSIONS"]:
+                name = str(uuid.uuid1()) + "_" + secure_filename(myfile.filename)
+                myfile.save(os.path.join(app.root_path, app.config["UPLOAD_FOLDER"],"profile_pics/",name))
+                if(user.role=="influencer"):
+                    user.infludata.profile_photo = name
+                else:
+                    user.sponsdata.profile_photo = name
+                db.session.add(user)
+                db.session.commit()
+                flash("Profile Picture Updated Successfully!",category="success")
+                if(user.role=="influencer"):
+                    return redirect(f"/influencer/{user.id}/home")
+                else:
+                    pass #return to sponsors home page
+            else:
+                flash("ERROR IN UPLOADING FILE: Extention not allowed!",category="danger")
+        else:
+            flash("ERROR IN UPLOADING FILE: No file selected",category="danger")
+    return render_template("updateprofilepic.html",user=user)

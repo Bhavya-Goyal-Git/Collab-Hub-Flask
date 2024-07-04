@@ -13,6 +13,8 @@ app = Flask(__name__)
 db = SQLAlchemy(model_class=Base)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///collabhub.db"
 app.config["SECRET_KEY"] = "Veryverytopsecret909090"
+app.config["UPLOAD_FOLDER"] = "static/uploads/"
+app.config["ALLOWED_EXTENSIONS"] = [".jpg",".jpeg",".png"]
 db.init_app(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager()

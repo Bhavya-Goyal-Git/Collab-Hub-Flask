@@ -70,6 +70,9 @@ class Influencerdata(db.Model):
    name:Mapped[str] = mapped_column(nullable=False)
    country:Mapped[str] = mapped_column(nullable=True)
    category_id:Mapped[int] = mapped_column(ForeignKey("category.id"))
+   about:Mapped[str]
+   cover_photo:Mapped[str] = mapped_column(unique=True,nullable=True) #stores path url
+   profile_photo:Mapped[str] = mapped_column(unique=True,nullable=True) #stores path url
 
    influencer_category:Mapped['Category'] = relationship()
    social_links:Mapped[List['Socials']] = relationship()
@@ -80,7 +83,8 @@ class Sponsordata(db.Model):
    id:Mapped[int] = mapped_column(primary_key=True)
    user_id:Mapped[int] = mapped_column(ForeignKey("user.id"),unique=True)
    company_name:Mapped[str] = mapped_column(nullable=False)
-
+   profile_photo:Mapped[str] = mapped_column(unique=True)
+   
    campaigns:Mapped[List['Campaign']] = relationship(back_populates="sponsor")
    
 

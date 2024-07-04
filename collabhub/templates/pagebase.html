@@ -28,8 +28,8 @@
                     src="{{ url_for('static',filename='stockImages/Logo.jpeg')}}" /></a>
         </div>
         {% if current_user.role =="influencer" %}
-        <a class="nav-link" href="">Somelink</a>
-        <a class="nav-link" href="">Somelink</a>
+        <a class="nav-link" href="{{url_for('influencer_profilepage',user_id=current_user.id)}}">Profile</a>
+        <a class="nav-link" href="{{url_for('influencer_homepage',user_id=current_user.id)}}">Home</a>
         <a class="nav-link" href="">Somelink</a>
         <a class="nav-link" href="">Somelink</a>
         {% else %}

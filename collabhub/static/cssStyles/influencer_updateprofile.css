@@ -40,6 +40,11 @@ form {
     transition: 0.2s;
 }
 
+.form-about {
+    height: 100px;
+    overflow-y: scroll;
+}
+
 .form-select {
     width: 74%;
 }

@@ -1,0 +1,51 @@
+{% extends 'pagebase.html' %}
+
+{% block pageTitle %}
+Home
+{% endblock pageTitle %}
+
+{% block pageStyles %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/influencer_homepage.css')}}">
+{% endblock pageStyles %}
+
+{% block pageBody %}
+<div class="cover-img-container">
+    {% if user.infludata.cover_photo %}
+    <img src="{{ url_for('static',filename='stockImages/cover.jpg')}}">
+    {% else %}
+    <img src="{{ url_for('static',filename='stockImages/cover.jpg')}}">
+    {% endif %}
+</div>
+<section class="main-section">
+    <div class="profile-bar-container">
+        <div class="profile-bar">
+            <div class="profile-picture-cont">
+                {% if user.infludata.profile_photo %}
+                <img class="profile-picture"
+                    src="{{ url_for('static',filename='uploads/profile_pics/'+user.infludata.profile_photo)}}">
+                {% else %}
+                <img class="profile-picture" src="{{ url_for('static',filename='stockImages/blackpicture.jpg')}}">
+                {% endif %}
+            </div>
+            <h1 class="profile-data">{{user.infludata.name}}</h1>
+            <h3 class="profile-data">@{{user.username}}</h3>
+            <h5 class="profile-data">{{user.email_address}}</h5>
+            <h6 class="profile-data">{{user.infludata.country}}</h6>
+            <h2 class="profile-data">{{user.infludata.influencer_category.title}} Influencer</h2>
+            <div class="about-section">
+                <h4>About</h4>
+                <p>{{user.infludata.about}}</p>
+            </div>
+            <div class="niche-section">
+                <h4>Niches</h4>
+                {% for niche in user.infludata.influencer_niches %}
+                <span>{{niche.title}}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="profile-options-container">
+
+    </div>
+</section>
+{% endblock pageBody %}

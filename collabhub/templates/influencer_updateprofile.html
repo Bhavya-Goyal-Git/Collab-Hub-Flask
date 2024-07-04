@@ -17,6 +17,11 @@ Update Profile
         <label for="name">Name</label>
         <input type="text" name="name" id="name" class="form-input" placeholder="Name" {% if user.infludata %}
             value="{{user.infludata.name}}" {% endif %}>
+
+        <label for="About">About</label>
+        <input type="text" name="about" id="about" class="form-input form-about" placeholder="Write some text here.." {%
+            if user.infludata %} value="{{user.infludata.about}}" {% endif %}>
+
         <label for="country">Country</label>
         <select name="country" id="country" class="form-input form-select" value="India">
             {% if user.infludata %}

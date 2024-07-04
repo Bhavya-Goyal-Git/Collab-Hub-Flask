@@ -55,10 +55,9 @@
                 reader.onload = function (e) {
                     const url = e.target.result;
                     croppie = new Croppie(croppieContainer, {
-                        viewport: { width: 200, height: 200 },
+                        viewport: { width: 200, height: 200, type: "circle" },
                         boundary: { width: 300, height: 300 },
                         showZoomer: true,
-                        enableResize: true,
                         enforceBoundary: true,
                     });
                     croppie.bind({ url: url }).then(console.log("Bound it"));
@@ -88,6 +87,7 @@
                         dataTransfer.items.add(fileobj);
                         imageInput.files = dataTransfer.files;
                         console.log(imageInput.files[0])
+                        croppie.destroy()
                     });
             })
             uploadButton.addEventListener('click', function (event) {

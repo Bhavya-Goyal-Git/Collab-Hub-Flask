@@ -17,13 +17,8 @@
     display: flex;
 }
 
-.profile-bar-container {
-    border: 2px solid white;
-}
-
 .profile-options-container {
     border: 2px solid blue;
-
 }
 
 .profile-bar {
@@ -43,6 +38,7 @@
     width: 290px;
     border-radius: 50%;
     margin: 8px auto;
+    position: relative;
 }
 
 .profile-picture {
@@ -128,4 +124,32 @@
     color: white;
     border-radius: 8px;
     font-size: 1.1rem;
+}
+
+.img-coverup {
+    background-color: rgba(255, 255, 255, 0.792);
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+.img-coverup-btn {
+    background-color: #8c60ec;
+    padding: 10px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.img-coverup-btn:hover {
+    background-color: #7446e7;
 }

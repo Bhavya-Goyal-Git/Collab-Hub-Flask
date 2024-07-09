@@ -1,0 +1,64 @@
+{% extends 'pagebase.html' %}
+
+{% block pageTitle %}
+My Campaigns
+{% endblock pageTitle %}
+
+{% block pageStyles %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/my_campaigns.css')}}" />
+{% endblock pageStyles %}
+
+{% block pageBody %}
+
+{% for campaign in sponsor.campaigns %}
+<div class="camp-container">
+    <div class="camp-img-cont">
+        {% if campaign.campaign_pic %}
+        <img id="display" src="{{ url_for('static',filename='uploads/campaign_pics/'+campaign.campaign_pic)}}">
+        {% endif %}
+    </div>
+    <div class="camp-opt-cont">
+        <div class="headingcont">
+            <h1>{{ campaign.name }}</h1>
+            <span class="status-{{campaign.status}}">Status: {{campaign.status.capitalize()}}</span>
+        </div>
+        <p class="camp-date">From: {{ campaign.start_date }} | To: {{ campaign.end_date }}</p>
+        <div class="cat-niches">
+            <p class="camp-cat">{{ campaign.campaign_category.title }} Category</p>
+            <p class="camp-nic">Niches :</p>
+            <ul>
+                {% for niche in campaign.campaign_niches %}
+                <li>{{niche.title}}{% if loop.index!= campaign.campaign_niches|length %},{% endif %}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <p class="budget">${{campaign.budget}}/-</p>
+        <p class="descc"><span>Description :</span> {{ campaign.description }}</p>
+        <p class="descc"><span>Goal :</span> {{ campaign.goal }}</p>
+        <div class="progress">Progress : <div class="progress-bar">
+                {% set progress = ((today_date - campaign.start_date).days)*100/((campaign.end_date -
+                campaign.start_date).days) %}
+                <div class="progress-fill" {% if progress < 0 %} style="width: 0;" {% else %} {% if progress> 100 %}
+                    style="width: 100%;"
+                    {% else %}
+                    style="width: {{progress}}%;"{% endif %} {% endif %}>
+                </div>
+            </div>
+        </div>
+
+        <div class="act-btns">
+            <a class="status-btn" href="{{url_for('toggle_campaignstatus',campaign_id=campaign.id)}}">Make {% if
+                campaign.status == "public" %}
+                Private
+                {% else %}
+                Public
+                {% endif %}</a>
+            <a class="end-btn" href="">End Campaign</a>
+            <a class="update-btn" href="">Update</a>
+            <a class="delete-btn" href="">Delete</a>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock pageBody %}

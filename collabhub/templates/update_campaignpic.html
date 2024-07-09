@@ -1,0 +1,114 @@
+{% extends 'pagebase.html' %}
+
+{% block pageTitle %}
+Update Profile Pic
+{% endblock pageTitle %}
+
+{% block pageStyles %}
+<link rel="stylesheet" href="{{url_for('static',filename='/cssStyles/update_campaignpic.css')}}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css">
+{% endblock pageStyles %}
+
+{% block pageBody %}
+<div class="main-container">
+    <div class="preview-container">
+        <h1>Preview</h1>
+        <div class="preview-img-container">
+            {% if campaign.campaign_pic %}
+            <img id="display" src="{{ url_for('static',filename='uploads/campaign_pics/'+campaign.campaign_pic)}}">
+            {% else %}
+            <img id="display" src="{{ url_for('static',filename='stockImages/cover.jpg')}}">
+            {% endif %}
+        </div>
+    </div>
+    <div class="form-container">
+        <form class="file-upload-form" method="post" id="profile-form" enctype="multipart/form-data">
+            <label for="image" class="file-upload-label">
+                <div class="file-upload-design">
+                    <svg viewBox="0 0 640 512" height="1em">
+                        <path
+                            d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z">
+                        </path>
+                    </svg>
+                    <p>Drag and Drop</p>
+                    <p>or</p>
+                    <span class="browse-button">Browse file</span>
+                </div>
+                <input name="campaign_pic" id="image" type="file" accept="image/*" />
+            </label>
+            <button type=" submit" id="upload-button">Upload Campaign Picture</button>
+        </form>
+    </div>
+</div>
+{% endblock pageBody %}
+
+{% block pageScripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.js"></script>
+<script>
+    function dataURLToBlob(dataURL) {
+        const parts = dataURL.split(',');
+        const contentType = parts[0].split(':')[1].split(";")[0];
+        const base64Data = parts[1];
+        const binaryString = atob(base64Data);
+        const arrayBuffer = new ArrayBuffer(binaryString.length);
+        const uint8Array = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < binaryString.length; i++) {
+            uint8Array[i] = binaryString.charCodeAt(i);
+        }
+        return new Blob([arrayBuffer], { type: contentType });
+    }
+
+    const imageInput = document.getElementById('image');
+    imageInput.addEventListener('change', function () {
+        let modal = document.createElement("div");
+        modal.setAttribute("class", "modal");
+        modal.innerHTML = `<div class="modal-content">
+        <div id="croppie-container"></div>
+        <button id="cropme">Crop Image</button>
+        </div>`
+        document.body.append(modal);
+        let croppie;
+        const croppieContainer = document.getElementById('croppie-container');
+        const imggg = document.getElementById("display")
+        const cropme = document.getElementById("cropme")
+        let imgname = ""
+        let imgtype = ""
+
+        const image = this.files[0];
+        imgname = image.name
+        imgtype = image.type
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const url = e.target.result;
+            croppie = new Croppie(croppieContainer, {
+                viewport: { width: 300, height: 480 },
+                boundary: { width: 500, height: 500 },
+                showZoomer: true,
+                enforceBoundary: true,
+            });
+            croppie.bind({ url: url }).then(console.log("Croppie Instance bounded success!"));
+        };
+
+        reader.readAsDataURL(image);
+
+        cropme.addEventListener("click", (e) => {
+            e.preventDefault();
+            croppie.result({
+                format: "jpeg",
+            })
+                .then(function (croppedImage) {
+                    imggg.src = croppedImage
+                    const newFileblob = dataURLToBlob(croppedImage)
+                    const fileobj = new File([newFileblob], imgname, { type: imgtype });
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(fileobj);
+                    imageInput.files = dataTransfer.files;
+
+                    croppie.destroy();
+                    modal.remove();
+                });
+        })
+    });
+</script>
+{% endblock pageScripts %}

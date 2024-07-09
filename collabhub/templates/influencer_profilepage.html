@@ -1,7 +1,7 @@
 {% extends 'pagebase.html' %}
 
 {% block pageTitle %}
-Home
+Profile!
 {% endblock pageTitle %}
 
 {% block pageStyles %}
@@ -11,7 +11,7 @@ Home
 {% block pageBody %}
 <div class="cover-img-container">
     {% if user.infludata.cover_photo %}
-    <img src="{{ url_for('static',filename='stockImages/cover.jpg')}}">
+    <img src="{{ url_for('static',filename='uploads/profile_pics/'+user.infludata.cover_photo)}}">
     {% else %}
     <img src="{{ url_for('static',filename='stockImages/cover.jpg')}}">
     {% endif %}

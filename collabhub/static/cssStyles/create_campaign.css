@@ -1,9 +1,9 @@
 .form-container {
     background-color: #282828e5;
     margin: 90px auto 90px;
-    padding: 20px 0 20px 0;
+    padding: 20px;
     border-radius: 15px;
-    width: 60%;
+    width: 65%;
     box-shadow: 3px 3px 5px black;
 }
 
@@ -14,9 +14,7 @@ form {
 
 .heading h1 {
     font-size: 5.5rem;
-    margin: 0 auto;
-    text-align: center;
-
+    margin-left: 10px;
 }
 
 .heading h1 span {
@@ -24,14 +22,74 @@ form {
 }
 
 .heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 25px;
+}
+
+.status-container h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.status-container span {
+    transform: translateY(-10px);
+    display: inline-block;
+    font-size: 1.1rem;
+}
+
+.status-container #public {
+    color: white;
+}
+
+.status-container #private {
+    color: #a27af0;
+}
+
+label[for="status"] {
+    background-color: #717171;
+    width: 55px;
+    height: 28px;
+    border-radius: 50px;
+    cursor: pointer;
+    position: relative;
+    transition: 0.2s;
+    display: inline-block;
+}
+
+label[for="status"]::before {
+    position: absolute;
+    content: '';
+    background-color: #ffffffd0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    margin: 3px;
+    transition: 0.2s;
+}
+
+.form-role:checked+label[for="status"]::before {
+    transform: translateX(26px);
+}
+
+.form-role {
+    display: none;
+}
+
+.status-container:has(.form-role:checked) #public {
+    color: #a27af0;
+}
+
+.status-container:has(.form-role:checked) #private {
+    color: white;
 }
 
 .form-input {
     width: 70%;
     padding: 12px 15px;
     border-radius: 18px;
-    margin: 12px auto 15px;
+    margin: 10px auto;
     background-color: #3f3f3fd5;
     color: white;
     border: 3px solid transparent;
@@ -40,34 +98,9 @@ form {
     transition: 0.2s;
 }
 
-.form-about {
-    overflow-y: scroll;
-    height: 100px;
-    resize: none;
-}
-
-.form-about::-webkit-scrollbar {
-    display: none;
-}
-
-.form-select {
-    width: 74%;
-}
-
 .form-input:focus {
     border-color: #8c60ec;
     box-shadow: 3px 3px 5px black;
-}
-
-label {
-    margin: 1px auto 1px 140px;
-    font-size: 1.2rem;
-    color: rgba(255, 255, 255, 0.69);
-    cursor: pointer;
-}
-
-label:has(+.form-input:focus) {
-    color: #8c60ec;
 }
 
 .form-submit {
@@ -85,6 +118,32 @@ label:has(+.form-input:focus) {
 .form-submit:hover {
     background-color: #7446e7;
     color: rgba(255, 255, 255, 0.847);
+}
+
+label:not([for="status"]) {
+    margin: 1px auto 1px 140px;
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.69);
+    cursor: pointer;
+}
+
+label:not([for="status"]):has(+.form-input:focus) {
+    color: #8c60ec;
+}
+
+.form-about {
+    overflow-y: scroll;
+    height: 100px;
+    resize: none;
+    margin-bottom: 20px;
+}
+
+.form-about::-webkit-scrollbar {
+    display: none;
+}
+
+.form-select {
+    width: 74%;
 }
 
 .dropdown-container {
@@ -158,7 +217,7 @@ label:has(+.form-input:focus) {
     background-color: #3f3f3fd5;
     color: white;
     border: 3px solid transparent;
-    display: flex;
+    display: none;
     flex-wrap: wrap;
     height: 100px;
     overflow-y: scroll;
@@ -183,4 +242,38 @@ label:has(+.form-input:focus) {
 .selected-span i:hover {
     font-size: 1rem;
     color: #690303;
+}
+
+.date-container {
+    display: flex;
+    width: 70%;
+    padding: 6px 7px;
+    margin: 10px auto;
+    font-size: 1.1rem;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.date-cont {
+    padding: 15px;
+    border-radius: 12px;
+    background-color: #3f3f3fd5;
+    text-align: center;
+}
+
+.form-date {
+    background-color: #717171e0;
+    border-radius: 8px;
+    padding: 8px;
+    border: 2px solid transparent;
+    color: white;
+    margin: 8px 8px;
+}
+
+.form-date:focus {
+    border: 2px solid #a27af0;
+}
+
+.date-cont p:has(+.form-date:focus) {
+    color: #a27af0;
 }

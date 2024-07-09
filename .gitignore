@@ -6,3 +6,6 @@ instance/
 
 #Python cache files
 __pycache__
+
+#images
+static/uploads/

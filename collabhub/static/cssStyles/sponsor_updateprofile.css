@@ -15,6 +15,7 @@ form {
 .heading h1 {
     font-size: 5.5rem;
     margin: 0 auto;
+    text-align: center;
 
 }
 
@@ -23,9 +24,6 @@ form {
 }
 
 .heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     margin-bottom: 25px;
 }
 
@@ -33,7 +31,7 @@ form {
     width: 70%;
     padding: 12px 15px;
     border-radius: 18px;
-    margin: 10px auto;
+    margin: 12px auto 15px;
     background-color: #3f3f3fd5;
     color: white;
     border: 3px solid transparent;
@@ -45,6 +43,17 @@ form {
 .form-input:focus {
     border-color: #8c60ec;
     box-shadow: 3px 3px 5px black;
+}
+
+label {
+    margin: 1px auto 1px 140px;
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.69);
+    cursor: pointer;
+}
+
+label:has(+.form-input:focus) {
+    color: #8c60ec;
 }
 
 .form-submit {
@@ -62,47 +71,4 @@ form {
 .form-submit:hover {
     background-color: #7446e7;
     color: rgba(255, 255, 255, 0.847);
-}
-
-label {
-    transform: translate(140px, -47px);
-    font-size: 1.2rem;
-    z-index: 2;
-    position: relative;
-    color: rgba(255, 255, 255, 0.69);
-    transition: 0.2s;
-    cursor: pointer;
-}
-
-.form-input:focus+label {
-    color: #8c60ec;
-    transform: translate(95px, -87px) scale(0.9);
-}
-
-.inactive {
-    color: #8c60ec !important;
-    transform: translate(95px, -87px) scale(0.9) !important;
-}
-
-form i {
-    position: relative;
-    transform: translate(767px, -64px);
-    cursor: pointer;
-    z-index: 2;
-    color: rgba(255, 255, 255, 0.677);
-}
-
-.some-data {
-    text-align: center;
-    color: rgba(255, 255, 255, 0.726);
-    margin-top: 20px;
-}
-
-.some-data a {
-    text-decoration: none;
-    color: #7446e7d1;
-}
-
-.some-data a:hover {
-    border-bottom: 2px solid #7446e7d1;
 }

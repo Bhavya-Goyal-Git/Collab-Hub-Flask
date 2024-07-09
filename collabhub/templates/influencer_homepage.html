@@ -11,7 +11,7 @@ Home
 {% block pageBody %}
 <div class="cover-img-container">
     {% if user.infludata.cover_photo %}
-    <img src="{{ url_for('static',filename='stockImages/cover.jpg')}}">
+    <img src="{{ url_for('static',filename='uploads/profile_pics/'+user.infludata.cover_photo)}}">
     {% else %}
     <img src="{{ url_for('static',filename='stockImages/cover.jpg')}}">
     {% endif %}
@@ -26,6 +26,10 @@ Home
                 {% else %}
                 <img class="profile-picture" src="{{ url_for('static',filename='stockImages/blackpicture.jpg')}}">
                 {% endif %}
+                <div class="img-coverup">
+                    <a href="{{url_for('update_profilepic',user_id=current_user.id)}}" class="img-coverup-btn">Update
+                        Profile Pic</a>
+                </div>
             </div>
             <h1 class="profile-data">{{user.infludata.name}}</h1>
             <h3 class="profile-data">@{{user.username}}</h3>
@@ -49,3 +53,17 @@ Home
     </div>
 </section>
 {% endblock pageBody %}
+
+{% block pageScripts %}
+<script>
+    let profilepic = document.querySelector(".profile-picture-cont");
+    let optcontainer = document.querySelector(".img-coverup")
+
+    profilepic.addEventListener("mouseenter", () => {
+        optcontainer.style.display = "flex";
+    })
+    profilepic.addEventListener("mouseleave", () => {
+        optcontainer.style.display = "none";
+    })
+</script>
+{% endblock pageScripts %}

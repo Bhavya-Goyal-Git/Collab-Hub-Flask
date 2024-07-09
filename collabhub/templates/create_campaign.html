@@ -1,75 +1,60 @@
 {% extends 'pagebase.html' %}
 
 {% block pageTitle %}
-Update Profile
+Create Campaign
 {% endblock pageTitle %}
 
 {% block pageStyles %}
-<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/influencer_updateprofile.css')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/create_campaign.css')}}">
 {% endblock pageStyles %}
 
 {% block pageBody %}
 <div class="form-container">
     <form method="post">
         <div class="heading">
-            <h1>Update <span>Profile</span></h1>
+            <h1>Create <span>Campaign</span></h1>
+            <div class="status-container">
+                <h3>Status:</h3>
+                <span id="private">Private </span> <input type="checkbox" name="status" id="status" class="form-role"
+                    checked>
+                <label for="status"></label><span id="public">
+                    Public</span>
+            </div>
         </div>
         <label for="name">Name</label>
-        <input required type="text" name="name" id="name" class="form-input" placeholder="Name" {% if user.infludata %}
-            value="{{user.infludata.name}}" {% endif %}>
+        <input required type="text" name="name" id="name" class="form-input" placeholder="Name" />
+        <label for="description">Description</label>
+        <textarea name="description" id="description" class="form-input form-about"
+            placeholder="Describe the campaign"></textarea>
 
-        <label for="about">About</label>
-        <textarea name="about" id="about" class="form-input form-about" placeholder="Write some text here..">{% if user.infludata %}
-            value="{{user.infludata.about}}" {% endif %}</textarea>
-
-        <label for="country">Country</label>
-        <select name="country" id="country" class="form-input form-select" value="India">
-            {% if user.infludata %}
-            {% for country in list_of_countries %}
-            {% if country==user.infludata.country %}
-            <option value="{{country}}" selected>{{country}}</option>
-            {% else %}
-            <option value="{{country}}">{{country}}</option>
-            {% endif %}
-            {% endfor %}
-            {% else %}
-            {% for country in list_of_countries %}
-            {% if country=="India" %}
-            <option value="{{country}}" selected>{{country}}</option>
-            {% else %}
-            <option value="{{country}}">{{country}}</option>
-            {% endif %}
-            {% endfor %}
-            {% endif %}
-
-        </select>
-        <label for="category">Category</label>
-        <select name="category" id="category" class="form-input form-select">
-            {% if user.infludata %}
-            {% for category in categories %}
-            {% if category.id==user.infludata.category_id %}
-            <option value="{{category.id}}" selected>{{category.title}}</option>
-            {% else %}
-            <option value="{{category.id}}">{{category.title}}</option>
-            {% endif %}
-            {% endfor %}
-            {% else %}
-            {% for category in categories %}
-            <option value="{{category.id}}">{{category.title}}</option>
-            {% endfor %}
-            {% endif %}
-
-        </select>
-        <label>Niches</label>
-
-        <div class="selected-values-container">
-            {% if user.infludata %}
-            {% for niche in user.infludata.influencer_niches %}
-            <span class="selected-span">{{niche.title}} <i class="fa-solid fa-xmark" id="cross-{{niche.id}}"></i></span>
-            {% endfor %}
-            {% endif %}
+        <div class="date-container">
+            <div class="date-cont">
+                <p>From</p>
+                <input required type="date" name="start_date" id="start_date" class="form-date" min="{{today_date}}">
+            </div>
+            <div class="date-cont">
+                <p>To</p>
+                <input required type="date" name="end_date" id="end_date" class="form-date" min="{{today_date}}">
+            </div>
         </div>
 
+        <label for="budget">Budget</label>
+        <input required type="number" name="budget" id="budget" class="form-input" min="0" placeholder="00">
+
+        <label for="goal">Goal</label>
+        <textarea name="goal" id="goal" class="form-input form-about"
+            placeholder="Write goal(s) to achieve by the campaign"></textarea>
+
+        <label for="category">Category</label>
+        <select name="category" id="category" class="form-input form-select">
+            {% for category in categories %}
+            <option value="{{category.id}}">{{category.title}}</option>
+            {% endfor %}
+        </select>
+
+        <label>Niches</label>
+        <div class="selected-values-container">
+        </div>
         <div class="dropdown-container">Select <i class="fa-solid fa-caret-down" id="dropdown-toggler"></i>
             <div class="dropdown-menu">
                 {% for niche in niches %}
@@ -81,7 +66,6 @@ Update Profile
                 <div id="Show-All">Show All Niches</div>
             </div>
         </div>
-
         <button class="form-submit">Submit</button>
     </form>
 </div>
@@ -130,7 +114,7 @@ Update Profile
             menu.style.display = "block";
         }
         showdropdown = !showdropdown;
-    });
+    })
     document.addEventListener('click', function (event) {
         let menu = document.querySelector(".dropdown-menu")
         if (!menu.contains(event.target) && showdropdown) {
@@ -138,31 +122,6 @@ Update Profile
             showdropdown = false;
         }
     });
-    try {
-        window.addEventListener("DOMContentLoaded", () => {
-            if (!selectedContainer.children.length) {
-                selectedContainer.style.display = "none"
-            }
-            let preselectedniches = document.querySelectorAll(".selected-span")
-            for (const opt of preselectedniches) {
-                let someId = Number(opt.children[0].getAttribute("id").split("-")[1])
-                checkboxes[someId - 1].checked = true;
-                opt.children[0].addEventListener("click", () => {
-                    let someId = Number(opt.children[0].getAttribute("id").split("-")[1])
-                    if (checkboxes[someId - 1].checked) {
-                        checkboxes[someId - 1].checked = false;
-                        opt.remove()
-                        if (!selectedContainer.children.length) {
-                            selectedContainer.style.display = "none"
-                        }
-                    }
-                })
-            }
-        })
-
-    } catch (e) {
-        console.log("No previous records")
-    }
     for (let i = 0; i < dropdownItems.length; i++) {
         let item = dropdownItems[i];
         item.addEventListener("click", () => {
@@ -187,6 +146,5 @@ Update Profile
             }
         })
     }
-
 </script>
 {% endblock pageScripts %}

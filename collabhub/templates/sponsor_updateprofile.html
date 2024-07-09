@@ -1,0 +1,23 @@
+{% extends 'pagebase.html' %}
+
+{% block pageTitle %}
+Update Profile
+{% endblock pageTitle %}
+
+{% block pageStyles %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/sponsor_updateprofile.css')}}">
+{% endblock pageStyles %}
+
+{% block pageBody %}
+<div class="form-container">
+    <form method="post">
+        <div class="heading">
+            <h1>Update <span>Profile</span></h1>
+        </div>
+        <label for="company_name">Name</label>
+        <input required type="text" name="company_name" id="company_name" class="form-input" placeholder="Company name"
+            {% if user.sponsdata %} value="{{user.sponsdata.company_name}}" {% endif %}>
+        <button class="form-submit">Submit</button>
+    </form>
+</div>
+{% endblock pageBody %}

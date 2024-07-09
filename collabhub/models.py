@@ -71,8 +71,8 @@ class Influencerdata(db.Model):
    country:Mapped[str] = mapped_column(nullable=True)
    category_id:Mapped[int] = mapped_column(ForeignKey("category.id"))
    about:Mapped[str]
-   cover_photo:Mapped[str] = mapped_column(unique=True,nullable=True) #stores path url
-   profile_photo:Mapped[str] = mapped_column(unique=True,nullable=True) #stores path url
+   cover_photo:Mapped[str] = mapped_column(unique=True,nullable=True) #stores filename
+   profile_photo:Mapped[str] = mapped_column(unique=True,nullable=True) 
 
    influencer_category:Mapped['Category'] = relationship()
    social_links:Mapped[List['Socials']] = relationship()
@@ -83,7 +83,7 @@ class Sponsordata(db.Model):
    id:Mapped[int] = mapped_column(primary_key=True)
    user_id:Mapped[int] = mapped_column(ForeignKey("user.id"),unique=True)
    company_name:Mapped[str] = mapped_column(nullable=False)
-   profile_photo:Mapped[str] = mapped_column(unique=True)
+   profile_photo:Mapped[str] = mapped_column(unique=True,nullable=True)
    
    campaigns:Mapped[List['Campaign']] = relationship(back_populates="sponsor")
    
@@ -99,6 +99,9 @@ class Campaign(db.Model):
    status:Mapped[str] = mapped_column(nullable=False)
    goal:Mapped[str] = mapped_column(nullable=False)
    category_id:Mapped[int] = mapped_column(ForeignKey("category.id"))
+   is_flagged:Mapped[bool] = mapped_column(default=False)
+   has_ended:Mapped[bool] = mapped_column(default=False)
+   campaign_pic:Mapped[str] = mapped_column(unique=True,nullable=True)
 
    __table_args__ =(
       CheckConstraint("status IN ('public', 'private')", name='check_status_valid'),

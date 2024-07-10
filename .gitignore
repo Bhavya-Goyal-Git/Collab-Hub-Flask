@@ -8,4 +8,4 @@ instance/
 __pycache__
 
 #images
-static/uploads/
+collabhub/static/uploads/

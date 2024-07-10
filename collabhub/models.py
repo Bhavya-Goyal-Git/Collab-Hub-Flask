@@ -112,6 +112,19 @@ class Campaign(db.Model):
    ad_requests:Mapped[List['Adrequest']] = relationship(back_populates="ad_campaign")
    campaign_niches:Mapped[List['Niche']] = relationship(secondary=campaignniche)
 
+   @property
+   def prettyBudget(self):
+      if(self.budget<1000):
+         return str(self.budget)
+      r = ""
+      b = list(str(self.budget))
+      count = 0
+      while(len(b)!=0):
+         if(count%3==0 and count!=0):
+            r = ","+r
+         r = b.pop() + r
+         count+=1
+      return r
 
 class Adrequest(db.Model):
    id:Mapped[int] = mapped_column(primary_key=True)

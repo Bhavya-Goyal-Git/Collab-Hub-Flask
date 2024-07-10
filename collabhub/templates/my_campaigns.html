@@ -16,6 +16,9 @@ My Campaigns
         {% if campaign.campaign_pic %}
         <img id="display" src="{{ url_for('static',filename='uploads/campaign_pics/'+campaign.campaign_pic)}}">
         {% endif %}
+        <div class="update-pic-btn-container">
+            <a class="update-btn" href="{{ url_for('update_campaignpic_page',campaign_id=campaign.id) }}">Update Pic</a>
+        </div>
     </div>
     <div class="camp-opt-cont">
         <div class="headingcont">
@@ -32,7 +35,7 @@ My Campaigns
                 {% endfor %}
             </ul>
         </div>
-        <p class="budget">${{campaign.budget}}/-</p>
+        <p class="budget">${{campaign.prettyBudget}}/-</p>
         <p class="descc"><span>Description :</span> {{ campaign.description }}</p>
         <p class="descc"><span>Goal :</span> {{ campaign.goal }}</p>
         <div class="progress">Progress : <div class="progress-bar">
@@ -53,12 +56,29 @@ My Campaigns
                 {% else %}
                 Public
                 {% endif %}</a>
+            <a class="status-btn" href="">View Ad Requests</a>
+            <a class="status-btn" href="">Create Ad Request</a>
             <a class="end-btn" href="">End Campaign</a>
-            <a class="update-btn" href="">Update</a>
+            <a class="update-btn" href="{{ url_for('update_campaignpage',campaign_id=campaign.id) }}">Update</a>
             <a class="delete-btn" href="">Delete</a>
         </div>
     </div>
 </div>
 {% endfor %}
-
 {% endblock pageBody %}
+
+{% block pageScripts %}
+<script>
+    let imgdivs = document.querySelectorAll(".camp-img-cont");
+    imgdivs.forEach((imgdiv) => {
+        imgdiv.addEventListener("mouseenter", () => {
+            let box = imgdiv.querySelector(".update-pic-btn-container");
+            box.style.display = "flex";
+        });
+        imgdiv.addEventListener("mouseleave", () => {
+            let box = imgdiv.querySelector(".update-pic-btn-container");
+            box.style.display = "none";
+        });
+    });
+</script>
+{% endblock pageScripts %}

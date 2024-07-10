@@ -15,6 +15,10 @@ Home
     {% else %}
     <img src="{{ url_for('static',filename='stockImages/cover.jpg')}}">
     {% endif %}
+    <div class="update-pic-btn-container">
+        <a class="img-coverup-btn" href="{{ url_for('update_coverpic',user_id=current_user.id) }}">Update Cover
+            Pic</a>
+    </div>
 </div>
 <section class="main-section">
     <div class="profile-bar-container">
@@ -65,5 +69,15 @@ Home
     profilepic.addEventListener("mouseleave", () => {
         optcontainer.style.display = "none";
     })
+    let imgdiv = document.querySelector(".cover-img-container");
+    imgdiv.addEventListener("mouseenter", () => {
+        let box = imgdiv.querySelector(".update-pic-btn-container");
+        box.style.display = "flex";
+    });
+    imgdiv.addEventListener("mouseleave", () => {
+        let box = imgdiv.querySelector(".update-pic-btn-container");
+        box.style.display = "none";
+    });
+
 </script>
 {% endblock pageScripts %}

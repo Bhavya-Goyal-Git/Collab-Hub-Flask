@@ -2,6 +2,7 @@
     width: 100vw;
     height: calc(100vw*(3/16));
     margin-top: -10px;
+    position: relative;
 }
 
 .cover-img-container img {
@@ -13,7 +14,6 @@
 
 .main-section {
     height: 100vw;
-    border: 2px solid red;
     display: flex;
 }
 
@@ -152,4 +152,18 @@
 
 .img-coverup-btn:hover {
     background-color: #7446e7;
+}
+
+.update-pic-btn-container {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.648);
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
 }

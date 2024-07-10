@@ -214,6 +214,37 @@ def create_campaignpage(user_id):
     niches = Niche.query.all()
     return render_template("create_campaign.html",user=user,categories=categories,niches=niches,today_date=date.today())
 
+@app.route("/<int:campaign_id>/campaign/update",methods=["GET","POST"])
+def update_campaignpage(campaign_id):
+    camp = Campaign.query.get(campaign_id)
+    if request.method=="POST":
+        if Campaign_form_validator(request.form):
+            new_status = "public" if request.form["status"] else "private"
+            cat = Category.query.get(int(request.form["category"]))
+            while len(camp.campaign_niches)!=0:
+                camp.campaign_niches.pop()
+            nichelist = []
+            for element in request.form.getlist("niches"):
+                nichelist.append(Niche.query.get(int(element)))
+            camp.name=request.form["name"]
+            camp.description=request.form["description"]
+            camp.start_date=datetime.strptime(request.form["start_date"], "%Y-%m-%d").date()
+            camp.end_date=datetime.strptime(request.form["end_date"], "%Y-%m-%d").date()
+            camp.budget=int(request.form["budget"])
+            camp.status=new_status
+            camp.goal=request.form["goal"]
+            camp.campaign_category = cat
+            for niche in nichelist:
+                camp.campaign_niches.append(niche)
+            db.session.add(camp)
+            db.session.commit()
+            flash("Campaign data Updated successfully!!",category="success")
+            return redirect(url_for('my_campaignspage',sponsor_id=camp.sponsor.id))
+    categories = Category.query.all()
+    niches = Niche.query.all()
+    return render_template("update_campaign.html",campaign=camp,categories=categories,niches=niches,today_date=date.today())
+
+
 @app.route("/<int:campaign_id>/campaign/updatepic", methods=["GET","POST"])
 def update_campaignpic_page(campaign_id):
     camp = Campaign.query.get(campaign_id)

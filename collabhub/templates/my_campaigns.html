@@ -9,7 +9,7 @@ My Campaigns
 {% endblock pageStyles %}
 
 {% block pageBody %}
-
+{% if sponsor.campaigns|length!=0 %}
 {% for campaign in sponsor.campaigns %}
 <div class="camp-container">
     <div class="camp-img-cont">
@@ -65,20 +65,26 @@ My Campaigns
     </div>
 </div>
 {% endfor %}
+{% endif %}
 {% endblock pageBody %}
 
 {% block pageScripts %}
 <script>
-    let imgdivs = document.querySelectorAll(".camp-img-cont");
-    imgdivs.forEach((imgdiv) => {
-        imgdiv.addEventListener("mouseenter", () => {
-            let box = imgdiv.querySelector(".update-pic-btn-container");
-            box.style.display = "flex";
+    try {
+        let imgdivs = document.querySelectorAll(".camp-img-cont");
+        imgdivs.forEach((imgdiv) => {
+            imgdiv.addEventListener("mouseenter", () => {
+                let box = imgdiv.querySelector(".update-pic-btn-container");
+                box.style.display = "flex";
+            });
+            imgdiv.addEventListener("mouseleave", () => {
+                let box = imgdiv.querySelector(".update-pic-btn-container");
+                box.style.display = "none";
+            });
         });
-        imgdiv.addEventListener("mouseleave", () => {
-            let box = imgdiv.querySelector(".update-pic-btn-container");
-            box.style.display = "none";
-        });
-    });
+    } catch (e) {
+        //No campaigns found!
+    }
+
 </script>
 {% endblock pageScripts %}

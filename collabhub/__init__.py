@@ -26,3 +26,4 @@ countries = countries_for_language("en")
 list_of_countries = [country[1] for country in countries]
 
 from collabhub.routes import *
+from collabhub.routes2 import *

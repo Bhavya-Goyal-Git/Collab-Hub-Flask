@@ -1,0 +1,24 @@
+{% extends 'pagebase.html' %}
+
+{% block pageTitle %}
+Add Social Link
+{% endblock pageTitle %}
+
+{% block pageStyles %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/add_social.css')}}">
+{% endblock pageStyles %}
+
+{% block pageBody %}
+<div class="form-container">
+    <form method="post">
+        <div class="heading">
+            <h1>Add Wallet<span> Money</span></h1>
+        </div>
+        <label for="upi_id">UPI ID</label>
+        <input type="text" name="upi_id" id="upi_id" class="form-input" placeholder="1234567890@abc" required>
+        <label for="amount">Amount</label>
+        <input type="number" name="amount" id="amount" class="form-input" placeholder="00" required>
+        <input type="submit" class="form-submit" value="Add Money">
+    </form>
+</div>
+{% endblock pageBody %}

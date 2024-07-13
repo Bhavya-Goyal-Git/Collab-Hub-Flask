@@ -19,8 +19,8 @@ Update Profile
             value="{{user.infludata.name}}" {% endif %}>
 
         <label for="about">About</label>
-        <textarea name="about" id="about" class="form-input form-about" placeholder="Write some text here..">{% if user.infludata %}
-            value="{{user.infludata.about}}" {% endif %}</textarea>
+        <textarea name="about" id="about" class="form-input form-about"
+            placeholder="Write some text here..">{% if user.infludata %}{{user.infludata.about}}{% endif %}</textarea>
 
         <label for="country">Country</label>
         <select name="country" id="country" class="form-input form-select" value="India">

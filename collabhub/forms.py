@@ -1,9 +1,10 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, EmailField, BooleanField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from collabhub.models import User
+from wtforms import StringField, SubmitField, PasswordField, EmailField, BooleanField, SelectField, URLField, IntegerField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, URL
+from collabhub.models import User, Socials
 from flask import flash
 from datetime import datetime,date
+from flask_login import current_user
 
 class RegisterForm(FlaskForm):
 
@@ -63,3 +64,38 @@ def Campaign_form_validator(form):
         return False
     return True
     
+
+class SocialMediaForm(FlaskForm):
+
+    def validate_handle(self,handle_to_check):
+        social = Socials.query.filter_by(owner=current_user.infludata.id).filter_by(handle=handle_to_check.data).first()
+        if(social):
+            raise ValidationError("Link for given Handle Already Exists")
+   
+    handle = SelectField(label="Social Handle",choices = [('discord', 'Discord'),('facebook', 'Facebook'),('instagram', 'Instagram'),('linkedin', 'Linkedin'),('reddit', 'Reddit'),('telegram', 'Telegram'),('threads', 'Threads'),('tiktok', 'Tiktok'),('tumblr', 'Tumblr'),('twitch', 'Twitch'),('x-twitter', 'X-twitter'),('youtube', 'Youtube')])
+    link = URLField(label="Link to Profile",validators=[DataRequired(),URL(message="Social Media Link is broken!")])
+    reach = IntegerField(label="Reach",validators=[DataRequired()])
+    submit = SubmitField(label="Add Link")
+
+def money_valiadator(form):
+    if form["upi_id"]=="":
+        flash("TRANSACTION FAILED! No UPI ID provided",category="danger")
+        return False
+    if form["amount"]=="":
+        flash("TRANSACTION FAILED! Amount field can't be empty",category="danger")
+        return False
+    if int(form["amount"])>100000:
+        flash("TRANSACTION FAILED! UPI Limit Exceeded!",category="danger")
+        return False
+    if int(form["amount"])<=0:
+        flash("TRANSACTION FAILED! Invalid amount provided!",category="danger")
+        return False
+    id = form["upi_id"]
+    if id.find("@")==-1 or len(id.split("@")[0])<10 or len(id)<12:
+        flash("TRANSACTION FAILED! Invalid UPI ID provided!",category="danger")
+        return False
+    return True
+
+
+
+

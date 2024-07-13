@@ -28,22 +28,24 @@
                     src="{{ url_for('static',filename='stockImages/Logo.jpeg')}}" /></a>
         </div>
         {% if current_user.role =="influencer" %}
-        <a class="nav-link" href="{{url_for('influencer_profilepage',user_id=current_user.id)}}"><i
-                class="fa-solid fa-user"></i>Profile</a>
         <a class="nav-link" href="{{url_for('influencer_homepage',user_id=current_user.id)}}"><i
-                class="fa-solid fa-house-user"></i>Home</a>
-        <a class="nav-link" href="">Somelink</a>
-        <a class="nav-link" href="">Somelink</a>
+                class="fa-solid fa-house-user"></i> Home</a>
+        <a class="nav-link" href=""><i class="fa-solid fa-hand-holding-dollar"></i> My Ad requests</a>
+        <a class="nav-link" href=""><i class="fa-solid fa-magnifying-glass"></i> Search Campaigns</a>
+        <a class="nav-link" href=""><i class="fa-solid fa-chart-line"></i> My Stats</a>
         {% else %}
         {% if current_user.role =="sponsor" %}
         <a class="nav-link" href="{{url_for('sponsor_homepage',user_id=current_user.id)}}"><i
-                class="fa-solid fa-house-user"></i>Home</a>
+                class="fa-solid fa-house-user"></i> Home</a>
         <a class="nav-link" href="{{url_for('create_campaignpage',user_id=current_user.id)}}">Create Campaign</a>
         <a class="nav-link" {% if current_user.sponsdata %}
             href="{{url_for('my_campaignspage',sponsor_id=current_user.sponsdata.id)}}" {% else %}
-            href="{{url_for('create_campaignpage',user_id=current_user.id)}}" {% endif %}>My
+            href="{{url_for('create_campaignpage',user_id=current_user.id)}}" {% endif %}><i
+                class="fa-solid fa-file-signature"></i> My
             Campaigns</a>
-        <a class="nav-link" href="">Somelink2</a>
+        <a class="nav-link" href=""><i class="fa-solid fa-hand-holding-dollar"></i> My Ad's</a>
+        <a class="nav-link" href=""><i class="fa-solid fa-chart-line"></i> My Stats</a>
+        <a class="nav-link" href=""><i class="fa-solid fa-magnifying-glass"></i> Search Influencers</a>
         {% else %}
         <a class="nav-link" href="">Somelink2</a>
         <a class="nav-link" href="">Somelink2</a>

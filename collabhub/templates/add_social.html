@@ -1,0 +1,27 @@
+{% extends 'pagebase.html' %}
+
+{% block pageTitle %}
+Add Social Link
+{% endblock pageTitle %}
+
+{% block pageStyles %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/add_social.css')}}">
+{% endblock pageStyles %}
+
+{% block pageBody %}
+<div class="form-container">
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <div class="heading">
+            <h1>Add <span>Social Link</span></h1>
+        </div>
+        {{ form.handle.label }}
+        {{ form.handle(class="form-input form-select")}}
+        {{ form.link.label }}
+        {{ form.link(class="form-input")}}
+        {{ form.reach.label }}
+        {{ form.reach(class="form-input")}}
+        {{ form.submit(class="form-submit")}}
+    </form>
+</div>
+{% endblock pageBody %}

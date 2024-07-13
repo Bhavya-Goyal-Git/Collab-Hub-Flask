@@ -1,7 +1,7 @@
 from collabhub import app, db, list_of_countries
 from flask import render_template, flash, redirect, request, url_for
-from collabhub.forms import RegisterForm, LoginForm, Campaign_form_validator
-from collabhub.models import User, Category, Niche, Influencerdata, Sponsordata, Campaign
+from collabhub.forms import RegisterForm, LoginForm, Campaign_form_validator, SocialMediaForm
+from collabhub.models import User, Category, Niche, Influencerdata, Sponsordata, Campaign, Socials
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.utils import secure_filename
 from datetime import date, datetime
@@ -44,6 +44,8 @@ def login_page():
             if user.check_password(form.password.data):
                 login_user(user)
                 flash(f"Login Successful! Welcome, {user.username}",category="success")
+                if(user.is_flagged):
+                    flash("Your Account has been flagged inappropriate by the Admin",category="danger")
                 if user.role == "influencer":
                     return redirect(url_for("influencer_homepage",user_id=user.id))
                 elif user.role == "sponsor":
@@ -54,6 +56,10 @@ def login_page():
                 flash("ERROR IN LOGIN : Password Does Not Match!",category="danger")
         else:
             flash("ERROR IN LOGIN : No Such Username Exists!",category="danger")
+
+    if form.errors != {}: #checking validation errors
+        for ErrMsg in form.errors.values():
+            flash(f"ERROR IN USER LOGIN: {ErrMsg[0]}",category="danger")
 
     return render_template("login.html",form=form)
             
@@ -133,12 +139,12 @@ def influencer_profilepage(user_id):
     user = User.query.get(user_id)
     return render_template("influencer_profilepage.html",user=user)
 
-@app.route("/influencer/<int:user_id>/home") #home page with links
+@app.route("/influencer/<int:user_id>/home") 
 def influencer_homepage(user_id):
     user = User.query.get(user_id)
     return render_template("influencer_homepage.html",user=user)
 
-@app.route("/sponsor/<int:user_id>") #home page
+@app.route("/sponsor/<int:user_id>") 
 def sponsor_homepage(user_id):
     user = User.query.get(user_id)
     return render_template("sponsor_homepage.html",user=user)
@@ -281,3 +287,62 @@ def toggle_campaignstatus(campaign_id):
     db.session.commit()
     flash(f"Campaign Status Updated! Campaign : {camp.name} is now {camp.status.capitalize()}",category="success")
     return redirect(url_for('my_campaignspage',sponsor_id=camp.sponsor.id))
+
+@app.route("/influencer/<int:influencer_id>/addsocials", methods=["GET","POST"])
+def add_socialmedia(influencer_id):
+    influencer = Influencerdata.query.get(influencer_id)
+    form = SocialMediaForm()
+    if form.validate_on_submit():
+        social = Socials(owner=influencer.id,handle=form.handle.data,link=form.link.data,reach=form.reach.data)
+        db.session.add(social)
+        db.session.commit()
+        flash(f"Social Link to {social.handle.capitalize()} added successfully!",category="success")
+        return redirect(url_for("influencer_homepage",user_id=influencer.user_id))
+    if form.errors != {}:
+        for ErrMsg in form.errors.values():
+            flash(f"ERROR IN Adding Social Link: {ErrMsg[0]}",category="danger")
+    return render_template("add_social.html",form=form)
+
+@app.route("/influencer/<int:influencer_id>/deletesocial/<int:social_id>")
+def delete_socialmedia(influencer_id,social_id):
+    influencer = Influencerdata.query.get(influencer_id)
+    social = Socials.query.get(social_id)
+    if social:
+        flag=False
+        for sociallink in influencer.social_links:
+            if sociallink == social:
+                flag=True
+        if flag:
+            social_name = social.handle
+            db.session.delete(social)
+            db.session.commit()
+            flash(f"Deleted Social Link for {social_name.capitalize()} successfully!",category="success")
+        else:
+            flash("You don't have permissions to delete the Social Link!",category="danger")
+    else:
+        flash("Could Not Delete the Social Link!",category="danger")
+    return redirect(url_for("influencer_homepage",user_id=influencer.user_id))
+
+@app.route("/influencer/<int:influencer_id>/updatesocial/<int:social_id>", methods=["GET","POST"])
+def update_socialmedia(influencer_id,social_id):
+    influencer = Influencerdata.query.get(influencer_id)
+    social = Socials.query.get(social_id)
+    if social:
+        flag=False
+        for sociallink in influencer.social_links:
+            if sociallink == social:
+                flag=True
+        if flag:
+            if request.method =="POST":
+                social.link = request.form["link"]
+                social.reach = request.form["reach"]
+                db.session.add(social)
+                db.session.commit()
+                flash(f"Social Media Link for {social.handle.capitalize()} updated successfully!",category="success")
+                return redirect(url_for("influencer_homepage",user_id=influencer.user_id))
+            return render_template("update_social.html",social=social)
+        else:
+            flash("You don't have permissions to update the Social Link!",category="danger")
+    else:
+        flash("Could Not Find the Social Link!",category="danger")
+    return redirect(url_for("influencer_homepage",user_id=influencer.user_id))

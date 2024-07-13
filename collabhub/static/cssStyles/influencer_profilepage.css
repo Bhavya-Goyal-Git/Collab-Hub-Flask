@@ -1,0 +1,129 @@
+.cover-img-container {
+    width: 100vw;
+    height: calc(100vw*(3/16));
+    margin-top: -10px;
+    position: relative;
+}
+
+.cover-img-container img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.main-section {
+    height: 100vw;
+    display: flex;
+    border: 2px solid red;
+}
+
+.profile-options-container {
+    border: 2px solid blue;
+    flex-grow: 1;
+}
+
+.profile-bar {
+    width: 300px;
+    background-color: #282828e7;
+    border-radius: 150px;
+    margin: 0 30px 0 30px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transform: translateY(-180px);
+}
+
+.profile-picture-cont {
+    height: 290px;
+    width: 290px;
+    border-radius: 50%;
+    margin: 8px auto;
+    position: relative;
+}
+
+.profile-picture {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.profile-data {
+    width: 80%;
+    text-align: center;
+}
+
+.profile-bar h1 {
+    font-size: 2.2rem;
+    margin: 10px auto 3px;
+    color: #7446e7;
+}
+
+.profile-bar h2 {
+    font-size: 1.5rem;
+    margin: 20px auto 3px;
+    color: rgba(255, 255, 255, 0.896);
+    background-color: #8c60ec;
+    border-radius: 15px;
+    padding: 7px;
+}
+
+.profile-bar h3 {
+    font-size: 1.2rem;
+    margin: 9px auto 3px;
+    color: #a27af0;
+}
+
+.profile-bar h5 {
+    color: rgba(255, 255, 255, 0.83);
+    font-size: 1rem;
+    margin: 8px auto 3px;
+}
+
+.profile-bar h6 {
+    color: rgba(255, 255, 255, 0.83);
+    margin: 6px auto 3px;
+    font-size: 0.8rem;
+}
+
+.about-section {
+    width: 85%;
+    margin: 20px auto 10px;
+    background-color: #3f3f3fd8;
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.about-section h4,
+.niche-section h4 {
+    color: #8c60ec;
+    font-size: 1.3rem;
+    margin: 5px auto;
+    text-align: center;
+}
+
+.about-section p {
+    color: rgba(255, 255, 255, 0.786);
+    text-align: center;
+}
+
+.niche-section {
+    width: 85%;
+    margin: 20px auto 150px;
+    background-color: #3f3f3fd8;
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.niche-section span {
+    display: inline-block;
+    padding: 7px;
+    margin: 5px 3px;
+    background-color: #a17af0d6;
+    color: white;
+    border-radius: 8px;
+    font-size: 1.1rem;
+}

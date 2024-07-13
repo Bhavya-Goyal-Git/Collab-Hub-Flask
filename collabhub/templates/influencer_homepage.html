@@ -53,7 +53,51 @@ Home
         </div>
     </div>
     <div class="profile-options-container">
-
+        <div class="menu-buttons-cont">
+            <a href="{{url_for('influencer_profilepage',user_id=current_user.id)}}"><i class="fa-solid fa-user"></i>
+                View Public Profile</a>
+            <a href="{{url_for('influencer_completeprofile_page',user_id=current_user.id)}}"><i
+                    class="fa-solid fa-marker"></i> Update Profile</a>
+            <a href="{{ url_for('add_socialmedia',influencer_id = current_user.infludata.id) }}"><i
+                    class="fa-solid fa-users"></i> Add Social Link</a>
+            <a href=""><i class="fa-solid fa-envelope"></i> Message Center</a>
+            <a href=""><i class="fa-solid fa-pen-to-square"></i> Write a Review</a>
+            <a href=""><i class="fa-solid fa-comment-dollar"></i> View Transaction Log</a>
+        </div>
+        <div class="money-cont">
+            <div class="money-title">
+                <h4>Wallet Balance:</h4>
+                <h2>${{ user.prettyBalance }}/-</h2>
+            </div>
+            <div class="money-btnsss">
+                <a class="good-btn" href="{{url_for('addMoneyToWallet',user_id=current_user.id)}}"><i
+                        class="fa-solid fa-wallet"></i> Add Money</a>
+                <a class="bad-btn" href="{{url_for('withdrawMoneyFromWallet',user_id=current_user.id)}}"><i
+                        class="fa-solid fa-money-bill-transfer"></i> Withdraw</a>
+            </div>
+        </div>
+        <div class="socials-container">
+            <h3>Social Links</h3>
+            {% for sociallink in user.infludata.social_links %}
+            <div class="social">
+                <div class="social-name">
+                    <a href="{{sociallink.link}}" target="_blank">
+                        <div class="social-icon-cont" id="{{sociallink.handle}}">
+                            <i class="fa-brands fa-{{sociallink.handle}}"></i>
+                        </div>
+                        <h4>{{ sociallink.handle.capitalize()}}</h4>
+                    </a>
+                </div>
+                <p>Reach: {{ sociallink.nicereach }}</p>
+                <div class="social-btns">
+                    <a class="good-btn"
+                        href="{{url_for('update_socialmedia',influencer_id = current_user.infludata.id,social_id=sociallink.id)}}">Update</a>
+                    <a class="bad-btn"
+                        href="{{url_for('delete_socialmedia',influencer_id = current_user.infludata.id,social_id=sociallink.id)}}">Delete</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </section>
 {% endblock pageBody %}

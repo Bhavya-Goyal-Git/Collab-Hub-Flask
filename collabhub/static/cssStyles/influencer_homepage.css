@@ -13,12 +13,11 @@
 }
 
 .main-section {
-    height: 100vw;
     display: flex;
 }
 
 .profile-options-container {
-    border: 2px solid blue;
+    flex-grow: 1;
 }
 
 .profile-bar {
@@ -166,4 +165,208 @@
     left: 0;
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
+}
+
+.menu-buttons-cont,
+.money-cont {
+    display: flex;
+    align-items: center;
+    padding: 20px 10px;
+    background-color: #282828c1;
+    border-radius: 15px;
+    width: 85%;
+    margin: 20px auto;
+    flex-wrap: wrap;
+}
+
+.money-cont {
+    justify-content: space-between;
+}
+
+.menu-buttons-cont a,
+.money-cont a,
+.socials-container a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.2rem;
+    padding: 7px;
+    border-radius: 7px;
+    margin: 5px 12px;
+}
+
+.menu-buttons-cont a {
+    background-color: #8b8b8be4;
+}
+
+.menu-buttons-cont a:hover {
+    background-color: #696969;
+}
+
+.money-cont h4 {
+    font-size: 1.7rem;
+    margin-left: 10px;
+    color: rgba(255, 255, 255, 0.792);
+}
+
+.money-cont .money-btnsss {
+    margin-right: 10px;
+}
+
+.money-cont h2 {
+    font-size: 2.3rem;
+    color: #24830fed;
+    margin-left: 10px;
+}
+
+.money-title {
+    display: flex;
+    align-items: center;
+}
+
+.good-btn {
+    background-color: #34ad19d6;
+}
+
+.good-btn:hover {
+    background-color: #24830fed;
+}
+
+.bad-btn {
+    background-color: #e04848;
+}
+
+.bad-btn:hover {
+    background-color: #bc2222e7;
+}
+
+.socials-container {
+    padding: 20px 10px;
+    background-color: #282828c1;
+    border-radius: 15px;
+    width: 85%;
+    margin: 20px auto;
+}
+
+.social p {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.796);
+}
+
+.socials-container h3 {
+    text-align: center;
+    font-size: 1.6rem;
+    margin-bottom: 15px;
+}
+
+.social {
+    width: 65%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 8px auto;
+    border-radius: 15px;
+    background-color: #3f3f3fc7;
+    padding: 18px;
+}
+
+.social-name h4 {
+    font-size: 1.3rem;
+    display: inline-block;
+    margin-left: 5px;
+    transition: 0.2s ease-in;
+}
+
+.social-icon-cont {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.4rem;
+    border-radius: 50%;
+    height: 38px;
+    width: 38px;
+    background-color: rgba(255, 255, 255, 0.759);
+    transition: 0.2s ease-in;
+}
+
+.social-icon-cont i {
+    color: rgba(0, 0, 0, 0.795);
+    transition: 0.2s ease-in;
+}
+
+.social-name a:hover i {
+    color: white;
+}
+
+.social-name a:hover #facebook {
+    background-color: #316FF6;
+}
+
+.social-name a:hover #facebook+h4 {
+    color: #316FF6;
+}
+
+.social-name a:hover #instagram {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+.social-name a:hover #instagram+h4 {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.social-name a:hover #youtube {
+    background-color: #CD201F;
+}
+
+.social-name a:hover #youtube+h4 {
+    color: #CD201F;
+}
+
+.social-name a:hover #x-twitter {
+    background-color: black;
+}
+
+.social-name a:hover #reddit {
+    background-color: #FF5700;
+}
+
+.social-name a:hover #reddit+h4 {
+    color: #FF5700;
+}
+
+.social-name a:hover #linkedin {
+    background-color: #0077B5;
+}
+
+.social-name a:hover #discord {
+    background-color: #5865F2;
+}
+
+.social-name a:hover #linkedin+h4 {
+    color: #0077B5;
+}
+
+.social-name a:hover #discord+h4 {
+    color: #5865F2;
+}
+
+.social-name a:hover #twitch {
+    background-color: #9146ff;
+}
+
+.social-name a:hover #tumblr {
+    background-color: #36465D;
+}
+
+.social-name a:hover #twitch+h4 {
+    color: #9146ff;
+}
+
+.social-name a:hover #tumblr+h4 {
+    color: #36465D;
+}
+
+.social-name a:hover #threads {
+    background-color: black;
 }

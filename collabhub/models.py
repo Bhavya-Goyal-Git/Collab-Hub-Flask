@@ -15,6 +15,7 @@ class User(db.Model,UserMixin):
    email_address:Mapped[str] = mapped_column(nullable=False,unique=True)
    password_hash:Mapped[str] = mapped_column(nullable=False)
    role:Mapped[str] = mapped_column(nullable=False)
+   walletbalance:Mapped[int] = mapped_column(default=0)
    is_flagged:Mapped[bool] = mapped_column(default=False)
 
    __table_args__ =(
@@ -34,13 +35,27 @@ class User(db.Model,UserMixin):
 
    def check_password(self,attempted_password):
       return bcrypt.check_password_hash(self.password_hash,attempted_password)
+   
+   @property
+   def prettyBalance(self):
+      if(self.walletbalance<1000):
+         return str(self.walletbalance)
+      r = ""
+      b = list(str(self.walletbalance))
+      count = 0
+      while(len(b)!=0):
+         if(count%3==0 and count!=0):
+            r = ","+r
+         r = b.pop() + r
+         count+=1
+      return r
 
 
 class Category(db.Model) :
    id:Mapped[int] = mapped_column(primary_key=True)
    title:Mapped[str] = mapped_column(String(20),nullable=False,unique=True)
 
-   niches:Mapped[List['Niche']] = relationship()
+   niches:Mapped[List['Niche']] = relationship(order_by="Niche.title")
 
 class Niche(db.Model) :
    id:Mapped[int] = mapped_column(primary_key=True)
@@ -52,6 +67,21 @@ class Socials(db.Model) :
    owner:Mapped[int] = mapped_column(ForeignKey("influencerdata.id"))
    handle:Mapped[str] = mapped_column(nullable=False)
    link:Mapped[str] = mapped_column(nullable=False,unique=True)
+   reach:Mapped[int]= mapped_column(nullable=False)
+
+   @property
+   def nicereach(self):
+      if(self.reach<1000):
+         return str(self.reach)
+      r = ""
+      b = list(str(self.reach))
+      count = 0
+      while(len(b)!=0):
+         if(count%3==0 and count!=0):
+            r = ","+r
+         r = b.pop() + r
+         count+=1
+      return r
 
 influencerniche = db.Table(
     "influencerniche",
@@ -75,7 +105,7 @@ class Influencerdata(db.Model):
    profile_photo:Mapped[str] = mapped_column(unique=True,nullable=True) 
 
    influencer_category:Mapped['Category'] = relationship()
-   social_links:Mapped[List['Socials']] = relationship()
+   social_links:Mapped[List['Socials']] = relationship(order_by="Socials.reach")
    influencer_niches:Mapped[List['Niche']] = relationship(secondary=influencerniche)
    ads:Mapped[List['Adrequest']] = relationship(back_populates="ad_influencer")
 
@@ -85,7 +115,7 @@ class Sponsordata(db.Model):
    company_name:Mapped[str] = mapped_column(nullable=False)
    profile_photo:Mapped[str] = mapped_column(unique=True,nullable=True)
    
-   campaigns:Mapped[List['Campaign']] = relationship(back_populates="sponsor")
+   campaigns:Mapped[List['Campaign']] = relationship(back_populates="sponsor", order_by="Campaign.start_date")
    
 
 class Campaign(db.Model):
@@ -99,9 +129,9 @@ class Campaign(db.Model):
    status:Mapped[str] = mapped_column(nullable=False)
    goal:Mapped[str] = mapped_column(nullable=False)
    category_id:Mapped[int] = mapped_column(ForeignKey("category.id"))
+   campaign_pic:Mapped[str] = mapped_column(unique=True,nullable=True)
    is_flagged:Mapped[bool] = mapped_column(default=False)
    has_ended:Mapped[bool] = mapped_column(default=False)
-   campaign_pic:Mapped[str] = mapped_column(unique=True,nullable=True)
 
    __table_args__ =(
       CheckConstraint("status IN ('public', 'private')", name='check_status_valid'),

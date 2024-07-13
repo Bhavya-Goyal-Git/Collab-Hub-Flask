@@ -1,0 +1,25 @@
+{% extends 'pagebase.html' %}
+
+{% block pageTitle %}
+Add Social Link
+{% endblock pageTitle %}
+
+{% block pageStyles %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/add_social.css')}}">
+{% endblock pageStyles %}
+
+{% block pageBody %}
+<div class="form-container">
+    <form method="post">
+        <div class="heading">
+            <h1>Update <span>Social Link</span></h1>
+        </div>
+        <h2><span>Updating : </span><i class="fa-brands fa-{{social.handle}}"></i> {{social.handle.capitalize()}}</h2>
+        <label for="link">Link to Profile</label>
+        <input type="url" name="link" id="link" class="form-input" value="{{social.link}}" required>
+        <label for="reach">Reach</label>
+        <input type="number" name="reach" id="reach" class="form-input" value="{{social.reach}}" required>
+        <input type="submit" value="Update" class="form-submit">
+    </form>
+</div>
+{% endblock pageBody %}

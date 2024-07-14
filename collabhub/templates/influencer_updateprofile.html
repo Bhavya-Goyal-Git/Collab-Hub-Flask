@@ -58,10 +58,10 @@ Update Profile
             <option value="{{category.id}}">{{category.title}}</option>
             {% endfor %}
             {% endif %}
-
         </select>
+        <p class="add-field-para">Couldn't find your Category? <a target="_blank"
+                href="{{url_for('create_category')}}">Add here</a></p>
         <label>Niches</label>
-
         <div class="selected-values-container">
             {% if user.infludata %}
             {% for niche in user.infludata.influencer_niches %}
@@ -69,7 +69,6 @@ Update Profile
             {% endfor %}
             {% endif %}
         </div>
-
         <div class="dropdown-container">Select <i class="fa-solid fa-caret-down" id="dropdown-toggler"></i>
             <div class="dropdown-menu">
                 {% for niche in niches %}
@@ -81,7 +80,8 @@ Update Profile
                 <div id="Show-All">Show All Niches</div>
             </div>
         </div>
-
+        <p class="add-field-para">Couldn't find your Niche? <a target="_blank" href="{{url_for('create_niche')}}">Add
+                here</a></p>
         <button class="form-submit">Submit</button>
     </form>
 </div>

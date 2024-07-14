@@ -1,0 +1,28 @@
+{% extends 'pagebase.html' %}
+
+{% block pageTitle %}
+Add Niche
+{% endblock pageTitle %}
+
+{% block pageStyles %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/add_social.css')}}">
+{% endblock pageStyles %}
+
+{% block pageBody %}
+<div class="form-container">
+    <form method="post">
+        <div class="heading">
+            <h1>Create <span>Niche</span></h1>
+        </div>
+        <label for="category">Category</label>
+        <select name="category" id="category" class="form-input form-select">
+            {% for category in categories %}
+            <option value="{{category.id}}">{{category.title}}</option>
+            {% endfor %}
+        </select>
+        <label for="niche_title">Niche Title</label>
+        <input type="text" class="form-input" name="niche_title" id="niche_title" required>
+        <input class="form-submit" type="submit" value="Add Niche">
+    </form>
+</div>
+{% endblock pageBody %}

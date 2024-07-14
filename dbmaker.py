@@ -15,8 +15,6 @@ with app.app_context():
 
     print("----------------- Adding some data ----------------------------\n")
     main_user = User(username="admin",email_address="admin11@gmail.com",password="12345678",role="admin")
-    user1 = User(username="influence11",email_address="influence11@gmail.com",password="12345678",role="influencer")
-    user2 = User(username="sponsor11",email_address="sponsor11@gmail.com",password="12345678",role="sponsor")
 
     cat1 = Category(title="Fashion", niches = [
         Niche(title="Sustainable Fashion"),
@@ -92,7 +90,7 @@ with app.app_context():
         Niche(title="Pet Food"),
     ])
 
-    db.session.add_all([main_user,user1,user2,cat1,cat2,cat3,cat4,cat5,cat6,cat7,cat8,cat9,cat10,cat11])
+    db.session.add_all([main_user,cat1,cat2,cat3,cat4,cat5,cat6,cat7,cat8,cat9,cat10,cat11])
     db.session.commit()
     print("----------------- Entries Added! ----------------------------\n")
 

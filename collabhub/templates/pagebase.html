@@ -37,21 +37,20 @@
         {% if current_user.role =="sponsor" %}
         <a class="nav-link" href="{{url_for('sponsor_homepage',user_id=current_user.id)}}"><i
                 class="fa-solid fa-house-user"></i> Home</a>
-        <a class="nav-link" href="{{url_for('create_campaignpage',user_id=current_user.id)}}">Create Campaign</a>
         <a class="nav-link" {% if current_user.sponsdata %}
             href="{{url_for('my_campaignspage',sponsor_id=current_user.sponsdata.id)}}" {% else %}
             href="{{url_for('create_campaignpage',user_id=current_user.id)}}" {% endif %}><i
                 class="fa-solid fa-file-signature"></i> My
             Campaigns</a>
         <a class="nav-link" href=""><i class="fa-solid fa-hand-holding-dollar"></i> My Ad's</a>
-        <a class="nav-link" href=""><i class="fa-solid fa-chart-line"></i> My Stats</a>
         <a class="nav-link" href=""><i class="fa-solid fa-magnifying-glass"></i> Search Influencers</a>
+        <a class="nav-link" href=""><i class="fa-solid fa-chart-line"></i> My Stats</a>
         {% else %}
         {% if current_user.role =="admin" %}
-        <a class="nav-link" href="">Somelink2</a>
-        <a class="nav-link" href="">Somelink2</a>
-        <a class="nav-link" href="">Somelink2</a>
-        <a class="nav-link" href="">Somelink2</a>
+        <a class="nav-link" href="">Home, mess center, stats, options</a>
+        <a class="nav-link" href="">Users</a>
+        <a class="nav-link" href="">Campaigns</a>
+        <a class="nav-link" href="">Create/delete cat,niche</a>
         {% else %}
         <a class="nav-link" href=""><i class="fa-solid fa-book-bookmark"></i> Features</a>
         <a class="nav-link" href="">How it Works <i class="fa-solid fa-question"></i></a>

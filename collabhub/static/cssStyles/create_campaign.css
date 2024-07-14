@@ -277,3 +277,14 @@ label:not([for="status"]):has(+.form-input:focus) {
 .date-cont p:has(+.form-date:focus) {
     color: #a27af0;
 }
+
+.add-field-para {
+    text-align: center;
+    margin: 7px auto;
+    color: rgba(255, 255, 255, 0.726);
+}
+
+.add-field-para a {
+    text-decoration: none;
+    color: #7446e7;
+}

@@ -1,7 +1,7 @@
 from collabhub import app, db
 from flask import render_template, flash, redirect, request, url_for
 from flask_login import current_user, login_required
-from collabhub.models import User, Transaction
+from collabhub.models import User, Transaction, Category, Niche
 from collabhub.forms import money_valiadator
 
 @app.route("/<int:user_id>/addmoney", methods=["GET","POST"])
@@ -43,3 +43,37 @@ def withdrawMoneyFromWallet(user_id):
                     return redirect(url_for("sponsor_homepage",user_id=user.id))
     return render_template("withdraw_money.html",user=user)
 
+@app.route("/create/category", methods=["GET","POST"])
+def create_category():
+    if request.method == "POST":
+        if request.form["category_title"]:
+            try:
+                cat = Category(title=request.form["category_title"].capitalize())
+                db.session.add(cat)
+                db.session.commit()
+                flash("Category Added Successfully!",category="success")
+            except:
+                flash("Category Already exists or is too long",category="danger")
+        else:
+            flash("Category field cannot be left blank!",category="danger")
+        return redirect(request.referrer)
+    return render_template("create_category.html")
+
+@app.route("/add/niche", methods=["GET","POST"])
+def create_niche():
+    if request.method == "POST":
+        if request.form["niche_title"]:
+            cat = Category.query.get(request.form["category"])
+            try:
+                niche = Niche(title=request.form["niche_title"])
+                cat.niches.append(niche)
+                db.session.add(cat)
+                db.session.commit()
+                flash("Niche Added Successfully!",category="success")
+            except:
+                flash("Niche Already exists or is too long",category="danger")
+        else:
+            flash("Niche field cannot be left blank!",category="danger")
+        return redirect(request.referrer)
+    categories = Category.query.all()
+    return render_template("create_niche.html",categories=categories)

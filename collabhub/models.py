@@ -199,6 +199,13 @@ class Transaction(db.Model):
    amount:Mapped[int] = mapped_column(nullable=False)
    dateoftransaction:Mapped[date] =mapped_column(default=date.today())
 
+class Message(db.Model):
+   id:Mapped[int] = mapped_column(primary_key=True)
+   sender:Mapped[int] = mapped_column(ForeignKey("user.id"))
+   reciever:Mapped[int] = mapped_column(ForeignKey("user.id"))
+   content:Mapped[str] = mapped_column(nullable=False)
+   dateofsending:Mapped[date] =mapped_column(default=date.today())
+
 class Review(db.Model):
    id:Mapped[int] = mapped_column(primary_key=True)
    writer_id:Mapped[int] = mapped_column(ForeignKey("user.id"))

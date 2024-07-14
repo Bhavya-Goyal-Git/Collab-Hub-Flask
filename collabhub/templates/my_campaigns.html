@@ -11,7 +11,7 @@ My Campaigns
 {% block pageBody %}
 {% if sponsor.campaigns|length!=0 %}
 {% for campaign in sponsor.campaigns %}
-<div class="camp-container">
+<div {% if campaign.is_flagged %} class="camp-container camp-flagged" {% else %} class="camp-container" {% endif %}>
     <div class="camp-img-cont">
         {% if campaign.campaign_pic %}
         <img id="display" src="{{ url_for('static',filename='uploads/campaign_pics/'+campaign.campaign_pic)}}">

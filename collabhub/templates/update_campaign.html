@@ -1,7 +1,7 @@
 {% extends 'pagebase.html' %}
 
 {% block pageTitle %}
-Create Campaign
+Update Campaign
 {% endblock pageTitle %}
 
 {% block pageStyles %}
@@ -59,7 +59,8 @@ Create Campaign
             {% endif %}
             {% endfor %}
         </select>
-
+        <p class="add-field-para">Couldn't find your Category? <a target="_blank"
+                href="{{url_for('create_category')}}">Add here</a></p>
         <label>Niches</label>
         <div class="selected-values-container">
             {% for niche in campaign.campaign_niches %}
@@ -77,6 +78,8 @@ Create Campaign
                 <div id="Show-All">Show All Niches</div>
             </div>
         </div>
+        <p class="add-field-para">Couldn't find your Niche? <a target="_blank" href="{{url_for('create_niche')}}">Add
+                here</a></p>
         <button class="form-submit">Submit</button>
     </form>
 </div>

@@ -10,4 +10,6 @@ Home
 
 {% block pageBody %}
 <h1>This is home</h1>
+<a href="{{url_for('create_campaignpage',user_id=current_user.id)}}">Create Campaign</a>
+<a href="">Make a Ad Request</a>
 {% endblock pageBody %}

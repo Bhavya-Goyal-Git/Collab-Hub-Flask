@@ -6,6 +6,8 @@
     padding: 15px;
     display: flex;
     align-items: flex-start;
+    position: relative;
+    overflow: hidden;
 }
 
 .camp-img-cont {
@@ -202,4 +204,22 @@
     font-size: 1.1rem;
     padding: 7px;
     border-radius: 7px;
+}
+
+.camp-flagged::before {
+    content: "Flagged by Admin";
+    position: absolute;
+    z-index: 2;
+    top: 200px;
+    font-size: 3rem;
+    left: -120px;
+    width: 900px;
+    padding: 5px 0;
+    background-color: #bc2222e6;
+    color: white;
+    text-align: center;
+    transform: rotate(-37deg);
+    -webkit-transform: rotate(-37deg);
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }

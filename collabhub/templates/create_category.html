@@ -1,0 +1,22 @@
+{% extends 'pagebase.html' %}
+
+{% block pageTitle %}
+Add Category
+{% endblock pageTitle %}
+
+{% block pageStyles %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/add_social.css')}}">
+{% endblock pageStyles %}
+
+{% block pageBody %}
+<div class="form-container">
+    <form method="post">
+        <div class="heading">
+            <h1>Create <span>Category</span></h1>
+        </div>
+        <label for="category_title">Category Title</label>
+        <input type="text" class="form-input" name="category_title" id="category_title" required>
+        <input class="form-submit" type="submit" value="Add Category">
+    </form>
+</div>
+{% endblock pageBody %}

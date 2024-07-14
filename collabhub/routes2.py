@@ -1,7 +1,7 @@
 from collabhub import app, db
 from flask import render_template, flash, redirect, request, url_for
 from flask_login import current_user, login_required
-from collabhub.models import User, Transaction, Category, Niche
+from collabhub.models import User, Transaction, Category, Niche, Influencerdata
 from collabhub.forms import money_valiadator
 
 @app.route("/<int:user_id>/addmoney", methods=["GET","POST"])
@@ -77,3 +77,39 @@ def create_niche():
         return redirect(request.referrer)
     categories = Category.query.all()
     return render_template("create_niche.html",categories=categories)
+
+def have_common_element(list1, list2):
+    return not set(list1).isdisjoint(list2)
+
+@app.route("/search/influencers", methods=["GET","POST"])
+def search_influencers():
+    influencers = []
+    if request.method == "POST":
+        if request.form["content"] == "":
+            influencers = Influencerdata.query.all()
+        elif request.form["search_by"] == "name":
+            influencers = Influencerdata.query.filter(Influencerdata.name.ilike(f"%{request.form['content']}%")).all()
+            flash(f"{len(influencers)} Results Found",category="info")
+        elif request.form["search_by"] == "category":
+            categories = Category.query.filter(Category.title.ilike(f"%{request.form['content']}%")).all()
+            if categories:
+                for cat in categories:
+                    influes = Influencerdata.query.filter_by(category_id=cat.id).all()
+                    if influes:
+                        influencers.extend(influes)
+                flash(f"{len(influencers)} Result(s) Found",category="info")
+            else:
+                flash("Category does not exist!",category="danger")
+        elif request.form["search_by"] == "niche":
+            nichess = Niche.query.filter(Niche.title.ilike(f"%{request.form['content']}%")).all()
+            if nichess:
+                for nic in nichess:
+                    influes = Influencerdata.query.join(Influencerdata.influencer_niches).filter(Niche.id == nic.id).all()
+                    if influes:
+                        influencers.extend(influes)
+                flash(f"{len(influencers)} Result(s) Found",category="info")
+            else:
+                flash("Niche does not exist!",category="danger")
+    cat_list = [catt.title for catt in Category.query.all()]
+    nic_list = [nicc.title for nicc in Niche.query.all()]
+    return render_template("search_influencers.html",influencers=influencers,cat_list=cat_list,nic_list=nic_list)

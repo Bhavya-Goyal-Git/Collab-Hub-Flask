@@ -113,7 +113,7 @@ class Influencerdata(db.Model):
    country:Mapped[str] = mapped_column(nullable=True)
    category_id:Mapped[int] = mapped_column(ForeignKey("category.id"))
    about:Mapped[str]
-   cover_photo:Mapped[str] = mapped_column(unique=True,nullable=True) #stores filename
+   cover_photo:Mapped[str] = mapped_column(unique=True,nullable=True) 
    profile_photo:Mapped[str] = mapped_column(unique=True,nullable=True) 
 
    influencer_category:Mapped['Category'] = relationship()

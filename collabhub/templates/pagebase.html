@@ -43,7 +43,8 @@
                 class="fa-solid fa-file-signature"></i> My
             Campaigns</a>
         <a class="nav-link" href=""><i class="fa-solid fa-hand-holding-dollar"></i> My Ad's</a>
-        <a class="nav-link" href=""><i class="fa-solid fa-magnifying-glass"></i> Search Influencers</a>
+        <a class="nav-link" href="{{ url_for('search_influencers') }}"><i class="fa-solid fa-magnifying-glass"></i>
+            Search Influencers</a>
         <a class="nav-link" href=""><i class="fa-solid fa-chart-line"></i> My Stats</a>
         {% else %}
         {% if current_user.role =="admin" %}

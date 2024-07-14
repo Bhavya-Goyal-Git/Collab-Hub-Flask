@@ -1,0 +1,82 @@
+{% extends 'pagebase.html' %}
+
+{% block pageTitle %}
+Search Influencers
+{% endblock pageTitle %}
+
+{% block pageStyles %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/search_influencers.css')}}">
+{% endblock pageStyles %}
+
+{% block pageBody %}
+<form method="post" class="search-form">
+    <select name="search_by" id="search_by" class="search-select">
+        <option value="name">Name</option>
+        <option value="category">Category</option>
+        <option value="niche">Niche</option>
+    </select>
+    <input class="search-input" type="text" name="content" id="content" list="search-suggestions">
+    <datalist id="search-suggestions">
+    </datalist>
+    <button class="submit-button"><i class="fa-solid fa-magnifying-glass"></i></button>
+</form>
+{% if influencers %}
+<div class="cards-container">
+    {% for influencer in influencers %}
+    <div class="card-container">
+        <div class="user-img">
+            {% if influencer.profile_photo %}
+            <img class="round" src="{{ url_for('static',filename='uploads/profile_pics/'+influencer.profile_photo)}}">
+            {% else %}
+            <img class="round" src="{{ url_for('static',filename='stockImages/blackpicture.jpg')}}">
+            {% endif %}
+        </div>
+        <a href="{{url_for('influencer_profilepage',user_id=influencer.user_id)}}" class="profile-link">
+            <h3>{{influencer.name}}</h3>
+        </a>
+        <h6>{{influencer.country}}</h6>
+        <h2>{{ influencer.influencer_category.title }} Influencer</h2>
+        <div class="niche-section">
+            <h4>Niches</h4>
+            {% for niche in influencer.influencer_niches %}
+            <span>{{niche.title}}</span>
+            {% endfor %}
+        </div>
+        <a href="" class="ad-req-btn">Make Ad Request</a>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock pageBody %}
+
+{% block pageScripts %}
+<script>
+    let submitButton = document.querySelector(".submit-button");
+    let searchForm = document.querySelector(".search-form");
+    submitButton.addEventListener("click", () => {
+        searchForm.submit();
+    });
+
+    var categories = {{ cat_list| tojson}};
+    var niches = {{ nic_list| tojson}};
+    let dataList = document.getElementById("search-suggestions");
+    let searchBy = document.getElementById("search_by");
+    searchBy.addEventListener("change", () => {
+        dataList.innerHTML = "";
+        if (searchBy.value == "category") {
+            categories.forEach(element => {
+                const option = document.createElement('option');
+                option.value = element;
+                dataList.appendChild(option);
+            });
+        }
+        else if (searchBy.value == "niche") {
+            niches.forEach(element => {
+                const option = document.createElement('option');
+                option.value = element;
+                dataList.appendChild(option);
+            });
+        }
+    });
+</script>
+{% endblock pageScripts %}

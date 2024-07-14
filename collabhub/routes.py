@@ -29,7 +29,7 @@ def register_page():
         else:
             return redirect(url_for("sponsor_completeprofile_page",user_id=new_user.id))
 
-    if form.errors != {}: #checking validation errors
+    if form.errors != {}:
         for ErrMsg in form.errors.values():
             flash(f"ERROR IN USER REGISTERATION: {ErrMsg[0]}",category="danger")
 
@@ -57,7 +57,7 @@ def login_page():
         else:
             flash("ERROR IN LOGIN : No Such Username Exists!",category="danger")
 
-    if form.errors != {}: #checking validation errors
+    if form.errors != {}:
         for ErrMsg in form.errors.values():
             flash(f"ERROR IN USER LOGIN: {ErrMsg[0]}",category="danger")
 
@@ -134,7 +134,7 @@ def sponsor_completeprofile_page(user_id):
         
     return render_template("sponsor_updateprofile.html",user=user)
 
-@app.route("/influencer/<int:user_id>") #publically visible
+@app.route("/influencer/<int:user_id>")
 def influencer_profilepage(user_id):
     user = User.query.get(user_id)
     return render_template("influencer_profilepage.html",user=user)

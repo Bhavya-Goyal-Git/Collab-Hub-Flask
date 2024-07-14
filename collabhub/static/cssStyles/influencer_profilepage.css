@@ -13,13 +13,10 @@
 }
 
 .main-section {
-    height: 100vw;
     display: flex;
-    border: 2px solid red;
 }
 
 .profile-options-container {
-    border: 2px solid blue;
     flex-grow: 1;
 }
 
@@ -27,7 +24,7 @@
     width: 300px;
     background-color: #282828e7;
     border-radius: 150px;
-    margin: 0 30px 0 30px;
+    margin: 0 30px -120px 30px;
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -57,14 +54,14 @@
 }
 
 .profile-bar h1 {
-    font-size: 2.2rem;
+    font-size: 2.4rem;
     margin: 10px auto 3px;
     color: #7446e7;
 }
 
 .profile-bar h2 {
     font-size: 1.5rem;
-    margin: 20px auto 3px;
+    margin: 15px auto 80px;
     color: rgba(255, 255, 255, 0.896);
     background-color: #8c60ec;
     border-radius: 15px;
@@ -73,49 +70,189 @@
 
 .profile-bar h3 {
     font-size: 1.2rem;
-    margin: 9px auto 3px;
-    color: #a27af0;
+    margin: 7px auto 3px;
+    color: rgba(255, 255, 255, 0.737);
 }
 
-.profile-bar h5 {
-    color: rgba(255, 255, 255, 0.83);
-    font-size: 1rem;
-    margin: 8px auto 3px;
-}
 
-.profile-bar h6 {
-    color: rgba(255, 255, 255, 0.83);
-    margin: 6px auto 3px;
-    font-size: 0.8rem;
-}
-
-.about-section {
+.wrapper {
+    display: flex;
     width: 85%;
-    margin: 20px auto 10px;
-    background-color: #3f3f3fd8;
+    margin: 25px auto 15px;
+    flex-wrap: wrap;
+    background-color: #282828d7;
     border-radius: 15px;
-    padding: 10px;
+    padding: 15px;
+    align-items: center;
+}
+
+.wrapper h1 {
+    color: #7446e7;
+    font-size: 2rem;
+}
+
+.wrapper .button {
+    display: inline-block;
+    height: 60px;
+    width: 60px;
+    margin: 2px 10px;
+    overflow: hidden;
+    background: #ffffffd6;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-out;
+}
+
+.wrapper .button:hover {
+    width: 250px;
+}
+
+.wrapper .button .icon {
+    display: inline-block;
+    height: 60px;
+    width: 60px;
+    color: rgba(0, 0, 0, 0.838);
+    text-align: center;
+    border-radius: 50px;
+    box-sizing: border-box;
+    line-height: 60px;
+    transition: all 0.3s ease-out;
+}
+
+.wrapper .button .icon i {
+    font-size: 25px;
+    line-height: 60px;
+    transition: all 0.3s ease-out;
+}
+
+.wrapper .button a {
+    text-decoration: none;
+}
+
+.wrapper .button:hover .icon i {
+    color: #fff;
+}
+
+.wrapper .button span {
+    font-size: 25px;
+    font-weight: bolder;
+    line-height: 60px;
+    margin-left: 5px;
+    transition: all 0.3s ease-out;
+}
+
+.wrapper .button:hover #facebook {
+    background-color: #316FF6;
+}
+
+.wrapper .button:hover #facebook+span {
+    color: #316FF6;
+}
+
+.wrapper .button:hover #instagram {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+.wrapper .button:hover #instagram+span {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.wrapper .button:hover #youtube {
+    background-color: #CD201F;
+}
+
+.wrapper .button:hover #youtube+span {
+    color: #CD201F;
+}
+
+.wrapper .button:hover #x-twitter {
+    background-color: black;
+}
+
+.wrapper .button:hover #x-twitter+span {
+    background-color: black;
+}
+
+.wrapper .button:hover #reddit {
+    background-color: #FF5700;
+}
+
+.wrapper .button:hover #reddit+span {
+    color: #FF5700;
+}
+
+.wrapper .button:hover #linkedin {
+    background-color: #0077B5;
+}
+
+.wrapper .button:hover #discord {
+    background-color: #5865F2;
+}
+
+.wrapper .button:hover #linkedin+span {
+    color: #0077B5;
+}
+
+.wrapper .button:hover #discord+span {
+    color: #5865F2;
+}
+
+.wrapper .button:hover #twitch {
+    background-color: #9146ff;
+}
+
+.wrapper .button:hover #tumblr {
+    background-color: #36465D;
+}
+
+.wrapper .button:hover #twitch+span {
+    color: #9146ff;
+}
+
+.wrapper .button:hover #tumblr+span {
+    color: #36465D;
+}
+
+.wrapper .button:hover #threads {
+    background-color: black;
+}
+
+.wrapper .button:hover #threads+span {
+    background-color: black;
+}
+
+.content-section {
+    display: flex;
+    align-items: flex-start;
+    width: 85%;
+    margin: 15px auto;
+    border-radius: 15px;
+    padding: 15px;
+    justify-content: space-between;
+}
+
+.about-section,
+.niche-section {
+    width: 45%;
+    background-color: #282828d7;
+    border-radius: 15px;
+    padding: 10px 20px 20px;
 }
 
 .about-section h4,
 .niche-section h4 {
     color: #8c60ec;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     margin: 5px auto;
     text-align: center;
 }
 
 .about-section p {
     color: rgba(255, 255, 255, 0.786);
-    text-align: center;
-}
-
-.niche-section {
-    width: 85%;
-    margin: 20px auto 150px;
-    background-color: #3f3f3fd8;
-    border-radius: 15px;
-    padding: 10px;
+    font-size: 1.05rem;
 }
 
 .niche-section span {
@@ -126,4 +263,25 @@
     color: white;
     border-radius: 8px;
     font-size: 1.1rem;
+}
+
+.contact-details {
+    width: 85%;
+    margin: 15px auto;
+    border-radius: 15px;
+    padding: 15px;
+    background-color: #282828d7;
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+}
+
+.contact-details h3 {
+    color: #9146ff;
+    margin-right: 10px;
+}
+
+.contact-details :is(h5, h6) {
+    margin-right: 10px;
+    color: rgba(255, 255, 255, 0.785);
 }

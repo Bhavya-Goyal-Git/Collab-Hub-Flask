@@ -1,9 +1,10 @@
 from collabhub import db, bcrypt, login_manager
 from sqlalchemy import CheckConstraint, ForeignKey, String, Column
-from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped, relationship
+from sqlalchemy.orm import mapped_column, Mapped, relationship
 from typing import List
 from datetime import date
 from flask_login import UserMixin
+from math import floor
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -38,8 +39,6 @@ class User(db.Model,UserMixin):
    
    @property
    def prettyBalance(self):
-      if(self.walletbalance<1000):
-         return str(self.walletbalance)
       r = ""
       b = list(str(self.walletbalance))
       count = 0
@@ -73,15 +72,28 @@ class Socials(db.Model) :
    def nicereach(self):
       if(self.reach<1000):
          return str(self.reach)
-      r = ""
-      b = list(str(self.reach))
-      count = 0
-      while(len(b)!=0):
-         if(count%3==0 and count!=0):
-            r = ","+r
-         r = b.pop() + r
-         count+=1
-      return r
+      elif(self.reach<1000000):
+         r = ""
+         c = floor(self.reach/1000)
+         b = list(str(c))
+         count = 0
+         while(len(b)!=0):
+            if(count%3==0 and count!=0):
+               r = ","+r
+            r = b.pop() + r
+            count+=1
+         return r+"K"
+      else:
+         r = ""
+         c = floor(self.reach/1000000)
+         b = list(str(c))
+         count = 0
+         while(len(b)!=0):
+            if(count%3==0 and count!=0):
+               r = ","+r
+            r = b.pop() + r
+            count+=1
+         return r+"M"
 
 influencerniche = db.Table(
     "influencerniche",
@@ -144,8 +156,6 @@ class Campaign(db.Model):
 
    @property
    def prettyBudget(self):
-      if(self.budget<1000):
-         return str(self.budget)
       r = ""
       b = list(str(self.budget))
       count = 0
@@ -165,7 +175,7 @@ class Adrequest(db.Model):
    status:Mapped[str] = mapped_column(nullable=False)
 
    __table_args__ =(
-      CheckConstraint("status IN ('pending', 'accepted', 'rejected', 'negotiation', 'completed')", name='check_ad_status_valid'),
+      CheckConstraint("status IN ('unapproved','pending', 'accepted', 'rejected', 'negotiation', 'unsettled','completed')", name='check_ad_status_valid'),
    )
 
    ad_campaign:Mapped['Campaign'] = relationship(back_populates="ad_requests")
@@ -181,3 +191,17 @@ class Admessages(db.Model):
    __table_args__ =(
       CheckConstraint("sender IN ('influencer', 'sponsor')", name='check_sender_valid'),
    )
+
+class Transaction(db.Model):
+   id:Mapped[int] = mapped_column(primary_key=True)
+   sender:Mapped[int] = mapped_column(ForeignKey("user.id"),nullable=True)
+   reciever:Mapped[int] = mapped_column(ForeignKey("user.id"),nullable=True)
+   amount:Mapped[int] = mapped_column(nullable=False)
+   dateoftransaction:Mapped[date] =mapped_column(default=date.today())
+
+class Review(db.Model):
+   id:Mapped[int] = mapped_column(primary_key=True)
+   writer_id:Mapped[int] = mapped_column(ForeignKey("user.id"))
+   content:Mapped[str] = mapped_column(nullable=False)
+
+   writer:Mapped["User"] = relationship()

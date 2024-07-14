@@ -29,9 +29,26 @@ Profile!
             </div>
             <h1 class="profile-data">{{user.infludata.name}}</h1>
             <h3 class="profile-data">@{{user.username}}</h3>
-            <h5 class="profile-data">{{user.email_address}}</h5>
-            <h6 class="profile-data">{{user.infludata.country}}</h6>
             <h2 class="profile-data">{{user.infludata.influencer_category.title}} Influencer</h2>
+        </div>
+    </div>
+    <div class="profile-options-container">
+        {% if user.infludata.social_links %}
+        <div class="wrapper">
+            <h1>Checkout : </h1>
+            {% for sociallink in user.infludata.social_links %}
+            <div class="button">
+                <a href="{{sociallink.link}}">
+                    <div class="icon" id="{{sociallink.handle}}">
+                        <i class="fa-brands fa-{{sociallink.handle}}"></i>
+                    </div>
+                    <span>Reach: {{sociallink.nicereach}}</span>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <div class="content-section">
             <div class="about-section">
                 <h4>About</h4>
                 <p>{{user.infludata.about}}</p>
@@ -43,9 +60,11 @@ Profile!
                 {% endfor %}
             </div>
         </div>
-    </div>
-    <div class="profile-options-container">
-
+        <div class="contact-details">
+            <h3>Contact : </h3>
+            <h5>{{user.email_address}},</h5>
+            <h6>{{user.infludata.country}}</h6>
+        </div>
     </div>
 </section>
 {% endblock pageBody %}

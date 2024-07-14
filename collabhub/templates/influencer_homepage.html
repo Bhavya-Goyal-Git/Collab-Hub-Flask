@@ -76,6 +76,7 @@ Home
                         class="fa-solid fa-money-bill-transfer"></i> Withdraw</a>
             </div>
         </div>
+        {% if user.infludata.social_links %}
         <div class="socials-container">
             <h3>Social Links</h3>
             {% for sociallink in user.infludata.social_links %}
@@ -98,6 +99,7 @@ Home
             </div>
             {% endfor %}
         </div>
+        {% endif %}
     </div>
 </section>
 {% endblock pageBody %}

@@ -47,10 +47,16 @@
         <a class="nav-link" href=""><i class="fa-solid fa-chart-line"></i> My Stats</a>
         <a class="nav-link" href=""><i class="fa-solid fa-magnifying-glass"></i> Search Influencers</a>
         {% else %}
+        {% if current_user.role =="admin" %}
         <a class="nav-link" href="">Somelink2</a>
         <a class="nav-link" href="">Somelink2</a>
         <a class="nav-link" href="">Somelink2</a>
         <a class="nav-link" href="">Somelink2</a>
+        {% else %}
+        <a class="nav-link" href=""><i class="fa-solid fa-book-bookmark"></i> Features</a>
+        <a class="nav-link" href="">How it Works <i class="fa-solid fa-question"></i></a>
+        <a class="nav-link" href=""><i class="fa-solid fa-comments"></i> Testimonials</a>
+        {% endif %}
         {% endif %}
         {% endif %}
 

@@ -134,7 +134,7 @@ def sponsor_completeprofile_page(user_id):
         
     return render_template("sponsor_updateprofile.html",user=user)
 
-@app.route("/influencer/<int:user_id>") #profile page (publically visible)
+@app.route("/influencer/<int:user_id>") #publically visible
 def influencer_profilepage(user_id):
     user = User.query.get(user_id)
     return render_template("influencer_profilepage.html",user=user)

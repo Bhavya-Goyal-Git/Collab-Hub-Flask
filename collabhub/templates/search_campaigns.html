@@ -1,0 +1,110 @@
+{% extends 'pagebase.html' %}
+
+{% block pageTitle %}
+Search Influencers
+{% endblock pageTitle %}
+
+{% block pageStyles %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/search_campaigns.css')}}">
+{% endblock pageStyles %}
+
+{% block pageBody %}
+<form method="post" class="search-form">
+    <select name="search_by" id="search_by" class="search-select">
+        <option value="company_name">Company</option>
+        <option value="category">Category</option>
+        <option value="niche">Niche</option>
+    </select>
+    <input class="search-input" type="text" name="content" id="content" list="search-suggestions">
+    <datalist id="search-suggestions">
+    </datalist>
+    <button class="submit-button"><i class="fa-solid fa-magnifying-glass"></i></button>
+</form>
+
+{% if campaigns %}
+<div class="campaigns-container">
+    {% for campaign in campaigns %}
+    <div class="camp-container">
+        <span class="camp-ribbon">
+            <h3>By: {{ campaign.sponsor.company_name }}</h3>
+            <div class="spons-img-cont">
+                {% if campaign.sponsor.profile_photo %}
+                <img class="round"
+                    src="{{ url_for('static',filename='uploads/profile_pics/'+campaign.sponsor.profile_photo)}}">
+                {% else %}
+                <img class="round" src="{{ url_for('static',filename='stockImages/blackpicture.jpg')}}">
+                {% endif %}
+            </div>
+        </span>
+        <div class="camp-img-cont">
+            {% if campaign.campaign_pic %}
+            <img id="display" src="{{ url_for('static',filename='uploads/campaign_pics/'+campaign.campaign_pic)}}">
+            {% endif %}
+        </div>
+        <div class="camp-opt-cont">
+            <h1>{{ campaign.name }}</h1>
+            <p class="camp-date">From: {{ campaign.start_date }} | To: {{ campaign.end_date }}</p>
+            <p class="camp-cat">{{ campaign.campaign_category.title }} Category</p>
+            <div class="camp-niches">
+                <p class="camp-nic">Niches :</p>
+                <ul>
+                    {% for niche in campaign.campaign_niches %}
+                    <li>{{niche.title}}{% if loop.index!= campaign.campaign_niches|length %},{% endif %}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <p class="budget">${{campaign.prettyBudget}}/-</p>
+            <p class="descc"><span>Description :</span> {{ campaign.description }}</p>
+            <p class="descc"><span>Goal :</span> {{ campaign.goal }}</p>
+            <div class="progress">Progress : <div class="progress-bar">
+                    {% set progress = ((today_date - campaign.start_date).days)*100/((campaign.end_date -
+                    campaign.start_date).days) %}
+                    <div class="progress-fill" {% if progress < 0 %} style="width: 0;" {% else %} {% if progress> 100 %}
+                        style="width: 100%;"
+                        {% else %}
+                        style="width: {{progress}}%;"{% endif %} {% endif %}>
+                    </div>
+                </div>
+            </div>
+
+            <a class="apply-btn" href="">Apply For Ad Request</a>
+
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% endblock pageBody %}
+
+{% block pageScripts %}
+<script>
+    let submitButton = document.querySelector(".submit-button");
+    let searchForm = document.querySelector(".search-form");
+    submitButton.addEventListener("click", () => {
+        searchForm.submit();
+    });
+
+    var categories = {{ cat_list| tojson}};
+    var niches = {{ nic_list| tojson}};
+    let dataList = document.getElementById("search-suggestions");
+    let searchBy = document.getElementById("search_by");
+    searchBy.addEventListener("change", () => {
+        dataList.innerHTML = "";
+        if (searchBy.value == "category") {
+            categories.forEach(element => {
+                const option = document.createElement('option');
+                option.value = element;
+                dataList.appendChild(option);
+            });
+        }
+        else if (searchBy.value == "niche") {
+            niches.forEach(element => {
+                const option = document.createElement('option');
+                option.value = element;
+                dataList.appendChild(option);
+            });
+        }
+    });
+</script>
+{% endblock pageScripts %}

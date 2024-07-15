@@ -1,8 +1,10 @@
 from collabhub import app, db
 from flask import render_template, flash, redirect, request, url_for
 from flask_login import current_user, login_required
-from collabhub.models import User, Transaction, Category, Niche, Influencerdata
+from collabhub.models import User, Transaction, Category, Niche, Influencerdata, Campaign, Sponsordata
 from collabhub.forms import money_valiadator
+from sqlalchemy import and_
+from datetime import date
 
 @app.route("/<int:user_id>/addmoney", methods=["GET","POST"])
 def addMoneyToWallet(user_id):
@@ -78,38 +80,90 @@ def create_niche():
     categories = Category.query.all()
     return render_template("create_niche.html",categories=categories)
 
-def have_common_element(list1, list2):
-    return not set(list1).isdisjoint(list2)
-
 @app.route("/search/influencers", methods=["GET","POST"])
 def search_influencers():
     influencers = []
     if request.method == "POST":
         if request.form["content"] == "":
-            influencers = Influencerdata.query.all()
+            flash("No Search Query Provided!",category="danger")
         elif request.form["search_by"] == "name":
             influencers = Influencerdata.query.filter(Influencerdata.name.ilike(f"%{request.form['content']}%")).all()
             flash(f"{len(influencers)} Results Found",category="info")
         elif request.form["search_by"] == "category":
             categories = Category.query.filter(Category.title.ilike(f"%{request.form['content']}%")).all()
             if categories:
-                for cat in categories:
-                    influes = Influencerdata.query.filter_by(category_id=cat.id).all()
-                    if influes:
-                        influencers.extend(influes)
+                cat = [catt.id for catt in categories]
+                influes = Influencerdata.query.filter(Influencerdata.category_id.in_(cat)).all()
+                if influes:
+                    influencers.extend(influes)
                 flash(f"{len(influencers)} Result(s) Found",category="info")
             else:
                 flash("Category does not exist!",category="danger")
         elif request.form["search_by"] == "niche":
             nichess = Niche.query.filter(Niche.title.ilike(f"%{request.form['content']}%")).all()
             if nichess:
-                for nic in nichess:
-                    influes = Influencerdata.query.join(Influencerdata.influencer_niches).filter(Niche.id == nic.id).all()
-                    if influes:
-                        influencers.extend(influes)
+                nic = [nicc.id for nicc in nichess]
+                influes = Influencerdata.query.join(Influencerdata.influencer_niches).filter(Niche.id.in_(nic)).all()
+                if influes:
+                    influencers.extend(influes)
                 flash(f"{len(influencers)} Result(s) Found",category="info")
             else:
                 flash("Niche does not exist!",category="danger")
     cat_list = [catt.title for catt in Category.query.all()]
     nic_list = [nicc.title for nicc in Niche.query.all()]
     return render_template("search_influencers.html",influencers=influencers,cat_list=cat_list,nic_list=nic_list)
+
+@app.route("/search/campaigns", methods=["GET","POST"])
+def search_campaigns():
+    campaigns = []
+    if request.method == "POST":
+        if request.form["content"] == "":
+            flash("No Search Query Provided!",category="danger")
+        elif request.form["search_by"] == "company_name":
+            sponsors = Sponsordata.query.filter(Sponsordata.company_name.ilike(f"%{request.form['content']}%")).all()
+            if sponsors:
+                spons = [sponsor.id for sponsor in sponsors]
+                camps = Campaign.query.filter(and_(
+                    Campaign.sponsor_id.in_(spons),
+                    Campaign.status == "public",
+                    Campaign.is_flagged == False,
+                    Campaign.has_ended == False
+                    )).all()
+                if camps:
+                    campaigns.extend(camps)
+                flash(f"{len(campaigns)} Results Found",category="info")
+            else:
+                flash("No Sponsor found",category="danger")
+        elif request.form["search_by"] == "category":
+            categories = Category.query.filter(Category.title.ilike(f"%{request.form['content']}%")).all()
+            if categories:
+                cat = [catt.id for catt in categories]
+                camps = Campaign.query.filter(and_(
+                        Campaign.category_id.in_(cat),
+                        Campaign.status == "public",
+                        Campaign.is_flagged == False,
+                        Campaign.has_ended == False
+                        )).all()
+                if camps:
+                    campaigns.extend(camps)
+                flash(f"{len(campaigns)} Result(s) Found",category="info")
+            else:
+                flash("Category does not exist!",category="danger")
+        elif request.form["search_by"] == "niche":
+            nichess = Niche.query.filter(Niche.title.ilike(f"%{request.form['content']}%")).all()
+            if nichess:
+                nic = [nicc.id for nicc in nichess]
+                camps = Campaign.query.join(Campaign.campaign_niches).filter(and_(
+                Niche.id.in_(nic),
+                Campaign.status == "public",
+                Campaign.is_flagged == False,
+                Campaign.has_ended == False
+                )).all()
+                if camps:
+                    campaigns.extend(camps)
+                flash(f"{len(campaigns)} Result(s) Found",category="info")
+            else:
+                flash("Niche does not exist!",category="danger")
+    cat_list = [catt.title for catt in Category.query.all()]
+    nic_list = [nicc.title for nicc in Niche.query.all()]
+    return render_template("search_campaigns.html",campaigns=campaigns,cat_list=cat_list,nic_list=nic_list,today_date=date.today())

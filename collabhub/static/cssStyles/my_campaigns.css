@@ -5,7 +5,7 @@
     border-radius: 15px;
     padding: 15px;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     position: relative;
     overflow: hidden;
 }
@@ -116,10 +116,9 @@
 
 .act-btns {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     width: 800px;
-    margin: 20px 0;
+    margin: 20px 0 0;
 }
 
 .act-btns a {
@@ -128,6 +127,7 @@
     font-size: 1.1rem;
     padding: 7px;
     border-radius: 7px;
+    margin-left: 18px;
 }
 
 .status-btn {

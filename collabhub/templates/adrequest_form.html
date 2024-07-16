@@ -1,0 +1,112 @@
+{% extends 'pagebase.html' %}
+
+{% block pageTitle %}
+Ad request
+{% endblock pageTitle %}
+
+{% block pageStyles %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/adrequest_form.css')}}">
+{% endblock pageStyles %}
+
+{% block pageBody %}
+<div class="form-container">
+    <form method="post" action="{{ url_for('create_adrequest') }}">
+        <div class="heading">
+            <h1>Make<span> Ad Request</span></h1>
+        </div>
+        <label for="influencer">Influencer</label>
+        <input type="number" name="influencer" id="influencer" value="{{influencer.id}}" readonly
+            style="display: none;">
+        <div class="selectable-cont">
+            <div class="img-cont">
+                {% if influencer.profile_photo %}
+                <img src="{{ url_for('static',filename='uploads/profile_pics/'+influencer.profile_photo)}}">
+                {% else %}
+                <img src="{{ url_for('static',filename='stockImages/blackpicture.jpg')}}">
+                {% endif %}
+            </div>
+            <div class="text-cont">
+                <a target="_blank" href="{{ url_for('influencer_profilepage',user_id=influencer.user_data.id) }}">
+                    <h1>{{influencer.name}}</h1>
+                </a>
+                <h3>@{{ influencer.user_data.username }}</h3>
+            </div>
+        </div>
+        <label for="campaign">Campaign</label>
+        {% if current_user.role=="influencer" %}
+        <input type="number" name="campaign" id="campaign" value="{{camp.id}}" readonly style="display: none;">
+        <div class="selectable-cont">
+            <div class="img-cont-2">
+                {% if camp.campaign_pic %}
+                <img src="{{ url_for('static',filename='uploads/campaign_pics/'+camp.campaign_pic)}}">
+                {% endif %}
+            </div>
+            <div class="text-cont">
+                <a target="_blank" href="{{ url_for('campaign_page',campaign_id=camp.id)}}">
+                    <h1>{{ camp.name }}</h1>
+                </a>
+                <h3>{{ camp.sponsor.company_name }}</h3>
+            </div>
+        </div>
+        {% else %}
+        {% for camps in current_user.sponsdata.campaigns %}
+        <input type="radio" name="campaign" value="{{camps.id}}">
+        <div class="selectable-cont radio-opt">
+            <div class="img-cont-2">
+                {% if camps.campaign_pic %}
+                <img src="{{ url_for('static',filename='uploads/campaign_pics/'+camps.campaign_pic)}}">
+                {% endif %}
+            </div>
+            <div class="text-cont">
+                <a target="_blank" href="{{ url_for('campaign_page',campaign_id=camps.id)}}">
+                    <h1>{{camps.name}}</h1>
+                </a>
+                <h3>{{current_user.sponsdata.company_name}}</h3>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <label for="requirements">Requirements</label>
+        {% if current_user.role=="influencer" %}
+        <textarea name="requirements" id="requirements" class="form-input form-about" required
+            readonly>To be filled by Sponsor</textarea>
+        {% else %}
+        <textarea name="requirements" id="requirements" class="form-input form-about"
+            placeholder="Write some requirements here" required></textarea>
+        {% endif %}
+
+        <label for="payment_amount">
+            {% if current_user.role=="influencer" %}
+            Expected Payment Amount
+            {% else %}
+            Payment Amount
+            {% endif %}
+        </label>
+        <input type="number" name="payment_amount" id="payment_amount" placeholder="00" class="form-input" required>
+
+        <label for="ad_message">Any Message</label>
+        <textarea name="ad_message" id="ad_message" class="form-input form-about"
+            placeholder="Write a message here for the {%if current_user.role=='influencer'%}Sponsor{%else%}Influencer{%endif%} (Optional)"></textarea>
+
+        <input type="submit" name="Make Ad Request" id="Submit" class="form-submit">
+    </form>
+</div>
+{% endblock pageBody %}
+
+{% block pageScripts %}
+{% if current_user.role=="sponsor" %}
+<script>
+    let radioOpts = document.getElementsByClassName("radio-opt");
+    let radioOptions = [...radioOpts];
+    radioOptions.forEach((radioOption) => {
+        radioOption.addEventListener("click", () => {
+            radioOption.previousElementSibling.checked = "true";
+        })
+    })
+    window.addEventListener("DOMContentLoaded", () => {
+        radioOptions[0].previousElementSibling.checked = "true";
+    })
+</script>
+{% endif %}
+{% endblock pageScripts %}

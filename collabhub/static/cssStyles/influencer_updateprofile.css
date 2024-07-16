@@ -164,6 +164,22 @@ label:has(+.form-input:focus) {
     overflow-y: scroll;
 }
 
+.selected-animate {
+    animation: growup 1s ease 1 forwards;
+}
+
+@keyframes growup {
+    from {
+        opacity: 0;
+        transform: scale(0.2);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 .selected-span {
     display: inline-block;
     padding: 7px;

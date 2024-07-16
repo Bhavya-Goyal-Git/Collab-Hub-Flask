@@ -1,5 +1,5 @@
 from collabhub import db, bcrypt, login_manager
-from sqlalchemy import CheckConstraint, ForeignKey, String, Column
+from sqlalchemy import CheckConstraint, ForeignKey, String, Column, UniqueConstraint
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from typing import List
 from datetime import date
@@ -17,7 +17,6 @@ class User(db.Model,UserMixin):
    password_hash:Mapped[str] = mapped_column(nullable=False)
    role:Mapped[str] = mapped_column(nullable=False)
    walletbalance:Mapped[int] = mapped_column(default=0)
-   is_flagged:Mapped[bool] = mapped_column(default=False)
 
    __table_args__ =(
       CheckConstraint("role IN ('influencer', 'sponsor','admin')", name='check_role_valid'),
@@ -48,7 +47,6 @@ class User(db.Model,UserMixin):
          r = b.pop() + r
          count+=1
       return r
-
 
 class Category(db.Model) :
    id:Mapped[int] = mapped_column(primary_key=True)
@@ -114,18 +112,21 @@ class Influencerdata(db.Model):
    category_id:Mapped[int] = mapped_column(ForeignKey("category.id"))
    about:Mapped[str]
    cover_photo:Mapped[str] = mapped_column(unique=True,nullable=True) 
-   profile_photo:Mapped[str] = mapped_column(unique=True,nullable=True) 
+   profile_photo:Mapped[str] = mapped_column(unique=True,nullable=True)
+   is_flagged:Mapped[bool] = mapped_column(default=False)
 
    influencer_category:Mapped['Category'] = relationship()
    social_links:Mapped[List['Socials']] = relationship(order_by="Socials.reach")
    influencer_niches:Mapped[List['Niche']] = relationship(secondary=influencerniche)
    ads:Mapped[List['Adrequest']] = relationship(back_populates="ad_influencer")
+   user_data:Mapped["User"] = relationship(back_populates="infludata")
 
 class Sponsordata(db.Model):
    id:Mapped[int] = mapped_column(primary_key=True)
    user_id:Mapped[int] = mapped_column(ForeignKey("user.id"),unique=True)
-   company_name:Mapped[str] = mapped_column(nullable=False)
+   company_name:Mapped[str] = mapped_column(nullable=False,unique=True)
    profile_photo:Mapped[str] = mapped_column(unique=True,nullable=True)
+   is_flagged:Mapped[bool] = mapped_column(default=False)
    
    campaigns:Mapped[List['Campaign']] = relationship(back_populates="sponsor", order_by="Campaign.start_date")
    
@@ -133,7 +134,7 @@ class Sponsordata(db.Model):
 class Campaign(db.Model):
    id:Mapped[int] = mapped_column(primary_key=True)
    sponsor_id:Mapped[int] = mapped_column(ForeignKey("sponsordata.id"))
-   name:Mapped[str] = mapped_column(nullable=False)
+   name:Mapped[str] = mapped_column(nullable=False,unique=True)
    description:Mapped[str]
    start_date:Mapped[date] = mapped_column(nullable=False)
    end_date:Mapped[date] = mapped_column(nullable=False)
@@ -176,6 +177,7 @@ class Adrequest(db.Model):
 
    __table_args__ =(
       CheckConstraint("status IN ('unapproved','pending', 'accepted', 'rejected', 'negotiation', 'unsettled','completed')", name='check_ad_status_valid'),
+      UniqueConstraint('campaign_id', 'influencer_id', name='influencer_campaign_uc'),
    )
 
    ad_campaign:Mapped['Campaign'] = relationship(back_populates="ad_requests")

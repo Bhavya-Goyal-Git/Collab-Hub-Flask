@@ -96,6 +96,16 @@ def money_valiadator(form):
         return False
     return True
 
-
-
+def ad_req_validator(form):
+    if form["campaign"] == "" or form["influencer"] == "":
+        flash("Input Fields can't be left empty",category="danger")
+        return False
+    if form["requirements"] == "":
+        flash("Requirement field can't be left empty",category="danger")
+        return False
+    if form["payment_amount"] == "":
+        flash("Payment Amount field can't be left empty",category="danger")
+        return False
+    return True
+    
 

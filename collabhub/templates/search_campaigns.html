@@ -66,9 +66,7 @@ Search Influencers
                     </div>
                 </div>
             </div>
-
-            <a class="apply-btn" href="">Apply For Ad Request</a>
-
+            <button class="apply-btn" onclick="applyfunc(event)" cid="{{campaign.id}}">Apply For Ad Request</button>
         </div>
     </div>
     {% endfor %}
@@ -106,5 +104,28 @@ Search Influencers
             });
         }
     });
+
+    var some_link = "{{url_for('adrequest_formpage')}}" //url string
+    var iid = {{ current_user.infludata.id }} // iid number
+
+    function applyfunc(event) {
+        let cid = Number(event.target.getAttribute("cid")); //cid number
+        const applyForm = document.createElement("form");
+        applyForm.action = some_link;
+        applyForm.method = "post";
+        applyForm.style.display = "none";
+        const iidInput = document.createElement("input");
+        const cidInput = document.createElement("input");
+        iidInput.setAttribute("type", "number");
+        cidInput.setAttribute("type", "number");
+        iidInput.setAttribute("name", "iid");
+        cidInput.setAttribute("name", "cid");
+        iidInput.setAttribute("value", iid);
+        cidInput.setAttribute("value", cid);
+        document.body.appendChild(applyForm);
+        applyForm.appendChild(iidInput);
+        applyForm.appendChild(cidInput);
+        applyForm.submit();
+    }
 </script>
 {% endblock pageScripts %}

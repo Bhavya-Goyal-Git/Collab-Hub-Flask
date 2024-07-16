@@ -173,6 +173,7 @@ Update Campaign
                 opt.setAttribute("class", "selected-span")
                 opt.innerHTML = `${item.innerText} <i class="fa-solid fa-xmark" id="cross-${nicheId}"></i>`
                 selectedContainer.style.display = "flex"
+                selectedContainer.classList.add("selected-animate")
                 selectedContainer.appendChild(opt)
                 opt.children[0].addEventListener("click", () => {
                     let someId = Number(opt.children[0].getAttribute("id").split("-")[1])
@@ -181,6 +182,7 @@ Update Campaign
                         opt.remove()
                         if (!selectedContainer.children.length) {
                             selectedContainer.style.display = "none"
+                            selectedContainer.classList.remove("selected-animate")
                         }
                     }
                 })

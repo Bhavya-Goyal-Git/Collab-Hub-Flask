@@ -1,8 +1,8 @@
 from collabhub import app, db
 from flask import render_template, flash, redirect, request, url_for
 from flask_login import current_user, login_required
-from collabhub.models import User, Transaction, Category, Niche, Influencerdata, Campaign, Sponsordata
-from collabhub.forms import money_valiadator
+from collabhub.models import User, Transaction, Category, Niche, Influencerdata, Campaign, Sponsordata, Adrequest, Admessages
+from collabhub.forms import money_valiadator, ad_req_validator
 from sqlalchemy import and_
 from datetime import date
 
@@ -167,3 +167,35 @@ def search_campaigns():
     cat_list = [catt.title for catt in Category.query.all()]
     nic_list = [nicc.title for nicc in Niche.query.all()]
     return render_template("search_campaigns.html",campaigns=campaigns,cat_list=cat_list,nic_list=nic_list,today_date=date.today())
+
+@app.route("/create/adrequest/form",methods=["POST"])
+def adrequest_formpage():
+    cid = request.form.get("cid")
+    iid = request.form.get("iid")
+    if not iid:
+        flash("Something went wrong!",category="danger")
+        return redirect(request.referrer)
+    camp = Campaign.query.get(int(cid)) if cid else None
+    influencer = Influencerdata.query.get(int(iid))
+    return render_template("adrequest_form.html",camp=camp,influencer=influencer)
+
+@app.route("/create/adrequest",methods=["POST"]) #register request in DB and redirect
+def create_adrequest():
+    if ad_req_validator(request.form):
+        adreq = Adrequest(campaign_id=int(request.form["campaign"]), influencer_id=int(request.form["influencer"]))
+        adreq.requirements = "To be filled by Sponsor" if current_user.role == "influencer" else request.form["requirements"]
+        adreq.payment_amount = request.form["payment_amount"]
+        adreq.status = "unapproved" if current_user.role == "influencer" else "pending"
+        if request.form["ad_message"] != "":
+            adreq.messages.append(Admessages(message=request.form["ad_message"],sender=current_user.role))
+        db.session.add(adreq)
+        db.session.commit()
+        flash("Ad Request Made Successfully!!",category="success")
+        if current_user.role == "influencer":
+            return redirect(url_for("influencer_homepage",user_id=current_user.id))
+        elif current_user.role == "sponsor":
+            return redirect(url_for("sponsor_homepage",user_id=current_user.id))
+
+@app.route("/influencer/<int:influencer_id>/myAdRequests")
+def influencer_adrequests(influencer_id):
+    pass

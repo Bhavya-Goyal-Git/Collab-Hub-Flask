@@ -44,11 +44,13 @@ def login_page():
             if user.check_password(form.password.data):
                 login_user(user)
                 flash(f"Login Successful! Welcome, {user.username}",category="success")
-                if(user.is_flagged):
-                    flash("Your Account has been flagged inappropriate by the Admin",category="danger")
                 if user.role == "influencer":
+                    if(user.infludata.is_flagged):
+                        flash("Your Account has been flagged inappropriate by the Admin",category="danger")
                     return redirect(url_for("influencer_homepage",user_id=user.id))
                 elif user.role == "sponsor":
+                    if(user.sponsdata.is_flagged):
+                        flash("Your Account has been flagged inappropriate by the Admin",category="danger")
                     return redirect(url_for("sponsor_homepage",user_id=user.id))
                 else:
                     pass #admin home page
@@ -346,3 +348,15 @@ def update_socialmedia(influencer_id,social_id):
     else:
         flash("Could Not Find the Social Link!",category="danger")
     return redirect(url_for("influencer_homepage",user_id=influencer.user_id))
+
+@app.route("/campaign/<int:campaign_id>")
+def campaign_page(campaign_id):
+    camp = Campaign.query.get(campaign_id)
+    if camp:
+        if camp.status == "private":
+            flash("Can't see a private campaign",category="danger")
+            return redirect(request.referrer)
+        return render_template("show_campaign.html",campaign=camp,today_date=date.today())
+    else:
+        flash("No Campaign found!",category="danger")
+        return redirect(request.referrer)

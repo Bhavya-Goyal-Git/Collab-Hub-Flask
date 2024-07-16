@@ -42,7 +42,7 @@ Search Influencers
             <span>{{niche.title}}</span>
             {% endfor %}
         </div>
-        <a href="" class="ad-req-btn">Make Ad Request</a>
+        <button class="ad-req-btn" iid="{{influencer.id}}" onclick="applyfunc(event)">Make Ad Request</button>
     </div>
     {% endfor %}
 </div>
@@ -78,5 +78,21 @@ Search Influencers
             });
         }
     });
+
+    var some_link = "{{url_for('adrequest_formpage')}}" //url string
+    function applyfunc(event) {
+        let iid = Number(event.target.getAttribute("iid")); //cid number
+        const applyForm = document.createElement("form");
+        applyForm.action = some_link;
+        applyForm.method = "post";
+        applyForm.style.display = "none";
+        const iidInput = document.createElement("input");
+        iidInput.setAttribute("type", "number");
+        iidInput.setAttribute("name", "iid");
+        iidInput.setAttribute("value", iid);
+        document.body.appendChild(applyForm);
+        applyForm.appendChild(iidInput);
+        applyForm.submit();
+    }
 </script>
 {% endblock pageScripts %}

@@ -1,16 +1,65 @@
 {% extends 'pagebase.html' %}
 
 {% block pageTitle %}
-My Campaigns
+View Campaign
 {% endblock pageTitle %}
 
 {% block pageStyles %}
+{% if current_user.role=="influencer" %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/search_campaigns.css')}}">
+{% else %}
 <link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/my_campaigns.css')}}" />
+{% endif %}
 {% endblock pageStyles %}
 
 {% block pageBody %}
-{% if sponsor.campaigns|length!=0 %}
-{% for campaign in sponsor.campaigns %}
+{% if current_user.role=="influencer" %}
+<div class="camp-container">
+    <span class="camp-ribbon">
+        <h3>By: {{ campaign.sponsor.company_name }}</h3>
+        <div class="spons-img-cont">
+            {% if campaign.sponsor.profile_photo %}
+            <img class="round"
+                src="{{ url_for('static',filename='uploads/profile_pics/'+campaign.sponsor.profile_photo)}}">
+            {% else %}
+            <img class="round" src="{{ url_for('static',filename='stockImages/blackpicture.jpg')}}">
+            {% endif %}
+        </div>
+    </span>
+    <div class="camp-img-cont">
+        {% if campaign.campaign_pic %}
+        <img id="display" src="{{ url_for('static',filename='uploads/campaign_pics/'+campaign.campaign_pic)}}">
+        {% endif %}
+    </div>
+    <div class="camp-opt-cont">
+        <h1>{{ campaign.name }}</h1>
+        <p class="camp-date">From: {{ campaign.start_date }} | To: {{ campaign.end_date }}</p>
+        <p class="camp-cat">{{ campaign.campaign_category.title }} Category</p>
+        <div class="camp-niches">
+            <p class="camp-nic">Niches :</p>
+            <ul>
+                {% for niche in campaign.campaign_niches %}
+                <li>{{niche.title}}{% if loop.index!= campaign.campaign_niches|length %},{% endif %}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <p class="budget">${{campaign.prettyBudget}}/-</p>
+        <p class="descc"><span>Description :</span> {{ campaign.description }}</p>
+        <p class="descc"><span>Goal :</span> {{ campaign.goal }}</p>
+        <div class="progress">Progress : <div class="progress-bar">
+                {% set progress = ((today_date - campaign.start_date).days)*100/((campaign.end_date -
+                campaign.start_date).days) %}
+                <div class="progress-fill" {% if progress < 0 %} style="width: 0;" {% else %} {% if progress> 100 %}
+                    style="width: 100%;"
+                    {% else %}
+                    style="width: {{progress}}%;"{% endif %} {% endif %}>
+                </div>
+            </div>
+        </div>
+        <button class="apply-btn" onclick="applyfunc(event)" cid="{{campaign.id}}">Apply For Ad Request</button>
+    </div>
+</div>
+{% else %}
 <div {% if campaign.is_flagged %} class="camp-container camp-flagged" {% else %} class="camp-container" {% endif %}>
     <div class="camp-img-cont">
         {% if campaign.campaign_pic %}
@@ -63,27 +112,5 @@ My Campaigns
         </div>
     </div>
 </div>
-{% endfor %}
 {% endif %}
 {% endblock pageBody %}
-
-{% block pageScripts %}
-<script>
-    try {
-        let imgdivs = document.querySelectorAll(".camp-img-cont");
-        imgdivs.forEach((imgdiv) => {
-            imgdiv.addEventListener("mouseenter", () => {
-                let box = imgdiv.querySelector(".update-pic-btn-container");
-                box.style.display = "flex";
-            });
-            imgdiv.addEventListener("mouseleave", () => {
-                let box = imgdiv.querySelector(".update-pic-btn-container");
-                box.style.display = "none";
-            });
-        });
-    } catch (e) {
-        //No campaigns found!
-    }
-
-</script>
-{% endblock pageScripts %}

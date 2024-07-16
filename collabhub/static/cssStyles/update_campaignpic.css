@@ -113,6 +113,12 @@
     align-items: center;
 }
 
+#top-heading {
+    font-size: 3rem;
+    text-align: center;
+    margin-top: 10px;
+}
+
 .modal-content {
     background-color: #282828;
     border-radius: 20px;

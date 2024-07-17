@@ -30,7 +30,10 @@
         {% if current_user.role =="influencer" %}
         <a class="nav-link" href="{{url_for('influencer_homepage',user_id=current_user.id)}}"><i
                 class="fa-solid fa-house-user"></i> Home</a>
-        <a class="nav-link" href=""><i class="fa-solid fa-hand-holding-dollar"></i> My Ad requests</a>
+        <a class="nav-link" {% if current_user.infludata %}
+            href="{{ url_for('influencer_adrequests',influencer_id=current_user.infludata.id) }}" {% else %}
+            href="{{ url_for('search_campaigns') }}" {% endif %}><i class="fa-solid fa-hand-holding-dollar"></i> My Ad
+            requests</a>
         <a class="nav-link" href="{{ url_for('search_campaigns') }}"><i class="fa-solid fa-magnifying-glass"></i> Find
             Campaigns</a>
         <a class="nav-link" href=""><i class="fa-solid fa-chart-line"></i> My Stats</a>
@@ -43,7 +46,10 @@
             href="{{url_for('create_campaignpage',user_id=current_user.id)}}" {% endif %}><i
                 class="fa-solid fa-file-signature"></i> My
             Campaigns</a>
-        <a class="nav-link" href=""><i class="fa-solid fa-hand-holding-dollar"></i> My Ad's</a>
+        <a class="nav-link" {% if current_user.sponsdata %}
+            href="{{url_for('sponsor_adrequests',sponsor_id=current_user.sponsdata.id)}}" {% else %}
+            href="{{ url_for('search_influencers') }}" {% endif %}><i class="fa-solid fa-hand-holding-dollar"></i> My
+            Ad's</a>
         <a class="nav-link" href="{{ url_for('search_influencers') }}"><i class="fa-solid fa-magnifying-glass"></i>
             Find Influencers</a>
         <a class="nav-link" href=""><i class="fa-solid fa-chart-line"></i> My Stats</a>

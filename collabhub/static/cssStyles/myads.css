@@ -1,0 +1,247 @@
+.ads-container {
+    margin-top: 25px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.ad-container {
+    width: 65%;
+    padding: 15px 15px 15px 25px;
+    border-radius: 15px;
+    background-color: #282828e9;
+    margin: 25px auto;
+    position: relative;
+    transition: 0.2s ease;
+}
+
+.ad-container:hover {
+    box-shadow: 0 0 15px purple;
+    --s: 37px;
+    --c: #0000, #282828 0.5deg 119.5deg, #0000 120deg;
+    --g1: conic-gradient(from 60deg at 56.25% calc(425% / 6), var(--c));
+    --g2: conic-gradient(from 180deg at 43.75% calc(425% / 6), var(--c));
+    --g3: conic-gradient(from -60deg at 50% calc(175% / 12), var(--c));
+    background: var(--g1), var(--g1) var(--s) calc(1.73 * var(--s)), var(--g2),
+        var(--g2) var(--s) calc(1.73 * var(--s)), var(--g3) var(--s) 0,
+        var(--g3) 0 calc(1.73 * var(--s)) #1e1e1e;
+    background-size: calc(2 * var(--s)) calc(3.46 * var(--s));
+}
+
+.selectable-cont,
+.payment-cont,
+.req-cont,
+.chats-cont,
+.action-btns {
+    width: 75%;
+    padding: 5px 12px;
+    margin: 3px 15px;
+    box-sizing: border-box;
+}
+
+.selectable-cont,
+.payment-cont,
+.action-btns {
+    display: flex;
+    align-items: center;
+}
+
+.selectable-cont .img-cont {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+}
+
+.selectable-cont .img-cont img {
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.selectable-cont .img-cont-2 {
+    height: 125px;
+    width: 100px;
+}
+
+.selectable-cont .img-cont-2 img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.selectable-cont .text-cont {
+    padding: 10px 25px;
+}
+
+.selectable-cont .text-cont a {
+    text-decoration: none;
+}
+
+.selectable-cont .text-cont a:hover {
+    font-style: italic;
+}
+
+.selectable-cont .text-cont :is(h1, h2),
+.req-cont h1,
+.payment-cont h2,
+.chats-cont h1 {
+    margin-bottom: 3px;
+    font-size: 2.5rem;
+    color: rgba(255, 255, 255, 0.929);
+}
+
+.selectable-cont .text-cont h2 {
+    font-size: 2rem;
+}
+
+.selectable-cont .text-cont h3 {
+    font-size: 1.5rem;
+    color: #7446e7;
+}
+
+.payment-cont h1 {
+    color: #30891c;
+    font-size: 4rem;
+    margin-left: 15px;
+}
+
+.camp-ribbon {
+    position: absolute;
+    right: 70px;
+    top: -30px;
+    width: 340px;
+    height: 200px;
+    background: linear-gradient(#040a51, rgb(71, 58, 117));
+    text-align: center;
+    border-bottom-left-radius: 170px;
+    border-bottom-right-radius: 170px;
+    border-top-left-radius: 30px;
+}
+
+.camp-ribbon::before {
+    content: "";
+    position: absolute;
+    height: 30px;
+    background-color: #050a47;
+    width: 30px;
+    right: -26px;
+    border-top-right-radius: 30px;
+    z-index: -1;
+}
+
+.camp-ribbon h2 {
+    color: rgba(255, 255, 255, 0.9);
+    margin: 43px 0 10px;
+}
+
+.camp-ribbon h1 {
+    font-size: 2.5rem;
+}
+
+.chats-cont {
+    border-radius: 10px;
+    background-color: rgba(23, 17, 48, 0.627);
+    display: none;
+    flex-direction: column;
+    padding: 10px 12px;
+    max-height: 350px;
+    overflow-y: scroll;
+    margin: 10px 15px;
+}
+
+.chat-visible {
+    display: flex;
+    animation: appear 0.4s ease 1 forwards;
+}
+
+.chat-invisible {
+    display: flex;
+    animation: away 0.4s ease 1 forwards;
+}
+
+@keyframes appear {
+    from {
+        max-height: 0;
+        opacity: 0.1;
+    }
+
+    to {
+        max-height: 350px;
+        opacity: 1;
+    }
+}
+
+@keyframes away {
+    from {
+        max-height: 350px;
+    }
+
+    to {
+        max-height: 0;
+        display: none;
+    }
+}
+
+.req-cont p {
+    color: rgba(255, 255, 255, 0.852);
+}
+
+.chats-cont .left {
+    font-size: 1rem;
+    background-color: #3f3f3f;
+    max-width: 80%;
+    align-self: flex-start;
+    padding: 8px 12px;
+    margin: 8px;
+    border-radius: 6px;
+}
+
+.chats-cont .right {
+    font-size: 1rem;
+    background-color: #8c60ec;
+    max-width: 80%;
+    align-self: flex-end;
+    padding: 8px 12px;
+    margin: 8px;
+    border-radius: 6px;
+}
+
+.chats-cont h1 {
+    text-align: center;
+}
+
+.action-btns :is(a, button) {
+    color: white;
+    margin: 3px 12px 3px 0;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    padding: 10px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.green-btn {
+    background-color: #30891c;
+    border: 2px solid #30891c;
+}
+
+.purple-btn {
+    background-color: #7446e7;
+    border: 2px solid #7446e7;
+}
+
+.red-btn {
+    background-color: #c61414;
+    border: 2px solid #c61414;
+}
+
+:is(.green-btn, .red-btn, .purple-btn):hover {
+    background-color: #282828;
+    font-weight: bold;
+}

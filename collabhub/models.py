@@ -129,7 +129,7 @@ class Sponsordata(db.Model):
    is_flagged:Mapped[bool] = mapped_column(default=False)
    
    campaigns:Mapped[List['Campaign']] = relationship(back_populates="sponsor", order_by="Campaign.start_date")
-   
+   user_data:Mapped["User"] = relationship(back_populates="sponsdata")
 
 class Campaign(db.Model):
    id:Mapped[int] = mapped_column(primary_key=True)
@@ -183,6 +183,18 @@ class Adrequest(db.Model):
    ad_campaign:Mapped['Campaign'] = relationship(back_populates="ad_requests")
    ad_influencer:Mapped['Influencerdata'] = relationship(back_populates="ads")
    messages:Mapped[List['Admessages']] = relationship()
+
+   @property
+   def prettypayment(self):
+      r = ""
+      b = list(str(self.payment_amount))
+      count = 0
+      while(len(b)!=0):
+         if(count%3==0 and count!=0):
+            r = ","+r
+         r = b.pop() + r
+         count+=1
+      return r
 
 class Admessages(db.Model):
    id:Mapped[int] = mapped_column(primary_key=True)

@@ -26,7 +26,7 @@ Ad request
                 {% endif %}
             </div>
             <div class="text-cont">
-                <a target="_blank" href="{{ url_for('influencer_profilepage',user_id=influencer.user_data.id) }}">
+                <a target="_blank" href="{{ url_for('influencer_profilepage',user_id=influencer.user_id) }}">
                     <h1>{{influencer.name}}</h1>
                 </a>
                 <h3>@{{ influencer.user_data.username }}</h3>

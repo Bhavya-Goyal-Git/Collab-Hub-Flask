@@ -1,0 +1,89 @@
+{% extends 'pagebase.html' %}
+
+{% block pageTitle %}
+My Ad Requests
+{% endblock pageTitle %}
+
+{% block pageStyles %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/myads.css')}}">
+{% endblock pageStyles %}
+
+{% block pageBody %}
+{% if influencer.ads %}
+<div class="ads-container">
+    {% for ad in influencer.ads %}
+    <div class="ad-container">
+        <span class="camp-ribbon">
+            <h2>Request Status :</h2>
+            <h1>{{ ad.status.capitalize() }}</h1>
+        </span>
+        <div class="selectable-cont">
+            <div class="img-cont-2">
+                {% if ad.ad_campaign.campaign_pic %}
+                <img src="{{ url_for('static',filename='uploads/campaign_pics/'+ad.ad_campaign.campaign_pic)}}">
+                {% endif %}
+            </div>
+            <div class="text-cont">
+                <h2>Campaign : </h2>
+                <a target="_blank" href="{{ url_for('campaign_page',campaign_id=ad.ad_campaign.id) }}">
+                    <h1>{{ ad.ad_campaign.name }}</h1>
+                </a>
+                <h3>{{ ad.ad_campaign.sponsor.company_name }}</h3>
+            </div>
+        </div>
+        <div class="payment-cont">
+            <h2>Payment : </h2>
+            <h1>${{ad.prettypayment}}/-</h1>
+        </div>
+        <div class="req-cont">
+            <h1>Requirements : </h1>
+            <p>{{ad.requirements}}</p>
+        </div>
+        <div class="chats-cont">
+            <h1>Chat Messages</h1>
+            {% if ad.messages %}
+            {% for admsg in ad.messages %}
+            <div {% if admsg.sender=="influencer" %} class="right" {% else %} class="left" {% endif %}>{{admsg.message}}
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="action-btns">
+            <a href="">Click Me</a>
+            <a href="">Click Me</a>
+            <button class="showChats green-btn">Show Chats</button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock pageBody %}
+
+{% block pageScripts %}
+<script>
+    let showBtns = document.getElementsByClassName("showChats");
+    let showButtons = Array.from(showBtns)
+    showButtons.forEach((showBtn) => {
+        let currentstat = false;
+        showBtn.addEventListener("click", (event) => {
+            let chatBox = event.target.parentElement.previousElementSibling;
+            if (!currentstat) {
+                chatBox.classList.remove("chat-invisible")
+                chatBox.classList.add("chat-visible");
+                currentstat = true;
+                showBtn.innerText = "Close Chats";
+                showBtn.classList.remove("green-btn")
+                showBtn.classList.add("red-btn")
+            }
+            else {
+                chatBox.classList.remove("chat-visible");
+                chatBox.classList.add("chat-invisible")
+                currentstat = false;
+                showBtn.innerText = "Show Chats";
+                showBtn.classList.add("green-btn")
+                showBtn.classList.remove("red-btn")
+            }
+        })
+    })
+</script>
+{% endblock pageScripts %}

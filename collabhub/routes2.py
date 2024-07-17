@@ -1,7 +1,7 @@
 from collabhub import app, db
 from flask import render_template, flash, redirect, request, url_for
 from flask_login import current_user, login_required
-from collabhub.models import User, Transaction, Category, Niche, Influencerdata, Campaign, Sponsordata, Adrequest, Admessages
+from collabhub.models import User, Transaction, Category, Niche, Influencerdata, Campaign, Sponsordata, Adrequest, Admessages, Message
 from collabhub.forms import money_valiadator, ad_req_validator
 from sqlalchemy import and_
 from datetime import date
@@ -192,10 +192,24 @@ def create_adrequest():
         db.session.commit()
         flash("Ad Request Made Successfully!!",category="success")
         if current_user.role == "influencer":
+            chat_message = Message(sender=current_user.id, reciever=adreq.ad_campaign.sponsor.user_id)
+            chat_message.content = f"You have recieved an Ad request from {current_user.infludata.name} for the campaign {adreq.ad_campaign.name}"
+            db.session.add(chat_message)
+            db.session.commit()
             return redirect(url_for("influencer_homepage",user_id=current_user.id))
         elif current_user.role == "sponsor":
+            chat_message = Message(sender=current_user.id, reciever=adreq.ad_influencer.user_id)
+            chat_message.content = f"You have recieved an Ad request from {current_user.sponsdata.company_name} for the campaign {adreq.ad_campaign.name}"
+            db.session.add(chat_message)
+            db.session.commit()
             return redirect(url_for("sponsor_homepage",user_id=current_user.id))
 
 @app.route("/influencer/<int:influencer_id>/myAdRequests")
 def influencer_adrequests(influencer_id):
-    pass
+    influencer = Influencerdata.query.get(influencer_id)
+    return render_template("influencer_myads.html",influencer=influencer)
+
+@app.route("/sponsor/<int:sponsor_id>/myAdRequests")
+def sponsor_adrequests(sponsor_id):
+    sponsor = Sponsordata.query.get(sponsor_id)
+    return render_template("sponsor_myads.html",sponsor=sponsor)

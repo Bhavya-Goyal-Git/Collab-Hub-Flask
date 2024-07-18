@@ -11,7 +11,7 @@
     padding: 15px 15px 15px 25px;
     border-radius: 15px;
     background-color: #282828e9;
-    margin: 25px auto;
+    margin: 30px auto;
     position: relative;
     transition: 0.2s ease;
 }
@@ -32,8 +32,7 @@
 .selectable-cont,
 .payment-cont,
 .req-cont,
-.chats-cont,
-.action-btns {
+.chats-cont {
     width: 75%;
     padding: 5px 12px;
     margin: 3px 15px;
@@ -41,8 +40,7 @@
 }
 
 .selectable-cont,
-.payment-cont,
-.action-btns {
+.payment-cont {
     display: flex;
     align-items: center;
 }
@@ -216,9 +214,9 @@
     text-align: center;
 }
 
-.action-btns :is(a, button) {
+.showChats {
     color: white;
-    margin: 3px 12px 3px 0;
+    margin: 10px 0 10px 25px;
     border-radius: 5px;
     font-size: 1.2rem;
     padding: 10px;
@@ -229,19 +227,40 @@
 .green-btn {
     background-color: #30891c;
     border: 2px solid #30891c;
+    transition: 0.5s ease;
 }
 
 .purple-btn {
     background-color: #7446e7;
     border: 2px solid #7446e7;
+    transition: 0.5s ease;
 }
 
 .red-btn {
     background-color: #c61414;
     border: 2px solid #c61414;
+    transition: 0.5s ease;
 }
 
 :is(.green-btn, .red-btn, .purple-btn):hover {
-    background-color: #282828;
+    background: transparent;
     font-weight: bold;
+}
+
+.action-btns {
+    position: absolute;
+    top: 230px;
+    right: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.action-btns a {
+    color: white;
+    margin: 6px 0;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    padding: 10px 15px;
+    text-decoration: none;
 }

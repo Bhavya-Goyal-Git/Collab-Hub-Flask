@@ -38,7 +38,7 @@ Profile!
             <h1>Checkout : </h1>
             {% for sociallink in user.infludata.social_links %}
             <div class="button">
-                <a href="{{sociallink.link}}">
+                <a href="{{sociallink.link}}" target="_blank">
                     <div class="icon" id="{{sociallink.handle}}">
                         <i class="fa-brands fa-{{sociallink.handle}}"></i>
                     </div>

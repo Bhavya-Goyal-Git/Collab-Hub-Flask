@@ -56,7 +56,9 @@ My Campaigns
                 {% else %}
                 Public
                 {% endif %}</a>
-            <a class="status-btn" href="">View Ad Requests</a>
+            <a class="status-btn"
+                href="{{ url_for('sponsor_adrequests',sponsor_id=campaign.sponsor.id,campaign=campaign.id) }}">View Ad
+                Requests</a>
             <a class="end-btn" href="">End Campaign</a>
             <a class="update-btn" href="{{ url_for('update_campaignpage',campaign_id=campaign.id) }}">Update</a>
             <a class="delete-btn" href="">Delete</a>

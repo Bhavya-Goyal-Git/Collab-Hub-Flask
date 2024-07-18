@@ -24,6 +24,7 @@ class User(db.Model,UserMixin):
 
    infludata:Mapped['Influencerdata'] = relationship(uselist=False)
    sponsdata:Mapped['Sponsordata'] =  relationship(uselist=False)
+   notifications:Mapped['Notification'] = relationship()
 
    @property
    def password(self):
@@ -213,12 +214,11 @@ class Transaction(db.Model):
    amount:Mapped[int] = mapped_column(nullable=False)
    dateoftransaction:Mapped[date] =mapped_column(default=date.today())
 
-class Message(db.Model):
+class Notification(db.Model):
    id:Mapped[int] = mapped_column(primary_key=True)
-   sender:Mapped[int] = mapped_column(ForeignKey("user.id"))
    reciever:Mapped[int] = mapped_column(ForeignKey("user.id"))
    content:Mapped[str] = mapped_column(nullable=False)
-   dateofsending:Mapped[date] =mapped_column(default=date.today())
+   daterecieved:Mapped[date] =mapped_column(default=date.today())
 
 class Review(db.Model):
    id:Mapped[int] = mapped_column(primary_key=True)

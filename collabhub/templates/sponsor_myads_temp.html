@@ -1,0 +1,70 @@
+<div class="ad-container">
+    <span class="camp-ribbon">
+        <h2>Request Status :</h2>
+        <h1>{{ ad.status.capitalize() }}</h1>
+    </span>
+    <div class="selectable-cont">
+        <div class="img-cont">
+            {% if ad.ad_influencer.profile_photo %}
+            <img src="{{ url_for('static',filename='uploads/profile_pics/'+ad.ad_influencer.profile_photo)}}">
+            {% else %}
+            <img src="{{ url_for('static',filename='stockImages/blackpicture.jpg')}}">
+            {% endif %}
+        </div>
+        <div class="text-cont">
+            <h2>Influencer : </h2>
+            <a target="_blank" href="{{ url_for('influencer_profilepage',user_id=ad.ad_influencer.user_id) }}">
+                <h1>{{ad.ad_influencer.name}}</h1>
+            </a>
+            <h3>@{{ ad.ad_influencer.user_data.username }}</h3>
+        </div>
+    </div>
+    <div class="selectable-cont">
+        <div class="img-cont-2">
+            {% if ad.ad_campaign.campaign_pic %}
+            <img src="{{ url_for('static',filename='uploads/campaign_pics/'+ad.ad_campaign.campaign_pic)}}">
+            {% endif %}
+        </div>
+        <div class="text-cont">
+            <h2>Campaign : </h2>
+            <a target="_blank" href="{{ url_for('campaign_page',campaign_id=ad.ad_campaign.id) }}">
+                <h1>{{ ad.ad_campaign.name }}</h1>
+            </a>
+            <h3>{{ ad.ad_campaign.sponsor.company_name }}</h3>
+        </div>
+    </div>
+    <div class="payment-cont">
+        <h2>Payment : </h2>
+        <h1>${{ad.prettypayment}}/-</h1>
+    </div>
+    <div class="req-cont">
+        <h1>Requirements : </h1>
+        <p>{{ad.requirements}}</p>
+    </div>
+    <div class="chats-cont">
+        <h1>Chat Messages</h1>
+        {% if ad.messages %}
+        {% for admsg in ad.messages %}
+        <div {% if admsg.sender=="influencer" %} class="left" {% else %} class="right" {% endif %}>{{admsg.message}}
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <button class="showChats green-btn">Show Chats</button>
+    <div class="action-btns">
+        {% if ad.status == "unapproved" %}
+        <a href="" class="purple-btn">Edit & Approve</a>
+        <a href="{{ url_for('rejectadreq_page',ad_request_id=ad.id) }}" class="red-btn">Reject Request</a>
+        {% elif ad.status == "pending" %}
+        <a href="{{ url_for('deleteadreq_page',ad_request_id=ad.id) }}" class="red-btn">Delete Request</a>
+        {%elif ad.status == "rejected" %}
+        <a href="{{ url_for('deleteadreq_page',ad_request_id=ad.id) }}" class="red-btn">Delete Request</a>
+        {%elif ad.request == "negotiation"%}
+        <a href="" class="green-btn">Edit & Accept</a>
+        <a href="{{ url_for('rejectadreq_page',ad_request_id=ad.id) }}" class="red-btn">Reject Request</a>
+        {%elif ad.status == "unsettled" %}
+        <a href="" class="green-btn">Make Payment</a>
+        {% else %}
+        {% endif %}
+    </div>
+</div>

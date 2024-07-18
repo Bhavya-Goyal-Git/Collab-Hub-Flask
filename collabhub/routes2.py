@@ -1,7 +1,7 @@
 from collabhub import app, db
 from flask import render_template, flash, redirect, request, url_for
 from flask_login import current_user, login_required
-from collabhub.models import User, Transaction, Category, Niche, Influencerdata, Campaign, Sponsordata, Adrequest, Admessages, Message
+from collabhub.models import User, Transaction, Category, Niche, Influencerdata, Campaign, Sponsordata, Adrequest, Admessages, Notification
 from collabhub.forms import money_valiadator, ad_req_validator
 from sqlalchemy import and_
 from datetime import date
@@ -87,13 +87,19 @@ def search_influencers():
         if request.form["content"] == "":
             flash("No Search Query Provided!",category="danger")
         elif request.form["search_by"] == "name":
-            influencers = Influencerdata.query.filter(Influencerdata.name.ilike(f"%{request.form['content']}%")).all()
+            influencers = Influencerdata.query.filter(and_(
+                Influencerdata.name.ilike(f"%{request.form['content']}%"),
+                Influencerdata.is_flagged ==False
+                )).all()
             flash(f"{len(influencers)} Results Found",category="info")
         elif request.form["search_by"] == "category":
             categories = Category.query.filter(Category.title.ilike(f"%{request.form['content']}%")).all()
             if categories:
                 cat = [catt.id for catt in categories]
-                influes = Influencerdata.query.filter(Influencerdata.category_id.in_(cat)).all()
+                influes = Influencerdata.query.filter(and_(
+                    Influencerdata.category_id.in_(cat),
+                    Influencerdata.is_flagged ==False
+                    )).all()
                 if influes:
                     influencers.extend(influes)
                 flash(f"{len(influencers)} Result(s) Found",category="info")
@@ -103,7 +109,10 @@ def search_influencers():
             nichess = Niche.query.filter(Niche.title.ilike(f"%{request.form['content']}%")).all()
             if nichess:
                 nic = [nicc.id for nicc in nichess]
-                influes = Influencerdata.query.join(Influencerdata.influencer_niches).filter(Niche.id.in_(nic)).all()
+                influes = Influencerdata.query.join(Influencerdata.influencer_niches).filter(and_(
+                    Niche.id.in_(nic),
+                    Influencerdata.is_flagged ==False
+                )).all()
                 if influes:
                     influencers.extend(influes)
                 flash(f"{len(influencers)} Result(s) Found",category="info")
@@ -192,15 +201,15 @@ def create_adrequest():
         db.session.commit()
         flash("Ad Request Made Successfully!!",category="success")
         if current_user.role == "influencer":
-            chat_message = Message(sender=current_user.id, reciever=adreq.ad_campaign.sponsor.user_id)
-            chat_message.content = f"You have recieved an Ad request from {current_user.infludata.name} for the campaign {adreq.ad_campaign.name}"
-            db.session.add(chat_message)
+            notif = Notification(reciever=adreq.ad_campaign.sponsor.user_id)
+            notif.content = f"You have recieved an Ad request from {current_user.infludata.name} for the Campaign {adreq.ad_campaign.name}. Kindly Edit/Approve or Reject the request to proceed further."
+            db.session.add(notif)
             db.session.commit()
             return redirect(url_for("influencer_homepage",user_id=current_user.id))
         elif current_user.role == "sponsor":
-            chat_message = Message(sender=current_user.id, reciever=adreq.ad_influencer.user_id)
-            chat_message.content = f"You have recieved an Ad request from {current_user.sponsdata.company_name} for the campaign {adreq.ad_campaign.name}"
-            db.session.add(chat_message)
+            notif = Notification(reciever=adreq.ad_influencer.user_id)
+            notif.content = f"You have recieved an Ad request from {current_user.sponsdata.company_name} for the campaign {adreq.ad_campaign.name}. Kindly Accept/Reject the request or Negotitate to proceed further."
+            db.session.add(notif)
             db.session.commit()
             return redirect(url_for("sponsor_homepage",user_id=current_user.id))
 
@@ -211,5 +220,67 @@ def influencer_adrequests(influencer_id):
 
 @app.route("/sponsor/<int:sponsor_id>/myAdRequests")
 def sponsor_adrequests(sponsor_id):
-    sponsor = Sponsordata.query.get(sponsor_id)
-    return render_template("sponsor_myads.html",sponsor=sponsor)
+    sponsor = None
+    campg = request.args.get("campaign")
+    if campg:
+        campg = Campaign.query.get(int(campg))
+        flash(f"Found {len(campg.ad_requests)} Ad request(s) for the Campaign: {campg.name}",category="info")
+    else:
+        sponsor = Sponsordata.query.get(sponsor_id)
+    return render_template("sponsor_myads.html",sponsor=sponsor, campg=campg)
+
+@app.route("/influencer/AcceptAdReq/<int:ad_request_id>")
+def acceptadreq_page(ad_request_id):
+    adreq = Adrequest.query.get(int(ad_request_id))
+    if adreq and adreq.status == "pending":
+        adreq.status = "accepted"
+        notif = Notification(reciever=adreq.ad_campaign.sponsor.user_id)
+        notif.content = f"Your Ad request to {current_user.infludata.name} for the Campaign {adreq.ad_campaign.name} has been ACCEPTED by the Influencer."
+        db.session.add_all([adreq,notif])
+        db.session.commit()
+        flash(f"Ad Request for Campaign {adreq.ad_campaign.name} has been accepted!",category="success")
+    else:
+        flash("Invalid Request",category="danger")
+    return redirect(url_for('influencer_adrequests',influencer_id=adreq.influencer_id))
+
+@app.route("/rejectAdReq/<int:ad_request_id>")
+def rejectadreq_page(ad_request_id):
+    adreq = Adrequest.query.get(int(ad_request_id))
+    if adreq and adreq.status == "pending" and current_user.role=="influencer" :
+        adreq.status = "rejected"
+        notif = Notification(reciever=adreq.ad_campaign.sponsor.user_id)
+        notif.content = f"Your Ad request to {current_user.infludata.name} for the Campaign {adreq.ad_campaign.name} has been REJECTED by the Influencer."
+        db.session.add_all([adreq,notif])
+        db.session.commit()
+        flash(f"Ad Request for Campaign {adreq.ad_campaign.name} has been rejected!",category="info")
+    elif adreq and (adreq.status == "unapproved" or adreq.status == "negotiation") and current_user.role=="sponsor":
+        adreq.status = "rejected"
+        notif = Notification(reciever=adreq.ad_influencer.user_id)
+        notif.content = f"Your Ad request to {adreq.ad_campaign.sponsor.company_name} for the Campaign {adreq.ad_campaign.name} has been REJECTED by the Sponsor."
+        db.session.add_all([adreq,notif])
+        db.session.commit()
+        flash(f"Influencer {adreq.ad_influencer.name}'s Ad Request for the Campaign {adreq.ad_campaign.name} has been rejected!",category="info")
+    else:
+        flash("Invalid Request",category="danger")
+    return redirect(request.referrer)
+
+@app.route("/deleteAdReq/<int:ad_request_id>")
+def deleteadreq_page(ad_request_id):
+    adreq = Adrequest.query.get(int(ad_request_id))
+    if adreq and adreq.status == "unapproved" and current_user.role=="influencer" :
+        notif = Notification(reciever=adreq.ad_campaign.sponsor.user_id)
+        notif.content = f"Ad request from {current_user.infludata.name} for the Campaign {adreq.ad_campaign.name} has been DELETED by the Influencer."
+        flash(f"Ad Request for Campaign {adreq.ad_campaign.name} has been deleted!",category="info")
+        db.session.delete(adreq)
+        db.session.add(notif)
+        db.session.commit()
+    elif adreq and (adreq.status == "pending" or adreq.status == "rejected") and current_user.role=="sponsor":
+        notif = Notification(reciever=adreq.ad_influencer.user_id)
+        notif.content = f"Ad request to {adreq.ad_campaign.sponsor.company_name} for the Campaign {adreq.ad_campaign.name} has been DELETED by the Sponsor."
+        flash(f"Influencer {adreq.ad_influencer.name}'s Ad Request for the Campaign {adreq.ad_campaign.name} has been Deleted!",category="info")
+        db.session.delete(adreq)
+        db.session.add(notif)
+        db.session.commit()
+    else:
+        flash("Invalid Request",category="danger")
+    return redirect(request.referrer)

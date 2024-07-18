@@ -48,10 +48,18 @@ My Ad Requests
             {% endfor %}
             {% endif %}
         </div>
+        <button class="showChats green-btn">Show Chats</button>
         <div class="action-btns">
-            <a href="">Click Me</a>
-            <a href="">Click Me</a>
-            <button class="showChats green-btn">Show Chats</button>
+            {%if ad.status == "pending" %}
+            <a href="{{ url_for('acceptadreq_page',ad_request_id=ad.id) }}" class="green-btn">Accept</a>
+            <a href="" class="purple-btn">Negotiate</a>
+            <a href="{{ url_for('rejectadreq_page',ad_request_id=ad.id) }}" class="red-btn">Reject</a>
+            {% elif ad.status == "accepted" %}
+            <a href="" class="purple-btn">Mark Completed</a>
+            {%elif ad.status == "unapproved"%}
+            <a href="{{ url_for('deleteadreq_page',ad_request_id=ad.id) }}" class="red-btn">Delete Request</a>
+            {% else %}
+            {% endif %}
         </div>
     </div>
     {% endfor %}
@@ -66,7 +74,7 @@ My Ad Requests
     showButtons.forEach((showBtn) => {
         let currentstat = false;
         showBtn.addEventListener("click", (event) => {
-            let chatBox = event.target.parentElement.previousElementSibling;
+            let chatBox = event.target.previousElementSibling;
             if (!currentstat) {
                 chatBox.classList.remove("chat-invisible")
                 chatBox.classList.add("chat-visible");

@@ -9,73 +9,25 @@ My Ad Requests
 {% endblock pageStyles %}
 
 {% block pageBody %}
+
+{% if campg %}
+<div class="ads-container">
+    {% for ad in campg.ad_requests %}
+    {% include 'sponsor_myads_temp.html' %}
+    {% endfor %}
+</div>
+{% else %}
 {% if sponsor.campaigns %}
 <div class="ads-container">
     {% for camp in sponsor.campaigns %}
     {% if camp.ad_requests %}
     {% for ad in camp.ad_requests %}
-    <div class="ad-container">
-        <span class="camp-ribbon">
-            <h2>Request Status :</h2>
-            <h1>{{ ad.status.capitalize() }}</h1>
-        </span>
-        <div class="selectable-cont">
-            <div class="img-cont">
-                {% if ad.ad_influencer.profile_photo %}
-                <img src="{{ url_for('static',filename='uploads/profile_pics/'+ad.ad_influencer.profile_photo)}}">
-                {% else %}
-                <img src="{{ url_for('static',filename='stockImages/blackpicture.jpg')}}">
-                {% endif %}
-            </div>
-            <div class="text-cont">
-                <h2>Influencer : </h2>
-                <a target="_blank" href="{{ url_for('influencer_profilepage',user_id=ad.ad_influencer.user_id) }}">
-                    <h1>{{ad.ad_influencer.name}}</h1>
-                </a>
-                <h3>@{{ ad.ad_influencer.user_data.username }}</h3>
-            </div>
-        </div>
-        <div class="selectable-cont">
-            <div class="img-cont-2">
-                {% if ad.ad_campaign.campaign_pic %}
-                <img src="{{ url_for('static',filename='uploads/campaign_pics/'+ad.ad_campaign.campaign_pic)}}">
-                {% endif %}
-            </div>
-            <div class="text-cont">
-                <h2>Campaign : </h2>
-                <a target="_blank" href="{{ url_for('campaign_page',campaign_id=ad.ad_campaign.id) }}">
-                    <h1>{{ ad.ad_campaign.name }}</h1>
-                </a>
-                <h3>{{ ad.ad_campaign.sponsor.company_name }}</h3>
-            </div>
-        </div>
-        <div class="payment-cont">
-            <h2>Payment : </h2>
-            <h1>${{ad.prettypayment}}/-</h1>
-        </div>
-        <div class="req-cont">
-            <h1>Requirements : </h1>
-            <p>{{ad.requirements}}</p>
-        </div>
-        <div class="chats-cont">
-            <h1>Chat Messages</h1>
-            {% if ad.messages %}
-            {% for admsg in ad.messages %}
-            <div {% if admsg.sender=="influencer" %} class="left" {% else %} class="right" {% endif %}>{{admsg.message}}
-            </div>
-            {% endfor %}
-            {% endif %}
-        </div>
-        <div class="action-btns">
-            <a href="">Click Me</a>
-            <a href="">Click Me</a>
-            <button class="showChats green-btn">Show Chats</button>
-        </div>
-    </div>
+    {% include 'sponsor_myads_temp.html' %}
     {% endfor %}
     {% endif %}
     {% endfor %}
 </div>
+{% endif %}
 {% endif %}
 {% endblock pageBody %}
 
@@ -86,7 +38,7 @@ My Ad Requests
     showButtons.forEach((showBtn) => {
         let currentstat = false;
         showBtn.addEventListener("click", (event) => {
-            let chatBox = event.target.parentElement.previousElementSibling;
+            let chatBox = event.target.previousElementSibling;
             if (!currentstat) {
                 chatBox.classList.remove("chat-invisible")
                 chatBox.classList.add("chat-visible");

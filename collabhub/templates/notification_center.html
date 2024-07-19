@@ -1,0 +1,26 @@
+{% extends 'pagebase.html' %}
+
+{% block pageTitle %}
+Notifications
+{% endblock pageTitle %}
+
+{% block pageStyles %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/notification_center.css')}}" />
+{% endblock pageStyles %}
+
+{% block pageBody %}
+<div class="head-cont">
+    <h1>Notifications</h1>
+    {% if user.notifications %}
+    <a href="{{url_for('clearnotifications_page',user_id=current_user.id)}}">Erase All</a>
+    {% endif %}
+</div>
+<div class="notifications-cont">
+    {% for notif in user.notifications %}
+    <div class="notification">
+        <p class="content-p">{{ notif.content|safe }}</p>
+        <p class="date-p">{{ notif.daterecieved }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock pageBody %}

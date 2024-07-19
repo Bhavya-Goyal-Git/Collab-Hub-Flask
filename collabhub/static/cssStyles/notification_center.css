@@ -1,0 +1,70 @@
+.head-cont {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    position: relative;
+    margin: 10px 0 3px;
+    padding: 10px 0;
+}
+
+.head-cont h1 {
+    font-size: 4rem;
+    color: #7446e7;
+}
+
+.head-cont a {
+    position: absolute;
+    right: 40px;
+    top: 25px;
+    background-color: #7446e7;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.head-cont a:hover {
+    background-color: #4520a4;
+    font-weight: bolder;
+}
+
+.notifications-cont {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.notification {
+    padding: 20px 25px 25px;
+    background-color: rgb(36, 32, 51);
+    margin: 15px auto;
+    width: 80%;
+    border-radius: 15px;
+    box-sizing: border-box;
+    cursor: pointer;
+    position: relative;
+    transition: 0.5s ease;
+}
+
+.notification:hover {
+    transform: scale(1.2);
+}
+
+.notification .date-p {
+    color: #8b8b8be0;
+    position: absolute;
+    bottom: 8px;
+    right: 20px;
+    font-size: 0.8rem;
+}
+
+.content-p {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    word-spacing: 3px;
+}
+
+.content-p strong {
+    color: #e4b14b;
+}

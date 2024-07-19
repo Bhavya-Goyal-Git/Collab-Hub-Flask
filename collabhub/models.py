@@ -24,7 +24,7 @@ class User(db.Model,UserMixin):
 
    infludata:Mapped['Influencerdata'] = relationship(uselist=False)
    sponsdata:Mapped['Sponsordata'] =  relationship(uselist=False)
-   notifications:Mapped['Notification'] = relationship()
+   notifications:Mapped[List['Notification']] = relationship()
 
    @property
    def password(self):

@@ -43,7 +43,7 @@ def login_page():
         if user:
             if user.check_password(form.password.data):
                 login_user(user)
-                flash(f"Login Successful! Welcome, {user.username}",category="success")
+                flash(f"Login Successful! Welcome, @{user.username}",category="success")
                 if user.role == "influencer":
                     if(user.infludata.is_flagged):
                         flash("Your Account has been flagged inappropriate by the Admin",category="danger")
@@ -203,7 +203,7 @@ def update_coverpic(user_id):
 def create_campaignpage(user_id):
     user = User.query.get(user_id)
     if request.method=="POST":
-        if Campaign_form_validator(request.form):
+        if Campaign_form_validator(request.form,date.today()):
             new_status = "public" if request.form["status"] else "private"
             cat = Category.query.get(int(request.form["category"]))
             nichelist = []
@@ -226,7 +226,7 @@ def create_campaignpage(user_id):
 def update_campaignpage(campaign_id):
     camp = Campaign.query.get(campaign_id)
     if request.method=="POST":
-        if Campaign_form_validator(request.form):
+        if Campaign_form_validator(request.form,camp.start_date):
             new_status = "public" if request.form["status"] else "private"
             cat = Category.query.get(int(request.form["category"]))
             while len(camp.campaign_niches)!=0:
@@ -353,7 +353,7 @@ def update_socialmedia(influencer_id,social_id):
 def campaign_page(campaign_id):
     camp = Campaign.query.get(campaign_id)
     if camp:
-        if camp.status == "private":
+        if camp.status == "private" and current_user.role!="admin":
             flash("Can't see a private campaign",category="danger")
             return redirect(request.referrer)
         return render_template("show_campaign.html",campaign=camp,today_date=date.today())

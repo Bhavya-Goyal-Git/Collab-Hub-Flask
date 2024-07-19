@@ -370,3 +370,23 @@
 .social-name a:hover #threads {
     background-color: black;
 }
+
+.notif-dot {
+    position: relative;
+}
+
+.notif-dot::before {
+    content: "1";
+    background-color: #ef2f2f;
+    color: white;
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    top: -7px;
+    right: -7px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.7rem;
+}

@@ -33,16 +33,16 @@ class LoginForm(FlaskForm):
     submit = SubmitField(label="Log in")
 
 
-def Campaign_form_validator(form):
+def Campaign_form_validator(form,date_comp):
     strtdate = datetime.strptime(form["start_date"],"%Y-%m-%d").date()
     enddate = datetime.strptime(form["end_date"], "%Y-%m-%d").date()
     if form["name"]=="":
         flash("Campaign name can't be empty",category="danger")
         return False
-    if strtdate < date.today():
+    if strtdate < date_comp:
         flash(f"Start Date can't be older than {date.today}",category="danger")
         return False
-    if enddate < date.today():
+    if enddate < date_comp:
         flash(f"End Date can't be older than {date.today}",category="danger")
         return False
     if strtdate > enddate:
@@ -96,15 +96,19 @@ def money_valiadator(form):
         return False
     return True
 
-def ad_req_validator(form):
-    if form["campaign"] == "" or form["influencer"] == "":
-        flash("Input Fields can't be left empty",category="danger")
-        return False
+def ad_req_validator(form,checkfirst):
+    if checkfirst:
+        if form["campaign"] == "" or form["influencer"] == "":
+            flash("Input Fields can't be left empty",category="danger")
+            return False
     if form["requirements"] == "":
         flash("Requirement field can't be left empty",category="danger")
         return False
     if form["payment_amount"] == "":
         flash("Payment Amount field can't be left empty",category="danger")
+        return False
+    if int(form["payment_amount"]) < 0:
+        flash("Payment Amount field must be positive number",category="danger")
         return False
     return True
     

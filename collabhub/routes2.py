@@ -185,12 +185,15 @@ def adrequest_formpage():
         flash("Something went wrong!",category="danger")
         return redirect(request.referrer)
     camp = Campaign.query.get(int(cid)) if cid else None
+    if camp and (camp.has_ended or camp.is_flagged or camp.end_date<date.today()):
+        flash("Campaign is restricted/expired and can't have Ad requests",category="danger")
+        return redirect(request.referrer) 
     influencer = Influencerdata.query.get(int(iid))
     return render_template("adrequest_form.html",camp=camp,influencer=influencer)
 
-@app.route("/create/adrequest",methods=["POST"]) #register request in DB and redirect
+@app.route("/create/adrequest",methods=["POST"])
 def create_adrequest():
-    if ad_req_validator(request.form):
+    if ad_req_validator(request.form,True):
         adreq = Adrequest(campaign_id=int(request.form["campaign"]), influencer_id=int(request.form["influencer"]))
         adreq.requirements = "To be filled by Sponsor" if current_user.role == "influencer" else request.form["requirements"]
         adreq.payment_amount = request.form["payment_amount"]
@@ -202,13 +205,13 @@ def create_adrequest():
         flash("Ad Request Made Successfully!!",category="success")
         if current_user.role == "influencer":
             notif = Notification(reciever=adreq.ad_campaign.sponsor.user_id)
-            notif.content = f"You have recieved an Ad request from {current_user.infludata.name} for the Campaign {adreq.ad_campaign.name}. Kindly Edit/Approve or Reject the request to proceed further."
+            notif.content = f"You have recieved an Ad request from <strong>{current_user.infludata.name}</strong> for the Campaign <strong>{adreq.ad_campaign.name}</strong>. Kindly Edit/Approve or Reject the request to proceed further."
             db.session.add(notif)
             db.session.commit()
             return redirect(url_for("influencer_homepage",user_id=current_user.id))
         elif current_user.role == "sponsor":
             notif = Notification(reciever=adreq.ad_influencer.user_id)
-            notif.content = f"You have recieved an Ad request from {current_user.sponsdata.company_name} for the campaign {adreq.ad_campaign.name}. Kindly Accept/Reject the request or Negotitate to proceed further."
+            notif.content = f"You have recieved an Ad request from <strong>{current_user.sponsdata.company_name}</strong> for the campaign <strong>{adreq.ad_campaign.name}</strong>. Kindly Accept/Reject the request or Negotitate to proceed further."
             db.session.add(notif)
             db.session.commit()
             return redirect(url_for("sponsor_homepage",user_id=current_user.id))
@@ -235,7 +238,7 @@ def acceptadreq_page(ad_request_id):
     if adreq and adreq.status == "pending":
         adreq.status = "accepted"
         notif = Notification(reciever=adreq.ad_campaign.sponsor.user_id)
-        notif.content = f"Your Ad request to {current_user.infludata.name} for the Campaign {adreq.ad_campaign.name} has been ACCEPTED by the Influencer."
+        notif.content = f"Your Ad request to <strong>{current_user.infludata.name}</strong> for the Campaign <strong>{adreq.ad_campaign.name}</strong> has been <strong>ACCEPTED</strong> by the Influencer."
         db.session.add_all([adreq,notif])
         db.session.commit()
         flash(f"Ad Request for Campaign {adreq.ad_campaign.name} has been accepted!",category="success")
@@ -249,14 +252,14 @@ def rejectadreq_page(ad_request_id):
     if adreq and adreq.status == "pending" and current_user.role=="influencer" :
         adreq.status = "rejected"
         notif = Notification(reciever=adreq.ad_campaign.sponsor.user_id)
-        notif.content = f"Your Ad request to {current_user.infludata.name} for the Campaign {adreq.ad_campaign.name} has been REJECTED by the Influencer."
+        notif.content = f"Your Ad request to <strong>{current_user.infludata.name}</strong> for the Campaign <strong>{adreq.ad_campaign.name}</strong> has been <strong>REJECTED</strong> by the Influencer."
         db.session.add_all([adreq,notif])
         db.session.commit()
         flash(f"Ad Request for Campaign {adreq.ad_campaign.name} has been rejected!",category="info")
     elif adreq and (adreq.status == "unapproved" or adreq.status == "negotiation") and current_user.role=="sponsor":
         adreq.status = "rejected"
         notif = Notification(reciever=adreq.ad_influencer.user_id)
-        notif.content = f"Your Ad request to {adreq.ad_campaign.sponsor.company_name} for the Campaign {adreq.ad_campaign.name} has been REJECTED by the Sponsor."
+        notif.content = f"Your Ad request to <strong>{adreq.ad_campaign.sponsor.company_name}</strong> for the Campaign <strong>{adreq.ad_campaign.name}</strong> has been <strong>REJECTED</strong> by the Sponsor."
         db.session.add_all([adreq,notif])
         db.session.commit()
         flash(f"Influencer {adreq.ad_influencer.name}'s Ad Request for the Campaign {adreq.ad_campaign.name} has been rejected!",category="info")
@@ -269,18 +272,104 @@ def deleteadreq_page(ad_request_id):
     adreq = Adrequest.query.get(int(ad_request_id))
     if adreq and adreq.status == "unapproved" and current_user.role=="influencer" :
         notif = Notification(reciever=adreq.ad_campaign.sponsor.user_id)
-        notif.content = f"Ad request from {current_user.infludata.name} for the Campaign {adreq.ad_campaign.name} has been DELETED by the Influencer."
+        notif.content = f"Ad request from <strong>{current_user.infludata.name}</strong> for the Campaign <strong>{adreq.ad_campaign.name}</strong> has been <strong>DELETED</strong> by the Influencer."
         flash(f"Ad Request for Campaign {adreq.ad_campaign.name} has been deleted!",category="info")
         db.session.delete(adreq)
         db.session.add(notif)
         db.session.commit()
     elif adreq and (adreq.status == "pending" or adreq.status == "rejected") and current_user.role=="sponsor":
         notif = Notification(reciever=adreq.ad_influencer.user_id)
-        notif.content = f"Ad request to {adreq.ad_campaign.sponsor.company_name} for the Campaign {adreq.ad_campaign.name} has been DELETED by the Sponsor."
+        notif.content = f"Ad request to <strong>{adreq.ad_campaign.sponsor.company_name}</strong> for the Campaign <strong>{adreq.ad_campaign.name}</strong> has been <strong>DELETED</strong> by the Sponsor."
         flash(f"Influencer {adreq.ad_influencer.name}'s Ad Request for the Campaign {adreq.ad_campaign.name} has been Deleted!",category="info")
         db.session.delete(adreq)
         db.session.add(notif)
         db.session.commit()
+    else:
+        flash("Invalid Request",category="danger")
+    return redirect(request.referrer)
+
+@app.route("/influencer/negotitateAdReq/<int:ad_request_id>",methods=["POST"])
+def negotitateadreq_page(ad_request_id):
+    adreq = Adrequest.query.get(int(ad_request_id))
+    if adreq and adreq.status == "pending":
+        adreq.status = "negotiation"
+        admsg = Admessages(sender="influencer",message=request.form["ad_message"])
+        adreq.messages.append(admsg)
+        notif = Notification(reciever=adreq.ad_campaign.sponsor.user_id)
+        notif.content = f"Your Ad request to <strong>{current_user.infludata.name}</strong> for the Campaign <strong>{adreq.ad_campaign.name}</strong> has been put under <strong>NEGOTIATION</strong> by the Influencer. The changes requested can be found in dedicated Ad-Chat window. Kindly Update/Approve the changes or Reject the request to proceed further."
+        db.session.add_all([adreq,notif])
+        db.session.commit()
+        flash(f"Ad Request for Campaign {adreq.ad_campaign.name} has been sent back to Sponsor {adreq.ad_campaign.sponsor.company_name} for Negotiation!",category="success")
+    else:
+        flash("Invalid Request",category="danger")
+    return redirect(request.referrer)
+
+
+@app.route("/sponsor/editAdRequest/<int:ad_request_id>",methods=["GET","POST"])
+def edit_adrequestpage(ad_request_id):
+    adreq = Adrequest.query.get(int(ad_request_id))
+    if request.method == "POST":
+        if ad_req_validator(request.form,False):
+            isreqchanged = False if adreq.requirements == request.form["requirements"] else True
+            ispaychanged = False if int(adreq.payment_amount) == int(request.form["payment_amount"]) else True
+            adreq.requirements = request.form["requirements"]
+            adreq.payment_amount = request.form["payment_amount"]
+            if request.form["ad_message"] != "":
+                adreq.messages.append(Admessages(message=request.form["ad_message"],sender="sponsor"))
+                db.session.add(adreq)
+            notif = Notification(reciever=adreq.ad_influencer.user_id)
+            msg=""
+            if adreq.status == "unapproved":
+                msg = f"Your Ad Request for the Campaign <strong>{adreq.ad_campaign.name}</strong> to <strong>{adreq.ad_campaign.sponsor.company_name}</strong> has been approved by the Sponsor. Requirements for the ad request have been added."
+                if(ispaychanged):
+                    msg+= " Payment Amount however, is not kept at expected value, it has been changed."
+            elif adreq.status == "negotiation":
+                msg = f"Your Negotiation in Ad Request for the Campaign <strong>{adreq.ad_campaign.name}</strong> to <strong>{adreq.ad_campaign.sponsor.company_name}</strong> has been approved by the Sponsor."
+                if(ispaychanged):
+                    msg+=" Payment Amount for the ad request has been changed."
+                if(isreqchanged):
+                    msg+=" Requirements for the ad request have been changed."
+            msg+= " Kindly Accept/Reject the Ad request or Negotiate it to proceed further."
+            notif.content = msg
+            adreq.status = "pending"
+            db.session.add_all([adreq,notif])
+            db.session.commit()
+            flash(f"Ad request to {adreq.ad_influencer.name} for the Campaign {adreq.ad_campaign.name} has been Edited & Approved successfully!",category="success")
+            return redirect(url_for("sponsor_adrequests",sponsor_id=current_user.sponsdata.id))
+    return render_template("edit_adrequest.html",adreq=adreq)
+
+@app.route("/adRequest/<int:ad_request_id>/markCompleted")
+def markcompleted_adreq(ad_request_id):
+    adreq = Adrequest.query.get(int(ad_request_id))
+    if adreq.status == "accepted":
+        adreq.status = "unsettled"
+        notif = Notification(reciever=adreq.ad_campaign.sponsor.user_id)
+        notif.content = f"Ad Contract for the Campaign <strong>{adreq.ad_campaign.name}</strong> with <strong>{adreq.ad_influencer.name}</strong> has been marked <strong>DONE</strong> by the Influencer. The status has been set to unsettled. Kindly <strong>Make the due payment</strong> to the influencer to complete the Ad request."
+        db.session.add_all([adreq,notif])
+        db.session.commit()
+        flash(f"Ad Request for the campaign {adreq.ad_campaign.name} has been marked DONE successfully",category="success")
+    else:
+        flash("Invalid Request",category="danger")
+    return redirect(request.referrer)
+
+@app.route("/adRequest/<int:ad_request_id>/makePayment")
+def makeadreq_payment(ad_request_id):
+    adreq = Adrequest.query.get(int(ad_request_id))
+    if adreq.status == "unsettled":
+        ad_sponsor = adreq.ad_campaign.sponsor.user_data
+        ad_influ = adreq.ad_influencer.user_data
+        if ad_sponsor.walletbalance < adreq.payment_amount:
+            flash("Insufficient Money in wallet! Couldn't make payment for ad campaign!",category="danger")
+        else:
+            ad_sponsor.walletbalance -= adreq.payment_amount
+            ad_influ.walletbalance +=adreq.payment_amount
+            newTrans = Transaction(sender=ad_sponsor.id,reciever=ad_influ.id,amount=adreq.payment_amount)
+            notif = Notification(reciever=adreq.ad_influencer.user_id)
+            notif.content = f"Payment of <strong>${adreq.prettypayment}/-</strong> regarding Completed Ad request for Campaign <strong>{adreq.ad_campaign.name}</strong> by Sponsor <strong>{adreq.ad_campaign.sponsor.company_name}</strong> has been recieved in the wallet."
+            adreq.status = "completed"
+            db.session.add_all([adreq,notif,newTrans])
+            db.session.commit()
+            flash(f"Payment for the Ad Request made successfully!",category="success")
     else:
         flash("Invalid Request",category="danger")
     return redirect(request.referrer)

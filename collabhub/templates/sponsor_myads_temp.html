@@ -30,7 +30,7 @@
             <a target="_blank" href="{{ url_for('campaign_page',campaign_id=ad.ad_campaign.id) }}">
                 <h1>{{ ad.ad_campaign.name }}</h1>
             </a>
-            <h3>{{ ad.ad_campaign.sponsor.company_name }}</h3>
+            <h3>{{ current_user.sponsdata.company_name }}</h3>
         </div>
     </div>
     <div class="payment-cont">
@@ -53,17 +53,17 @@
     <button class="showChats green-btn">Show Chats</button>
     <div class="action-btns">
         {% if ad.status == "unapproved" %}
-        <a href="" class="purple-btn">Edit & Approve</a>
+        <a href="{{ url_for('edit_adrequestpage',ad_request_id=ad.id) }}" class="purple-btn">Edit & Approve</a>
         <a href="{{ url_for('rejectadreq_page',ad_request_id=ad.id) }}" class="red-btn">Reject Request</a>
         {% elif ad.status == "pending" %}
         <a href="{{ url_for('deleteadreq_page',ad_request_id=ad.id) }}" class="red-btn">Delete Request</a>
         {%elif ad.status == "rejected" %}
         <a href="{{ url_for('deleteadreq_page',ad_request_id=ad.id) }}" class="red-btn">Delete Request</a>
-        {%elif ad.request == "negotiation"%}
-        <a href="" class="green-btn">Edit & Accept</a>
+        {%elif ad.status == "negotiation"%}
+        <a href="{{ url_for('edit_adrequestpage',ad_request_id=ad.id) }}" class="green-btn">Edit & Accept</a>
         <a href="{{ url_for('rejectadreq_page',ad_request_id=ad.id) }}" class="red-btn">Reject Request</a>
         {%elif ad.status == "unsettled" %}
-        <a href="" class="green-btn">Make Payment</a>
+        <a href="{{ url_for('makeadreq_payment',ad_request_id=ad.id) }}" class="green-btn">Make Payment</a>
         {% else %}
         {% endif %}
     </div>

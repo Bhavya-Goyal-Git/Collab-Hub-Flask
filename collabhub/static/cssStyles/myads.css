@@ -256,11 +256,107 @@
     align-items: center;
 }
 
-.action-btns a {
+.action-btns :is(a, button) {
     color: white;
     margin: 6px 0;
     border-radius: 10px;
     font-size: 1.2rem;
     padding: 10px 15px;
     text-decoration: none;
+    cursor: pointer;
+}
+
+.modal {
+    height: 100%;
+    width: 100%;
+    z-index: 20;
+    background-color: #121212cf;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #282828;
+    border-radius: 20px;
+    padding: 30px 40px;
+    width: 60%;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-heading h1 {
+    font-size: 5.5rem;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.form-heading h1 span {
+    color: #8c60ec;
+}
+
+.form-heading {
+    margin-bottom: 25px;
+}
+
+.form-input {
+    width: 70%;
+    padding: 12px 15px;
+    border-radius: 18px;
+    margin: 12px auto 15px;
+    background-color: #3f3f3fd5;
+    color: white;
+    border: 3px solid transparent;
+    font-size: 1.1rem;
+    outline: none;
+    transition: 0.2s;
+}
+
+.form-select {
+    width: 74%;
+}
+
+.form-about {
+    overflow-y: scroll;
+    height: 100px;
+    resize: none;
+}
+
+.form-input:focus {
+    border-color: #8c60ec;
+    box-shadow: 3px 3px 5px black;
+}
+
+label {
+    margin: 1px auto 1px 140px;
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.69);
+    cursor: pointer;
+}
+
+label:has(+.form-input:focus) {
+    color: #8c60ec;
+}
+
+.form-submit {
+    width: 73%;
+    padding: 12px;
+    border-radius: 18px;
+    margin: 20px auto;
+    background-color: #a27af0;
+    color: black;
+    font-size: 1.1rem;
+    border: 3px solid #a27af0;
+    cursor: pointer;
+}
+
+.form-submit:hover {
+    background-color: #7446e7;
+    color: rgba(255, 255, 255, 0.847);
 }

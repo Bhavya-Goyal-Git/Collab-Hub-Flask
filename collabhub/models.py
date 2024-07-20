@@ -200,7 +200,7 @@ class Adrequest(db.Model):
 class Admessages(db.Model):
    id:Mapped[int] = mapped_column(primary_key=True)
    message:Mapped[str] = mapped_column(nullable=False)
-   adrequest_id:Mapped[int] = mapped_column(ForeignKey("adrequest.id"))
+   adrequest_id:Mapped[int] = mapped_column(ForeignKey("adrequest.id",ondelete="CASCADE"))
    sender:Mapped[str] = mapped_column(nullable=False)
 
    __table_args__ =(
@@ -219,10 +219,3 @@ class Notification(db.Model):
    reciever:Mapped[int] = mapped_column(ForeignKey("user.id"))
    content:Mapped[str] = mapped_column(nullable=False)
    daterecieved:Mapped[date] =mapped_column(default=date.today())
-
-class Review(db.Model):
-   id:Mapped[int] = mapped_column(primary_key=True)
-   writer_id:Mapped[int] = mapped_column(ForeignKey("user.id"))
-   content:Mapped[str] = mapped_column(nullable=False)
-
-   writer:Mapped["User"] = relationship()

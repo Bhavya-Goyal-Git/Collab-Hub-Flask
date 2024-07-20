@@ -11,14 +11,18 @@ My Campaigns
 {% block pageBody %}
 {% if sponsor.campaigns|length!=0 %}
 {% for campaign in sponsor.campaigns %}
-<div {% if campaign.is_flagged %} class="camp-container camp-flagged" {% else %} class="camp-container" {% endif %}>
+<div
+    class="camp-container {%if campaign.is_flagged%} camp-flagged {%endif%} {%if campaign.has_ended %} camp-ended {%endif%}">
     <div class="camp-img-cont">
         {% if campaign.campaign_pic %}
         <img id="display" src="{{ url_for('static',filename='uploads/campaign_pics/'+campaign.campaign_pic)}}">
         {% endif %}
+        {% if campaign.has_ended %}
+        {%else%}
         <div class="update-pic-btn-container">
             <a class="update-btn" href="{{ url_for('update_campaignpic_page',campaign_id=campaign.id) }}">Update Pic</a>
         </div>
+        {% endif %}
     </div>
     <div class="camp-opt-cont">
         <div class="headingcont">
@@ -50,6 +54,12 @@ My Campaigns
         </div>
 
         <div class="act-btns">
+            {% if campaign.has_ended %}
+            <a class="status-btn"
+                href="{{ url_for('sponsor_adrequests',sponsor_id=campaign.sponsor.id,campaign=campaign.id) }}">View Ad
+                Requests</a>
+            <a class="delete-btn delete-camp" href="{{ url_for('deleteCampaign',campaign_id=campaign.id) }}">Delete</a>
+            {% else %}
             <a class="status-btn" href="{{url_for('toggle_campaignstatus',campaign_id=campaign.id)}}">Make {% if
                 campaign.status == "public" %}
                 Private
@@ -59,14 +69,26 @@ My Campaigns
             <a class="status-btn"
                 href="{{ url_for('sponsor_adrequests',sponsor_id=campaign.sponsor.id,campaign=campaign.id) }}">View Ad
                 Requests</a>
-            <a class="end-btn" href="">End Campaign</a>
+            <a class="end-btn end-camp" href="{{ url_for('endCampaign',campaign_id=campaign.id) }}">End Campaign</a>
             <a class="update-btn" href="{{ url_for('update_campaignpage',campaign_id=campaign.id) }}">Update</a>
-            <a class="delete-btn" href="">Delete</a>
+            <a class="delete-btn delete-camp" href="{{ url_for('deleteCampaign',campaign_id=campaign.id) }}">Delete</a>
+            {% endif %}
         </div>
     </div>
 </div>
 {% endfor %}
 {% endif %}
+<button id="Show-completed" class="update-btn">Show Ended Campaigns</button>
+<div class="modal">
+    <div class="modal-content">
+        <h1>WARNING!</h1>
+        <p></p>
+        <div>
+            <button class="delete-btn" id="continue-btn">Continue Anyways</button>
+            <button class="update-btn" id="cancel-btn">Cancel</button>
+        </div>
+    </div>
+</div>
 {% endblock pageBody %}
 
 {% block pageScripts %}
@@ -75,17 +97,83 @@ My Campaigns
         let imgdivs = document.querySelectorAll(".camp-img-cont");
         imgdivs.forEach((imgdiv) => {
             imgdiv.addEventListener("mouseenter", () => {
-                let box = imgdiv.querySelector(".update-pic-btn-container");
-                box.style.display = "flex";
+                try {
+                    let box = imgdiv.querySelector(".update-pic-btn-container");
+                    box.style.display = "flex";
+                } catch (e) { }
             });
             imgdiv.addEventListener("mouseleave", () => {
-                let box = imgdiv.querySelector(".update-pic-btn-container");
-                box.style.display = "none";
+                try {
+                    let box = imgdiv.querySelector(".update-pic-btn-container");
+                    box.style.display = "none";
+                } catch (e) { }
             });
         });
     } catch (e) {
         //No campaigns found!
     }
-
+    let someAds = Array.from(document.getElementsByClassName("camp-ended"));
+    let adToggle = document.getElementById("Show-completed");
+    let showcomp = false;
+    window.addEventListener("DOMContentLoaded", () => {
+        if (someAds.length == 0) {
+            adToggle.style.display = "none";
+        }
+    })
+    adToggle.addEventListener("click", () => {
+        if (!showcomp) {
+            someAds.forEach(ad => ad.style.display = "flex")
+            showcomp = true;
+            adToggle.classList.remove("update-btn");
+            adToggle.classList.add("delete-btn");
+            adToggle.innerText = "Hide Ended Campaigns";
+        } else {
+            someAds.forEach(ad => ad.style.display = "none")
+            showcomp = false;
+            adToggle.classList.add("update-btn");
+            adToggle.classList.remove("delete-btn");
+            adToggle.innerText = "Show Ended Campaigns";
+        }
+    });
+    let modal = document.querySelector(".modal");
+    let contbtn = modal.querySelector("#continue-btn");
+    let cancelbtn = modal.querySelector("#cancel-btn");
+    let endBtns = Array.from(document.getElementsByClassName("end-camp"));
+    let delBtns = Array.from(document.getElementsByClassName("delete-camp"));
+    let href;
+    endBtns.forEach(endBtn => {
+        endBtn.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            ptag = modal.querySelector("p");
+            ptag.innerText = "This would reject every pending/unapproved Ad request of the campaign!";
+            modal.style.display = "flex";
+            href = endBtn.getAttribute("href");
+            console.log(href)
+        })
+    });
+    delBtns.forEach(delBtn => {
+        delBtn.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            ptag = modal.querySelector("p");
+            ptag.innerText = "This could delete all associated Ad requests of the campaign which will can never be retrieved again!";
+            modal.style.display = "flex";
+            href = delBtn.getAttribute("href");
+            console.log(href)
+        })
+    });
+    contbtn.addEventListener('click', () => {
+        window.location.href = href;
+    });
+    cancelbtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+    modal.firstElementChild.addEventListener("click", (event) => {
+        event.stopPropagation();
+    })
+    window.addEventListener("click", () => {
+        modal.style.display = 'none';
+    })
 </script>
 {% endblock pageScripts %}

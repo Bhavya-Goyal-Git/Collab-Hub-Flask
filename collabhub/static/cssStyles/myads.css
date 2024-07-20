@@ -360,3 +360,16 @@ label:has(+.form-input:focus) {
     background-color: #7446e7;
     color: rgba(255, 255, 255, 0.847);
 }
+
+.ad-completed {
+    display: none;
+}
+
+#Show-completed {
+    margin: 15px auto;
+    padding: 10px;
+    border-radius: 12px;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+}

@@ -12,7 +12,7 @@ My Ad Requests
 {% if influencer.ads %}
 <div class="ads-container">
     {% for ad in influencer.ads %}
-    <div class="ad-container">
+    <div {% if ad.status=='completed' %}class="ad-container ad-completed" {% else %}class="ad-container" {% endif %}>
         <span class="camp-ribbon">
             <h2>Request Status :</h2>
             <h1>{{ ad.status.capitalize() }}</h1>
@@ -63,6 +63,7 @@ My Ad Requests
         </div>
     </div>
     {% endfor %}
+    <button id="Show-completed" class="purple-btn">Show Completed Ad Requests</button>
 </div>
 {% endif %}
 <div class="modal">
@@ -124,5 +125,29 @@ My Ad Requests
             modal.style.display = "flex";
         })
     });
+
+    let someAds = Array.from(document.getElementsByClassName("ad-completed"));
+    let adToggle = document.getElementById("Show-completed");
+    let showcomp = false;
+    window.addEventListener("DOMContentLoaded", () => {
+        if (someAds.length == 0) {
+            adToggle.style.display = "none";
+        }
+    })
+    adToggle.addEventListener("click", () => {
+        if (!showcomp) {
+            someAds.forEach(ad => ad.style.display = "block")
+            showcomp = true;
+            adToggle.classList.remove("purple-btn");
+            adToggle.classList.add("red-btn");
+            adToggle.innerText = "Hide Completed Ad Requests";
+        } else {
+            someAds.forEach(ad => ad.style.display = "none")
+            showcomp = false;
+            adToggle.classList.add("purple-btn");
+            adToggle.classList.remove("red-btn");
+            adToggle.innerText = "Show Completed Ad Requests";
+        }
+    })
 </script>
 {% endblock pageScripts %}

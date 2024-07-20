@@ -49,13 +49,20 @@ def withdrawMoneyFromWallet(user_id):
 def create_category():
     if request.method == "POST":
         if request.form["category_title"]:
-            try:
-                cat = Category(title=request.form["category_title"].capitalize())
-                db.session.add(cat)
+            if current_user.role=="admin":
+                try:
+                    cat = Category(title=request.form["category_title"].capitalize())
+                    db.session.add(cat)
+                    db.session.commit()
+                    flash("Category Added Successfully!",category="success")
+                except:
+                    flash("Category Already exists or is too long",category="danger")
+            else:
+                notif = Notification(reciever=1)
+                notif.content = f"Request from <strong>@{current_user.user_name}</strong> for creation of Category: <strong>{request.form['category_title']}</strong>. Kindly add the category (or not if inappropriate) and notify the User."
+                db.session.add(notif)
                 db.session.commit()
-                flash("Category Added Successfully!",category="success")
-            except:
-                flash("Category Already exists or is too long",category="danger")
+                flash("Request for adding of category sent to ADMIN, until then please use given categories, change later.",category="success")
         else:
             flash("Category field cannot be left blank!",category="danger")
         return redirect(request.referrer)
@@ -66,14 +73,21 @@ def create_niche():
     if request.method == "POST":
         if request.form["niche_title"]:
             cat = Category.query.get(request.form["category"])
-            try:
-                niche = Niche(title=request.form["niche_title"])
-                cat.niches.append(niche)
-                db.session.add(cat)
+            if current_user.role=="admin":
+                try:
+                    niche = Niche(title=request.form["niche_title"])
+                    cat.niches.append(niche)
+                    db.session.add(cat)
+                    db.session.commit()
+                    flash("Niche Added Successfully!",category="success")
+                except:
+                    flash("Niche Already exists or is too long",category="danger")
+            else:
+                notif = Notification(reciever=1)
+                notif.content = f"Request from <strong>@{current_user.user_name}</strong> for creation of Niche: <strong>{request.form['niche_title']}</strong> under the Category:<strong>{cat.name}</strong>. Kindly add the Niche (or not if inappropriate) and notify the User."
+                db.session.add(notif)
                 db.session.commit()
-                flash("Niche Added Successfully!",category="success")
-            except:
-                flash("Niche Already exists or is too long",category="danger")
+                flash("Request for adding of Niche sent to ADMIN, until then please use given niches, change later.",category="success")
         else:
             flash("Niche field cannot be left blank!",category="danger")
         return redirect(request.referrer)
@@ -88,12 +102,12 @@ def search_influencers():
             flash("No Search Query Provided!",category="danger")
         elif request.form["search_by"] == "name":
             influencers = Influencerdata.query.filter(and_(
-                Influencerdata.name.ilike(f"%{request.form['content']}%"),
+                Influencerdata.name.ilike(f"{request.form['content']}%"),
                 Influencerdata.is_flagged ==False
                 )).all()
             flash(f"{len(influencers)} Results Found",category="info")
         elif request.form["search_by"] == "category":
-            categories = Category.query.filter(Category.title.ilike(f"%{request.form['content']}%")).all()
+            categories = Category.query.filter(Category.title.ilike(f"{request.form['content']}%")).all()
             if categories:
                 cat = [catt.id for catt in categories]
                 influes = Influencerdata.query.filter(and_(
@@ -106,7 +120,7 @@ def search_influencers():
             else:
                 flash("Category does not exist!",category="danger")
         elif request.form["search_by"] == "niche":
-            nichess = Niche.query.filter(Niche.title.ilike(f"%{request.form['content']}%")).all()
+            nichess = Niche.query.filter(Niche.title.ilike(f"{request.form['content']}%")).all()
             if nichess:
                 nic = [nicc.id for nicc in nichess]
                 influes = Influencerdata.query.join(Influencerdata.influencer_niches).filter(and_(
@@ -129,7 +143,7 @@ def search_campaigns():
         if request.form["content"] == "":
             flash("No Search Query Provided!",category="danger")
         elif request.form["search_by"] == "company_name":
-            sponsors = Sponsordata.query.filter(Sponsordata.company_name.ilike(f"%{request.form['content']}%")).all()
+            sponsors = Sponsordata.query.filter(Sponsordata.company_name.ilike(f"{request.form['content']}%")).all()
             if sponsors:
                 spons = [sponsor.id for sponsor in sponsors]
                 camps = Campaign.query.filter(and_(
@@ -144,7 +158,7 @@ def search_campaigns():
             else:
                 flash("No Sponsor found",category="danger")
         elif request.form["search_by"] == "category":
-            categories = Category.query.filter(Category.title.ilike(f"%{request.form['content']}%")).all()
+            categories = Category.query.filter(Category.title.ilike(f"{request.form['content']}%")).all()
             if categories:
                 cat = [catt.id for catt in categories]
                 camps = Campaign.query.filter(and_(
@@ -159,7 +173,7 @@ def search_campaigns():
             else:
                 flash("Category does not exist!",category="danger")
         elif request.form["search_by"] == "niche":
-            nichess = Niche.query.filter(Niche.title.ilike(f"%{request.form['content']}%")).all()
+            nichess = Niche.query.filter(Niche.title.ilike(f"{request.form['content']}%")).all()
             if nichess:
                 nic = [nicc.id for nicc in nichess]
                 camps = Campaign.query.join(Campaign.campaign_niches).filter(and_(

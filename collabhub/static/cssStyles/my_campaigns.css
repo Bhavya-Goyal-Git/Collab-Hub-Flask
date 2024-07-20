@@ -208,6 +208,18 @@
 
 .camp-flagged::before {
     content: "Flagged by Admin";
+}
+
+.camp-ended::before {
+    content: "Campaign Ended";
+}
+
+.camp-ended.camp-flagged::before {
+    content: "Ended, Flagged by Admin";
+}
+
+.camp-flagged::before,
+.camp-ended::before {
     position: absolute;
     z-index: 2;
     top: 200px;
@@ -222,4 +234,71 @@
     -webkit-transform: rotate(-37deg);
     font-weight: bold;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: 1s ease;
+}
+
+.camp-container:hover::before {
+    top: 120px;
+    left: -250px
+}
+
+.camp-ended {
+    display: none;
+}
+
+#Show-completed {
+    margin: 15px 50%;
+    transform: translateX(-50%);
+    padding: 10px;
+    border-radius: 12px;
+    color: white;
+    font-size: 1.2rem;
+    width: 300px;
+    cursor: pointer;
+}
+
+.modal {
+    height: 100%;
+    width: 100%;
+    z-index: 20;
+    background-color: #121212cf;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #282828;
+    border-radius: 20px;
+    padding: 30px 40px;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-content h1 {
+    font-size: 5rem;
+    color: #ed1717;
+    margin: 10px auto 5px;
+}
+
+.modal-content p {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.932);
+    margin: 10px auto;
+    text-align: center;
+}
+
+.modal-content button {
+    font-size: 1.5rem;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    color: white;
 }

@@ -15,6 +15,7 @@ My Ad Requests
     {% for ad in campg.ad_requests %}
     {% include 'sponsor_myads_temp.html' %}
     {% endfor %}
+    <button id="Show-completed" class="purple-btn">Show Completed Ad Requests</button>
 </div>
 {% else %}
 {% if sponsor.campaigns %}
@@ -26,6 +27,7 @@ My Ad Requests
     {% endfor %}
     {% endif %}
     {% endfor %}
+    <button id="Show-completed" class="purple-btn">Show Completed Ad Requests</button>
 </div>
 {% endif %}
 {% endif %}
@@ -56,6 +58,29 @@ My Ad Requests
                 showBtn.classList.remove("red-btn")
             }
         })
+    })
+    let someAds = Array.from(document.getElementsByClassName("ad-completed"));
+    let adToggle = document.getElementById("Show-completed");
+    let showcomp = false;
+    window.addEventListener("DOMContentLoaded", () => {
+        if (someAds.length == 0) {
+            adToggle.style.display = "none";
+        }
+    })
+    adToggle.addEventListener("click", () => {
+        if (!showcomp) {
+            someAds.forEach(ad => ad.style.display = "block")
+            showcomp = true;
+            adToggle.classList.remove("purple-btn");
+            adToggle.classList.add("red-btn");
+            adToggle.innerText = "Hide Completed Ad Requests";
+        } else {
+            someAds.forEach(ad => ad.style.display = "none")
+            showcomp = false;
+            adToggle.classList.add("purple-btn");
+            adToggle.classList.remove("red-btn");
+            adToggle.innerText = "Show Completed Ad Requests";
+        }
     })
 </script>
 {% endblock pageScripts %}

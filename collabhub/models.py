@@ -214,6 +214,21 @@ class Transaction(db.Model):
    amount:Mapped[int] = mapped_column(nullable=False)
    dateoftransaction:Mapped[date] =mapped_column(default=date.today())
 
+   sender_user:Mapped[User] = relationship(foreign_keys=[sender])
+   reciever_user:Mapped[User] = relationship(foreign_keys=[reciever])
+
+   @property
+   def prettyamount(self):
+      r = ""
+      b = list(str(self.amount))
+      count = 0
+      while(len(b)!=0):
+         if(count%3==0 and count!=0):
+            r = ","+r
+         r = b.pop() + r
+         count+=1
+      return r
+
 class Notification(db.Model):
    id:Mapped[int] = mapped_column(primary_key=True)
    reciever:Mapped[int] = mapped_column(ForeignKey("user.id"))

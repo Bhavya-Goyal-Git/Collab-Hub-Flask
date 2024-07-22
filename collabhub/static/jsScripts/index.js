@@ -63,3 +63,20 @@ var handleScroll = function handleScroll() {
 
 // Fire the function on scroll
 window.addEventListener("scroll", handleScroll);
+
+function scrolltoelement(elementclass) {
+  return function () {
+    const targetElement = document.querySelector(`.${elementclass}`);
+    const offset = 100; // Adjust this value as needed
+    const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+    const offsetPosition = elementPosition - offset;
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    });
+  }
+}
+document.getElementById('features-btn').addEventListener('click', scrolltoelement("features-section"));
+document.getElementById('howitworks-btn').addEventListener('click', scrolltoelement("howitworks-section"));
+document.getElementById('contactus-btn').addEventListener('click', scrolltoelement("footer"));
+

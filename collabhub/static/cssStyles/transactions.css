@@ -1,0 +1,59 @@
+.trans-cont {
+    width: 80%;
+    box-sizing: border-box;
+    padding: 20px;
+    border-radius: 15px;
+    margin: 40px auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+td,
+th {
+    text-align: center;
+    padding: 15px;
+
+}
+
+th {
+    font-size: 3rem;
+    background-color: rgb(26, 18, 57) !important;
+}
+
+td {
+    font-size: 1.5rem;
+}
+
+tr:nth-child(even) {
+    background-color: rgba(50, 49, 49, 0.658);
+}
+
+tr:nth-child(odd) {
+    background-color: #181818ec;
+}
+
+.sad {
+    color: #dd0606;
+}
+
+.happy {
+    color: #28b608;
+}
+
+tbody tr:hover {
+    background-color: #2d214b;
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+tr {
+    transition: 0.4s ease;
+}
+
+.last-row {
+    background-color: rgb(26, 18, 57) !important;
+}

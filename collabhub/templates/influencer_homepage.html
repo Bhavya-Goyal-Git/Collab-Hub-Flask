@@ -63,8 +63,8 @@ Home
             <a href="{{url_for('notifications_page',user_id=current_user.id)}}" {% if user.notifications|length !=0 %}
                 class="notif-dot" {% endif %}><i class="fa-solid fa-envelope"></i>
                 Notifications</a>
-            <a href=""><i class="fa-solid fa-pen-to-square"></i> Write a Review</a>
-            <a href=""><i class="fa-solid fa-comment-dollar"></i> View Transaction Log</a>
+            <a href="{{url_for('user_transactionspage',user_id=current_user.id)}}"><i
+                    class="fa-solid fa-comment-dollar"></i> View Transaction Log</a>
         </div>
         <div class="money-cont">
             <div class="money-title">

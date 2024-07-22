@@ -32,7 +32,7 @@ My Campaigns
         <p class="camp-date">From: {{ campaign.start_date }} | To: {{ campaign.end_date }}</p>
         <div class="cat-niches">
             <p class="camp-cat">{{ campaign.campaign_category.title }} Category</p>
-            <p class="camp-nic">Niches :</p>
+            <p class="camp-nic">Niches: </p>
             <ul>
                 {% for niche in campaign.campaign_niches %}
                 <li>{{niche.title}}{% if loop.index!= campaign.campaign_niches|length %},{% endif %}</li>

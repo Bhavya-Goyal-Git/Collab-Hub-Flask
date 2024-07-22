@@ -1,0 +1,56 @@
+{% extends 'pagebase.html' %}
+
+{% block pageTitle %}
+Transactions
+{% endblock pageTitle %}
+
+{% block pageStyles %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/transactions.css')}}">
+{% endblock pageStyles %}
+
+{% block pageBody %}
+{% if transacts %}
+<div class="trans-cont">
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Activity</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transacts %}
+            <tr>
+                <td>{{transaction.dateoftransaction.strftime('%d-%m-%Y')}}</td>
+
+                {% if transaction.sender == current_user.id %}
+                {% if transaction.reciever %}
+                <td class="sad">Sent to @{{transaction.reciever_user.username}}</td>
+                {% else %}
+                <td class="sad">Withdraw</td>
+                {% endif %}
+                {% else %}
+                {% if transaction.sender %}
+                <td class="happy">Recieved from @{{transaction.reciever_user.username}}</td>
+                {% else %}
+                <td class="happy">Deposit</td>
+                {% endif %}
+                {% endif %}
+
+                {% if transaction.sender == current_user.id %}
+                <td class="sad">- $ {{transaction.prettyamount}}/-</td>
+                {% else %}
+                <td class="happy">+ $ {{transaction.prettyamount}}/-</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            <tr class="last-row">
+                <td colspan="2"><i class="fa-solid fa-wallet"></i> Net Wallet Balance</td>
+                <td class="happy">$ {{current_user.prettyBalance}}/-</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock pageBody %}

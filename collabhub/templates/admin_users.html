@@ -1,0 +1,102 @@
+{% extends 'pagebase.html' %}
+
+{% block pageTitle %}
+Users
+{% endblock pageTitle %}
+
+{% block pageStyles %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/admin_users.css')}}">
+{% endblock pageStyles %}
+
+{% block pageBody %}
+{% if users %}
+<div class="search-cont"><input type="text" id="searchInput" placeholder="Type to search a user..."></div>
+{% endif %}
+<div class="users-cont">
+    {% for user in users %}
+    {% if loop.index != 1 %}
+    <div class="user-cont">
+        <div class="prof-data">
+            <div class="img-container">
+                {% if user.role=="influencer" %}
+                {% if user.infludata.profile_photo %}
+                <img class="profile-picture"
+                    src="{{ url_for('static',filename='uploads/profile_pics/'+user.infludata.profile_photo)}}">
+                {% else %}
+                <img class="profile-picture" src="{{ url_for('static',filename='stockImages/blackpicture.jpg')}}">
+                {% endif %}
+                {% else %}
+                {% if user.sponsdata.profile_photo %}
+                <img class="profile-picture"
+                    src="{{ url_for('static',filename='uploads/profile_pics/'+user.sponsdata.profile_photo)}}">
+                {% else %}
+                <img class="profile-picture" src="{{ url_for('static',filename='stockImages/blackpicture.jpg')}}">
+                {% endif %}
+                {% endif %}
+            </div>
+            <div class="text-cont">
+                <h1>@{{user.username}}</h1>
+                <p>{{ user.role.upper() }}</p>
+            </div>
+        </div>
+        <div class="opts-cont">
+            <a href="{{ url_for('notify_a_user',user_id=user.id) }}" class="notify-btn">Notify</a>
+            <a href="{{ url_for('toggleflag',user_id=user.id) }}" {% if user.role=="influencer" %} {% if
+                user.infludata.is_flagged %} class="flag-btn flag-red" {% else %} class="flag-btn" {% endif %} {% else
+                %} {% if user.sponsdata.is_flagged %} class="flag-btn flag-red" {% else %} class="flag-btn" {% endif %}
+                {% endif %}><i class="fa-solid fa-flag"></i></a>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+<div class="modal">
+    <div class="modal-content">
+        <form method="post">
+            <div class="form-heading">
+                <h1>Send <span>Notification</span></h1>
+            </div>
+            <label for="content">Message</label>
+            <textarea name="content" id="content" required class="form-input form-about"
+                placeholder="Write here the Notification Content..."></textarea>
+            <input type="submit" value="Send Notification" class="form-submit">
+        </form>
+    </div>
+</div>
+{% endblock pageBody %}
+
+{% block pageScripts %}
+<script>
+    document.getElementById('searchInput').addEventListener('input', function () {
+        const filter = this.value.toLowerCase();
+        const items = document.querySelectorAll('.user-cont');
+        items.forEach(item => {
+            const h1Text = item.querySelector('h1').textContent.toLowerCase();
+            if (h1Text.includes(filter)) {
+                item.classList.remove('hidden');
+            } else {
+                item.classList.add('hidden');
+            }
+        });
+    });
+
+    let negotiateBtns = document.getElementsByClassName("notify-btn");
+    let negotiateButtons = Array.from(negotiateBtns);
+    let modal = document.querySelector(".modal");
+    modal.addEventListener("click", () => {
+        modal.style.display = "none";
+    })
+    modal.firstElementChild.addEventListener("click", (event) => {
+        event.stopPropagation();
+    })
+    let subform = modal.querySelector("form");
+
+    negotiateButtons.forEach((negotiateBtn) => {
+        negotiateBtn.addEventListener("click", (event) => {
+            event.preventDefault()
+            subform.action = negotiateBtn.getAttribute("href");
+            modal.style.display = "flex";
+        })
+    });
+</script>
+{% endblock pageScripts %}

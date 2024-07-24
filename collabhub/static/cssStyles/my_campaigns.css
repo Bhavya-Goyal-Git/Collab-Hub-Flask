@@ -65,34 +65,39 @@
     margin: 3px 5px 10px;
 }
 
+.cat-niches {
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+}
+
 .camp-cat {
     padding: 8px;
     border-radius: 12px;
     background-color: #8c60ec;
     font-size: 1.2rem;
     margin: 2px 8px 7px 0;
+    text-align: center;
+}
+
+.niches-cont {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 .camp-nic {
     color: rgba(255, 255, 255, 0.742);
-    margin-left: 10px;
+    margin-left: 5px;
     margin-right: 5px;
     font-size: 1.1rem;
 }
 
-.cat-niches {
-    display: flex;
-    align-items: center;
-    margin-left: 5px;
-    flex-wrap: wrap;
-}
-
-.cat-niches ul li {
-    display: inline-block;
+.cat-niches .nichh {
     color: rgba(255, 255, 255, 0.742);
     margin-left: 5px;
     font-size: 1.1rem;
-    list-style-type: none;
+    margin-bottom: 4px;
 }
 
 .budget {

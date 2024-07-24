@@ -1,0 +1,13 @@
+{% extends 'pagebase.html' %}
+
+{% block pageTitle %}
+Admin Home
+{% endblock pageTitle %}
+
+{% block pageStyles %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/admin_home.css')}}">
+{% endblock pageStyles %}
+
+{% block pageBody %}
+<h1>Admin hai hum</h1>
+{% endblock pageBody %}

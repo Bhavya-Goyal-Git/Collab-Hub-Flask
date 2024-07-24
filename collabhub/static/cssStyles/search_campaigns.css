@@ -144,18 +144,15 @@
 .camp-nic {
     color: rgba(255, 255, 255, 0.742);
     font-size: 1.1rem;
+    margin-bottom: 4px;
+    margin-right: 5px;
 }
 
-.camp-niches ul {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.camp-niches ul li {
+.camp-niches .nichh {
     color: rgba(255, 255, 255, 0.742);
-    margin-left: 5px;
+    margin-right: 5px;
     font-size: 1.1rem;
-    list-style-type: none;
+    margin-bottom: 4px;
 }
 
 .budget {

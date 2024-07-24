@@ -1,0 +1,155 @@
+.main-section {
+    width: 90%;
+    box-sizing: border-box;
+    margin: 40px auto;
+    border-radius: 15px;
+    padding: 10px 30px;
+    display: flex;
+    align-items: center;
+    background-color: #282828ba;
+}
+
+.profile-picture-cont {
+    height: 290px;
+    width: 290px;
+    border-radius: 50%;
+    margin: 8px auto;
+    position: relative;
+}
+
+.profile-picture {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.img-coverup {
+    background-color: rgba(255, 255, 255, 0.792);
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+.img-coverup-btn {
+    background-color: #8c60ec;
+    padding: 10px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.img-coverup-btn:hover {
+    background-color: #7446e7;
+}
+
+.options-cont {
+    flex-grow: 1;
+}
+
+.options-cont h1 {
+    text-align: center;
+    font-size: 3rem;
+    color: #4915cc;
+}
+
+.menu-buttons-cont,
+.money-cont {
+    display: flex;
+    align-items: center;
+    padding: 20px 10px;
+    background-color: #282828;
+    border-radius: 15px;
+    width: 90%;
+    margin: 20px auto;
+    flex-wrap: wrap;
+}
+
+.money-cont {
+    justify-content: space-between;
+}
+
+.menu-buttons-cont a,
+.money-cont a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.2rem;
+    padding: 7px;
+    border-radius: 7px;
+    margin: 5px 12px;
+}
+
+.menu-buttons-cont a {
+    background-color: #8b8b8be4;
+}
+
+.menu-buttons-cont a:hover {
+    background-color: #696969;
+}
+
+.money-cont h4 {
+    font-size: 1.7rem;
+    margin-left: 10px;
+    color: rgba(255, 255, 255, 0.792);
+}
+
+.money-cont .money-btnsss {
+    margin-right: 10px;
+}
+
+.money-cont h2 {
+    font-size: 2.3rem;
+    color: #24830fed;
+    margin-left: 10px;
+}
+
+.money-title {
+    display: flex;
+    align-items: center;
+}
+
+.good-btn {
+    background-color: #34ad19d6;
+}
+
+.good-btn:hover {
+    background-color: #24830fed;
+}
+
+.bad-btn {
+    background-color: #e04848;
+}
+
+.bad-btn:hover {
+    background-color: #bc2222e7;
+}
+
+.notif-dot {
+    position: relative;
+}
+
+.notif-dot::before {
+    content: "1";
+    background-color: #ef2f2f;
+    color: white;
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    top: -7px;
+    right: -7px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.7rem;
+}

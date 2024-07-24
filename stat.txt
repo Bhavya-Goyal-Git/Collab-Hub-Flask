@@ -1,0 +1,181 @@
+Influencerrr
+General Stats:
+
+Total Reach: Sum of all social handles' reach values. This can give sponsors an idea of your combined audience size.
+Number of Campaigns: Total number of campaigns the influencer has participated in.
+Average Payment Per Campaign: Average payment received per campaign.
+Total Earnings: Sum of all earnings from campaigns.
+Category and Niche Distribution:
+
+Top Categories: Categories where the influencer has the most presence.
+Top Niches: Specific niches within categories where the influencer is most active.
+Campaign Performance:
+
+Campaign Success Rate: Percentage of campaigns successfully completed.
+Most Successful Campaigns: Campaigns with the highest engagement or ROI.
+Ongoing Campaigns: Current campaigns the influencer is involved in.
+Financial Information:
+
+Wallet Balance: Current balance available.
+Transaction History: Recent transactions (both incoming and outgoing).
+
+
+
+For Sponsors:
+General Stats:
+
+Number of Campaigns Launched: Total campaigns launched by the sponsor.
+Average Campaign Budget: Average budget allocated per campaign.
+Total Spend on Campaigns: Sum of budgets across all campaigns.
+Category and Niche Preferences:
+
+Top Categories: Categories where the sponsor has been most active.
+Top Niches: Specific niches targeted by the sponsor.
+Campaign Insights:
+
+Campaign Status Breakdown: Distribution of campaigns by status (e.g., active, completed).
+Top Performing Campaigns: Highest performing campaigns in terms of engagement or conversions.
+Financial Overview:
+
+Current Spend vs Budget: Comparison of current spend against allocated budget.
+Transaction History: Recent financial transactions related to campaigns and payments.
+
+
+For Influencers:
+General Stats:
+
+Total Reach: Sum of all social handles' reach values.
+
+Graph Type: Bar chart or line chart to show reach over time or by platform.
+Number of Campaigns: Total number of campaigns the influencer has participated in.
+
+Graph Type: Pie chart or bar chart to show distribution by status (completed, ongoing).
+Average Payment Per Campaign: Average payment received per campaign.
+
+Graph Type: Line chart to track average payments over time or by campaign type.
+Total Earnings: Sum of all earnings from campaigns.
+
+Graph Type: Bar chart to show earnings per campaign or over time.
+Category and Niche Distribution:
+
+Top Categories: Categories where the influencer has the most presence.
+
+Graph Type: Pie chart or bar chart to display distribution.
+Top Niches: Specific niches within categories where the influencer is most active.
+
+Graph Type: Horizontal bar chart or grouped bar chart to compare activity across niches.
+Campaign Performance:
+
+Campaign Success Rate: Percentage of campaigns successfully completed.
+
+Graph Type: Pie chart or gauge chart to show success rate.
+Most Successful Campaigns: Campaigns with the highest engagement or ROI.
+
+Graph Type: Table or bar chart listing top campaigns by performance metrics.
+Ongoing Campaigns: Current campaigns the influencer is involved in.
+
+Graph Type: Table or list format with campaign details.
+Financial Information:
+
+Wallet Balance: Current balance available.
+
+Graph Type: Gauge chart or simple numerical display.
+Transaction History: Recent transactions (both incoming and outgoing).
+
+Graph Type: Table listing recent transactions with details.
+For Sponsors:
+General Stats:
+
+Number of Campaigns Launched: Total campaigns launched by the sponsor.
+
+Graph Type: Bar chart or line chart showing campaign count over time.
+Average Campaign Budget: Average budget allocated per campaign.
+
+Graph Type: Line chart or grouped bar chart comparing budget allocations.
+Total Spend on Campaigns: Sum of budgets across all campaigns.
+
+Graph Type: Bar chart or area chart showing expenditure over time.
+Category and Niche Preferences:
+
+Top Categories: Categories where the sponsor has been most active.
+
+Graph Type: Pie chart or bar chart to display distribution.
+Top Niches: Specific niches targeted by the sponsor.
+
+Graph Type: Horizontal bar chart or grouped bar chart to compare activity across niches.
+Campaign Insights:
+
+Campaign Status Breakdown: Distribution of campaigns by status (e.g., active, completed).
+
+Graph Type: Pie chart or stacked bar chart to show campaign status breakdown.
+Top Performing Campaigns: Highest performing campaigns in terms of engagement or conversions.
+
+Graph Type: Table or bar chart listing top campaigns by performance metrics.
+Financial Overview:
+
+Current Spend vs Budget: Comparison of current spend against allocated budget.
+
+Graph Type: Gauge chart or bar chart showing budget utilization.
+Transaction History: Recent financial transactions related to campaigns and payments.
+
+Graph Type: Table listing recent transactions with details.
+Graph Types:
+Bar Chart: Suitable for comparing quantities across different categories or over time.
+Line Chart: Ideal for showing trends over time or continuous data.
+Pie Chart: Useful for showing parts of a whole (percentage distributions).
+Gauge Chart: Effective for displaying single metrics like success rate or budget utilization.
+Table: Provides detailed information and is good for listing data points or transaction histories.
+Implementing these statistics with appropriate graph types will provide influencers and sponsors with clear insights into their performance, financials, and areas of focus within the platform.
+
+
+ADDDDDMIIIIIINNNNNNNNN
+
+User Management and Engagement:
+User Distribution by Role:
+
+Stat: Number of influencers, sponsors, and admins registered on the platform.
+Graph Type: Pie chart or stacked bar chart to visualize the distribution of user roles.
+User Activity Metrics:
+
+Stat: Daily, weekly, or monthly active users.
+Graph Type: Line chart to track active users over time.
+User Growth:
+
+Stat: New user registrations over time.
+Graph Type: Bar chart or line chart showing user growth trends.
+Campaign Management:
+Campaign Overview:
+
+Stat: Total number of campaigns launched.
+Graph Type: Bar chart or line chart to visualize campaign count over time.
+Campaign Status Breakdown:
+
+Stat: Distribution of campaigns by status (e.g., active, completed).
+Graph Type: Pie chart or stacked bar chart to show the breakdown of campaign statuses.
+Financial Monitoring:
+Financial Overview:
+
+Stat: Total earnings from campaigns.
+Graph Type: Bar chart or area chart showing earnings over time.
+Transaction Insights:
+
+Stat: Total transactions (incoming and outgoing) within a period.
+Graph Type: Line chart or stacked bar chart to track transaction volume.
+Platform Health and Performance:
+System Usage Metrics:
+
+Stat: Platform uptime/downtime.
+Graph Type: Gauge chart or simple numerical display.
+Performance Metrics:
+
+Stat: Response times and server load.
+Graph Type: Line chart or area chart showing performance metrics over time.
+Security and Compliance:
+User Flagging and Compliance:
+
+Stat: Number of flagged accounts (influencers, sponsors).
+Graph Type: Bar chart or pie chart to show flagged accounts by type.
+Notification and Communication Metrics:
+
+Stat: Number of notifications sent (system-generated and admin-initiated).
+Graph Type: Line chart or bar chart showing notification trends.

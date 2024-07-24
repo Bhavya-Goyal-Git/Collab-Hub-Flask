@@ -46,12 +46,10 @@ Search Influencers
             <p class="camp-date">From: {{ campaign.start_date }} | To: {{ campaign.end_date }}</p>
             <p class="camp-cat">{{ campaign.campaign_category.title }} Category</p>
             <div class="camp-niches">
-                <p class="camp-nic">Niches :</p>
-                <ul>
-                    {% for niche in campaign.campaign_niches %}
-                    <li>{{niche.title}}{% if loop.index!= campaign.campaign_niches|length %},{% endif %}</li>
-                    {% endfor %}
-                </ul>
+                <p class="camp-nic">Niches: </p>
+                {% for niche in campaign.campaign_niches %}
+                <p class="nichh">{{niche.title}}{% if loop.index!= campaign.campaign_niches|length %},{% endif %}</p>
+                {% endfor %}
             </div>
             <p class="budget">${{campaign.prettyBudget}}/-</p>
             <p class="descc"><span>Description :</span> {{ campaign.description }}</p>

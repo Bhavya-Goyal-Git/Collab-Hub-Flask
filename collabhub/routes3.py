@@ -111,3 +111,93 @@ def user_transactionspage(user_id):
         Transaction.reciever == user_id
     )).order_by(Transaction.dateoftransaction).all()
     return render_template("transactions.html",transacts = transacts)
+
+@app.route("/admin")
+@login_required
+def admin_page():
+    user = User.query.get(1)
+    if current_user.role!="admin" or current_user.id != 1:
+        abort(403)
+    return render_template("admin_home.html",user=user)
+
+@app.route("/admin/users")
+@login_required
+def admin_userspage():
+    if current_user.role!="admin" or current_user.id != 1:
+        abort(403)
+    users = User.query.all()
+    return render_template("admin_users.html",users= users)
+
+@app.route("/admin/campaigns")
+@login_required
+def admin_campaignspage():
+    if current_user.role!="admin" or current_user.id != 1:
+        abort(403)
+    camps = Campaign.query.order_by(Campaign.has_ended).all()
+    return render_template("admin_campaigns.html",campaigns=camps)
+
+@app.route("/admin/flaguser/<int:user_id>")
+@login_required
+def toggleflag(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        abort(400)
+    if current_user.role !="admin" or user_id == 1:
+        abort(403)
+    if user.role == "influencer":
+        user.infludata.is_flagged = not user.infludata.is_flagged
+        nowstat = user.infludata.is_flagged
+    else:
+        user.sponsdata.is_flagged = not user.sponsdata.is_flagged
+        nowstat = user.sponsdata.is_flagged
+    if nowstat:
+        flash(f"Flagged User @{user.username} !!",category="info")
+        notif = Notification(reciever=user_id)
+        notif.content = "<strong>ADMIN MESSAGE : </strong> Your profile has been <strong>FLAGGED</strong> by Admin due to suspicious activity! Contact at admincollabhub@12.com to resolve or your Account shall be Terminated."
+    else:
+        flash(f"Unflagged User @{user.username} !!",category="info")
+        notif = Notification(reciever=user_id)
+        notif.content = "<strong>ADMIN MESSAGE : </strong> Your profile has been <strong>UNFLAGGED</strong> by Admin. Sorry for the inconvinience. Happy Collaborating :)"
+    db.session.add_all([user,notif])
+    db.session.commit()
+    return redirect(url_for('admin_userspage'))
+
+@app.route("/admin/notifyUser/<int:user_id>",methods=["POST"])
+@login_required
+def notify_a_user(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        abort(400)
+    if current_user.role != "admin":
+        abort(403)
+    if request.form["content"]:
+        notif = Notification(reciever=user_id)
+        notif.content = "<strong>ADMIN MESSAGE : </strong>"+request.form["content"]
+        db.session.add(notif)
+        db.session.commit()
+        flash(f"Notification sent to @{user.username} successfully!!",category="success")
+    else:
+        flash("No notification body provided!!",category="danger")
+    return redirect(request.referrer)
+
+@app.route("/admin/flagcampaign/<int:campaign_id>")
+@login_required
+def toggleflagcampaign(campaign_id):
+    camp = Campaign.query.get(campaign_id)
+    if not camp:
+        abort(400)
+    if current_user.role !="admin":
+        abort(403)
+    camp.is_flagged = not camp.is_flagged
+    nowstat = camp.is_flagged
+    if nowstat:
+        flash(f"Flagged Campaign {camp.name} !!",category="info")
+        notif = Notification(reciever=camp.sponsor.user_id)
+        notif.content = f"<strong>ADMIN MESSAGE : </strong> Your Campign <strong>{camp.name}</strong> has been <strong>FLAGGED</strong> by Admin due to suspicious activity! Contact at admincollabhub@12.com to resolve or your Campaign shall be Terminated."
+    else:
+        flash(f"Unflagged Campaign {camp.name} !!",category="info")
+        notif = Notification(reciever=camp.sponsor.user_id)
+        notif.content = f"<strong>ADMIN MESSAGE : </strong> Your Campign <strong>{camp.name}</strong> has been <strong>UNFLAGGED</strong> by Admin. Sorry for the inconvinience. Happy Collaborating :)"
+    db.session.add_all([camp,notif])
+    db.session.commit()
+    return redirect(url_for('admin_campaignspage'))

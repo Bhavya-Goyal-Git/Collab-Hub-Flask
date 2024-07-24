@@ -25,7 +25,7 @@
     <nav>
         <div class="nav-img-container">
             <a href="{{url_for('home_page')}}"><img class="nav-logo"
-                    src="{{ url_for('static',filename='stockImages/Logo.jpeg')}}" /></a>
+                    src="{{ url_for('static',filename='stockImages/Logo.jpg')}}" /></a>
         </div>
         {% if current_user.role =="influencer" %}
         <a class="nav-link" href="{{url_for('influencer_homepage',user_id=current_user.id)}}"><i
@@ -37,10 +37,11 @@
         <a class="nav-link" href="{{ url_for('search_campaigns') }}"><i class="fa-solid fa-magnifying-glass"></i> Find
             Campaigns</a>
         <a class="nav-link" href=""><i class="fa-solid fa-chart-line"></i> My Stats</a>
-        {% else %}
-        {% if current_user.role =="sponsor" %}
+        {% elif current_user.role =="sponsor" %}
         <a class="nav-link" href="{{url_for('sponsor_homepage',user_id=current_user.id)}}"><i
                 class="fa-solid fa-house-user"></i> Home</a>
+        <a class="nav-link" href="{{url_for('create_campaignpage',user_id=current_user.id)}}"><i
+                class="fa-solid fa-plus"></i> Create Campaign</a>
         <a class="nav-link" {% if current_user.sponsdata %}
             href="{{url_for('my_campaignspage',sponsor_id=current_user.sponsdata.id)}}" {% else %}
             href="{{url_for('create_campaignpage',user_id=current_user.id)}}" {% endif %}><i
@@ -52,19 +53,21 @@
             Ad's</a>
         <a class="nav-link" href="{{ url_for('search_influencers') }}"><i class="fa-solid fa-magnifying-glass"></i>
             Find Influencers</a>
-        <a class="nav-link" href=""><i class="fa-solid fa-chart-line"></i> My Stats</a>
-        {% else %}
-        {% if current_user.role =="admin" %}
-        <a class="nav-link" href="">Home, mess center, stats, options</a>
-        <a class="nav-link" href="">Users</a>
-        <a class="nav-link" href="">Campaigns</a>
-        <a class="nav-link" href="">Create/delete cat,niche</a>
+
+        {% elif current_user.role =="admin" %}
+        <a class="nav-link" href="{{ url_for('admin_page') }}"><i class="fa-solid fa-house-user"></i> Home</a>
+        <a class="nav-link" href="{{url_for('admin_userspage')}}"><i class="fa-solid fa-users"></i> Users</a>
+        <a class="nav-link" href="{{url_for('admin_campaignspage')}}"><i class="fa-solid fa-file-signature"></i>
+            Campaigns</a>
+        <a class="nav-link" href="{{url_for('create_category')}}"><i class="fa-solid fa-plus"></i> Create Category</a>
+        <a class="nav-link" href="{{url_for('create_niche')}}"><i class="fa-solid fa-plus"></i>
+            Create Niche</a>
+        <a class="nav-link" href="{{url_for('notifications_page',user_id=current_user.id)}}"><i
+                class="fa-solid fa-comments"></i> Notifications</a>
         {% else %}
         <button class="nav-link" id="features-btn"><i class="fa-solid fa-book-bookmark"></i> Features</button>
         <button class="nav-link" id="howitworks-btn">How it Works <i class="fa-solid fa-question"></i></button>
         <button class="nav-link" id="contactus-btn"><i class="fa-solid fa-phone"></i> Contact Us</button>
-        {% endif %}
-        {% endif %}
         {% endif %}
 
         <div class="nav-btn-container">

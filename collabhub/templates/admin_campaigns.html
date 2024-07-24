@@ -1,0 +1,64 @@
+{% extends 'pagebase.html' %}
+
+{% block pageTitle %}
+Campaigns
+{% endblock pageTitle %}
+
+{% block pageStyles %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/admin_campaigns.css')}}">
+{% endblock pageStyles %}
+
+{% block pageBody %}
+{% if campaigns %}
+<div class="search-cont"><input type="text" id="searchInput" placeholder="Type to search a campaign..."></div>
+{% endif %}
+<div class="users-cont">
+    {% for campaign in campaigns %}
+    <div class="user-cont">
+        <div class="prof-data">
+            <div class="img-container">
+                {% if campaign.campaign_pic %}
+                <img class="profile-picture"
+                    src="{{ url_for('static',filename='uploads/campaign_pics/'+campaign.campaign_pic)}}">
+                {% endif %}
+            </div>
+            <div class="text-cont">
+                <div>
+                    <a href="{{ url_for('campaign_page',campaign_id=campaign.id) }}">
+                        <h1>{{campaign.name}}</h1>
+                    </a>
+                    <h6>{{ campaign.start_date }} | {{campaign.end_date}}</h6>
+                </div>
+                <p class="{{campaign.status}}">{{ campaign.status.upper() }}</p>
+                <p>{% if campaign.has_ended %}
+                    ENDED
+                    {% else %}
+                    RUNNING
+                    {% endif %}</p>
+            </div>
+        </div>
+        <div class="opts-cont">
+            <a href="{{ url_for('toggleflagcampaign',campaign_id=campaign.id) }}" {% if campaign.is_flagged %}
+                class="flag-btn flag-red" {% else %} class="flag-btn" {%endif%}><i class="fa-solid fa-flag"></i></a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock pageBody %}
+
+{% block pageScripts %}
+<script>
+    document.getElementById('searchInput').addEventListener('input', function () {
+        const filter = this.value.toLowerCase();
+        const items = document.querySelectorAll('.user-cont');
+        items.forEach(item => {
+            const h1Text = item.querySelector('h1').textContent.toLowerCase();
+            if (h1Text.includes(filter)) {
+                item.classList.remove('hidden');
+            } else {
+                item.classList.add('hidden');
+            }
+        });
+    });
+</script>
+{% endblock pageScripts %}

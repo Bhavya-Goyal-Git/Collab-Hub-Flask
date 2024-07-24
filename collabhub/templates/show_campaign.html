@@ -5,7 +5,7 @@ View Campaign
 {% endblock pageTitle %}
 
 {% block pageStyles %}
-{% if current_user.role=="influencer" %}
+{% if current_user.role=="influencer" or current_user.role =="admin" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/search_campaigns.css')}}">
 {% else %}
 <link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/my_campaigns.css')}}" />
@@ -13,7 +13,7 @@ View Campaign
 {% endblock pageStyles %}
 
 {% block pageBody %}
-{% if current_user.role=="influencer" %}
+{% if current_user.role=="influencer" or current_user.role =="admin" %}
 <div class="camp-container">
     <span class="camp-ribbon">
         <h3>By: {{ campaign.sponsor.company_name }}</h3>
@@ -36,12 +36,10 @@ View Campaign
         <p class="camp-date">From: {{ campaign.start_date }} | To: {{ campaign.end_date }}</p>
         <p class="camp-cat">{{ campaign.campaign_category.title }} Category</p>
         <div class="camp-niches">
-            <p class="camp-nic">Niches :</p>
-            <ul>
-                {% for niche in campaign.campaign_niches %}
-                <li>{{niche.title}}{% if loop.index!= campaign.campaign_niches|length %},{% endif %}</li>
-                {% endfor %}
-            </ul>
+            <p class="camp-nic">Niches: </p>
+            {% for niche in campaign.campaign_niches %}
+            <p class="nichh">{{niche.title}}{% if loop.index!= campaign.campaign_niches|length %},{% endif %}</p>
+            {% endfor %}
         </div>
         <p class="budget">${{campaign.prettyBudget}}/-</p>
         <p class="descc"><span>Description :</span> {{ campaign.description }}</p>
@@ -75,13 +73,15 @@ View Campaign
         </div>
         <p class="camp-date">From: {{ campaign.start_date }} | To: {{ campaign.end_date }}</p>
         <div class="cat-niches">
-            <p class="camp-cat">{{ campaign.campaign_category.title }} Category</p>
-            <p class="camp-nic">Niches :</p>
-            <ul>
+            <div>
+                <p class="camp-cat">{{ campaign.campaign_category.title }} Category</p>
+            </div>
+            <div class="niches-cont">
+                <p class="camp-nic">Niches: </p>
                 {% for niche in campaign.campaign_niches %}
-                <li>{{niche.title}}{% if loop.index!= campaign.campaign_niches|length %},{% endif %}</li>
+                <p class="nichh">{{niche.title}}{% if loop.index!= campaign.campaign_niches|length %},{% endif %}</p>
                 {% endfor %}
-            </ul>
+            </div>
         </div>
         <p class="budget">${{campaign.prettyBudget}}/-</p>
         <p class="descc"><span>Description :</span> {{ campaign.description }}</p>

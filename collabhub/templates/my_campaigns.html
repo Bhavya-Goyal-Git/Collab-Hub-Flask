@@ -31,13 +31,15 @@ My Campaigns
         </div>
         <p class="camp-date">From: {{ campaign.start_date }} | To: {{ campaign.end_date }}</p>
         <div class="cat-niches">
-            <p class="camp-cat">{{ campaign.campaign_category.title }} Category</p>
-            <p class="camp-nic">Niches: </p>
-            <ul>
+            <div>
+                <p class="camp-cat">{{ campaign.campaign_category.title }} Category</p>
+            </div>
+            <div class="niches-cont">
+                <p class="camp-nic">Niches: </p>
                 {% for niche in campaign.campaign_niches %}
-                <li>{{niche.title}}{% if loop.index!= campaign.campaign_niches|length %},{% endif %}</li>
+                <p class="nichh">{{niche.title}}{% if loop.index!= campaign.campaign_niches|length %},{% endif %}</p>
                 {% endfor %}
-            </ul>
+            </div>
         </div>
         <p class="budget">${{campaign.prettyBudget}}/-</p>
         <p class="descc"><span>Description :</span> {{ campaign.description }}</p>

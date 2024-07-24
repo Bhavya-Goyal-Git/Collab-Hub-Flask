@@ -55,7 +55,7 @@ def login_page():
                         flash("Your Account has been flagged inappropriate by the Admin",category="danger")
                     return redirect(url_for("sponsor_homepage",user_id=user.id))
                 else:
-                    pass #admin home page
+                    return redirect(url_for("admin_page"))
             else:
                 flash("ERROR IN LOGIN : Password Does Not Match!",category="danger")
         else:

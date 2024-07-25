@@ -101,7 +101,7 @@ influencerniche = db.Table(
 )
 campaignniche = db.Table(
    "campaignniche",
-   Column("ad_id", ForeignKey("campaign.id"), primary_key=True),
+   Column("campaign_id", ForeignKey("campaign.id"), primary_key=True),
    Column("niche_id", ForeignKey("niche.id"), primary_key=True),
 )
 

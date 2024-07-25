@@ -111,5 +111,12 @@ def ad_req_validator(form,checkfirst):
         flash("Payment Amount field must be positive number",category="danger")
         return False
     return True
-    
 
+
+def onlytext(char):
+    return char.isalpha() or char.isspace()
+ 
+def search_query_validator(searchquery):
+    if searchquery:
+        return "".join(filter(onlytext,searchquery))
+    return None

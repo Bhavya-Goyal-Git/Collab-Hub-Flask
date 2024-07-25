@@ -32,7 +32,7 @@ Transactions
                 {% endif %}
                 {% else %}
                 {% if transaction.sender %}
-                <td class="happy">Recieved from @{{transaction.reciever_user.username}}</td>
+                <td class="happy">Recieved from @{{transaction.sender_user.username}}</td>
                 {% else %}
                 <td class="happy">Deposit</td>
                 {% endif %}

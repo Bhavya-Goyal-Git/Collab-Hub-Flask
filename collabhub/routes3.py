@@ -1,7 +1,7 @@
 from collabhub import app, db
 from flask import render_template, flash, redirect, request, url_for, abort
 from flask_login import current_user, login_required
-from collabhub.models import User, Notification, Campaign, Adrequest, Transaction
+from collabhub.models import User, Notification, Campaign, Adrequest, Transaction, Influencerdata
 from sqlalchemy import or_
 
 @app.route("/<int:user_id>/notifications")
@@ -201,3 +201,12 @@ def toggleflagcampaign(campaign_id):
     db.session.add_all([camp,notif])
     db.session.commit()
     return redirect(url_for('admin_campaignspage'))
+
+@app.route("/influencer/<int:influencer_id>/stats")
+def influencer_stats(influencer_id):
+    influencer = Influencerdata.query.get(influencer_id)
+    if not influencer:
+        abort(400)
+    if current_user.role != "influencer" or current_user.infludata.id!=influencer_id:
+        abort(403)
+    return render_template("influencer_stats.html",influencer=influencer)

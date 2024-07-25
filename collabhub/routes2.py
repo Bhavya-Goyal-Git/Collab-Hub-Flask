@@ -122,8 +122,8 @@ def search_influencers():
     if current_user.role != "sponsor":
         abort(403)
     influencers = []
-    searchQuery = search_query_validator(request.form["content"])
     if request.method == "POST":
+        searchQuery = search_query_validator(request.form["content"])
         if not searchQuery:
             flash("No Search Query Provided!",category="danger")
         elif request.form["search_by"] == "name":
@@ -168,8 +168,8 @@ def search_campaigns():
     if current_user.role != "influencer":
         abort(403)
     campaigns = []
-    searchQuery = search_query_validator(request.form["content"])
     if request.method == "POST":
+        searchQuery = search_query_validator(request.form["content"])
         if not searchQuery:
             flash("No Search Query Provided!",category="danger")
         elif request.form["search_by"] == "company_name":

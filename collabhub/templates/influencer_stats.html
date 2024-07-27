@@ -6,8 +6,219 @@ My Stats
 
 {% block pageStyles %}
 <link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/influencer_stats.css')}}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock pageStyles %}
 
 {% block pageBody %}
+<div class="counters-cont">
+    <div class="counter">
+        <h1>{{total_reach}}</h1>
+        <p>Total Reach</p>
+    </div>
+    <div class="counter">
+        <h1>{{ average_reach }}</h1>
+        <p>Average Reach</p>
+    </div>
+    <div class="counter">
+        <h1>{{ total_ads }}</h1>
+        <p>Ad Requests Recieved</p>
+    </div>
+    <div class="counter">
+        <h1>${{ total_earning }}</h1>
+        <p>Total Earnings</p>
+    </div>
+    <div class="counter">
+        <h1>{{ success_percent }}%</h1>
+        <p>Ad Request Success</p>
+    </div>
+</div>
 
+<div class="charts-cont">
+    <div class="chart"><canvas id="reach-per-sm"></canvas></div>
+    <div class="chart">
+        <h1>Ad Statuses Distribution</h1>
+        <canvas id="ad-req-status"></canvas>
+    </div>
+    <div class="chart">
+        <h1>Categories Participated</h1>
+        <canvas id="cat-partss"></canvas>
+    </div>
+    <div class="chart"><canvas id="payment-per-adreq"></canvas></div>
+</div>
 {% endblock pageBody %}
+
+{% block pageScripts %}
+<script>
+
+    let adStats = {{ ad_stats| tojson}};
+    let categoriesParticipated = {{ categories_participated| tojson}};
+    let paymentPerAdRequest = {{ payment_per_adreq| tojson}};
+
+    const BackColors = ['#FF6384ee', '#36A2EBee', '#FFCE56ee', '#4BC0C0ee', '#9966FFee', '#FF9F40ee', '#FF6F61ee', '#6B5B95ee', '#88B04Bee', '#F7CAC9ee', '#92A8D1ee', '#F0B27Aee', '#F5B041ee', '#D5DBDBee']
+
+    let reachPerSm = new Chart(document.getElementById('reach-per-sm'), {
+        type: 'bar',
+        data: {
+            labels: {{ social_handles| tojson}},
+    datasets: [{
+        label: 'Social Media Reach',
+        data: {{ social_handles_reach| tojson}},
+        backgroundColor: BackColors,
+        maxBarThickness: 90,
+            }]
+        },
+    options: {
+        plugins: {
+            legend: {
+                position: 'top',
+                    labels: {
+                    color: 'white',
+                        font: {
+                        size: 18,
+                        }
+                }
+            },
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: 'white',
+                        font: {
+                        size: 16,
+                        }
+                },
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.15)',
+                    },
+            },
+            y: {
+                ticks: {
+                    color: 'white',
+                        font: {
+                        size: 16,
+                        }
+                },
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.15)', 
+                    },
+                beginAtZero: true
+            }
+        }
+    }
+    });
+
+    let AdReqStat = new Chart(document.getElementById('ad-req-status'), {
+        type: 'pie',
+        data: {
+            labels: Object.keys(adStats),
+            datasets: [{
+                label: 'Ad Status Count',
+                data: Object.values(adStats),
+                backgroundColor: BackColors,
+                borderWidth: 0
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'right',
+                    labels: {
+                        color: 'white',
+                        font: {
+                            size: 18,
+                        },
+                        padding: 10,
+                    }
+                },
+            }
+        }
+    });
+    let CatParticipated = new Chart(document.getElementById('cat-partss'), {
+        type: 'pie',
+        data: {
+            labels: Object.keys(categoriesParticipated),
+            datasets: [{
+                label: 'Category Count',
+                data: Object.values(categoriesParticipated),
+                backgroundColor: BackColors,
+                borderWidth: 0
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'right',
+                    labels: {
+                        color: 'white',
+                        font: {
+                            size: 18,
+                        },
+                        padding: 10,
+                    }
+                },
+            }
+        }
+    });
+
+    let PaymentperAd = new Chart(document.getElementById('payment-per-adreq'), {
+        type: 'line',
+        data: {
+            labels: paymentPerAdRequest.map((value, index) =>
+                `AD-${index}`
+            ),
+            datasets: [{
+                label: 'Payment Per Ad Request',
+                data: paymentPerAdRequest,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                fill: true,
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    ticks: {
+                        color: 'white',
+                        font: {
+                            size: 16,
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: 'white',
+                        font: {
+                            size: 16,
+                        },
+                        callback: function (value) {
+                            return '$' + value;
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        color: 'white',
+                        font: {
+                            size: 16,
+                        }
+                    }
+                },
+            }
+        }
+    });
+</script>
+{% endblock pageScripts %}

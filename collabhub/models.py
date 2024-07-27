@@ -17,6 +17,7 @@ class User(db.Model,UserMixin):
    password_hash:Mapped[str] = mapped_column(nullable=False)
    role:Mapped[str] = mapped_column(nullable=False)
    walletbalance:Mapped[int] = mapped_column(default=0)
+   dateofjoining:Mapped[date] = mapped_column(default=date.today())
 
    __table_args__ =(
       CheckConstraint("role IN ('influencer', 'sponsor','admin')", name='check_role_valid'),

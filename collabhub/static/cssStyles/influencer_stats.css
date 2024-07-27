@@ -1,0 +1,56 @@
+.counters-cont {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px 0;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.counter {
+    padding: 15px 25px;
+    border-radius: 15px;
+    background: linear-gradient(rgb(21, 13, 107) 1.1%, rgb(188, 16, 80) 130.5%);
+    text-align: center;
+}
+
+.counter p {
+    margin-top: 8px;
+    font-size: 1.2rem;
+}
+
+.charts-cont {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+
+.chart {
+    width: 45%;
+    box-sizing: border-box;
+    padding: 20px;
+    height: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    margin: 20px;
+    background-color: #282828db;
+    border-radius: 10px;
+}
+
+.chart h1 {
+    position: absolute;
+    top: 25px;
+    left: 30%;
+    transform: translateX(-40px);
+    color: rgba(255, 255, 255, 0.86);
+    width: 800px;
+}

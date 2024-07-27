@@ -10,9 +10,21 @@ My Ad Requests
 
 {% block pageBody %}
 {% if influencer.ads %}
+<div class="select-cont">
+    <select id="ad-status-select" class="form-input form-select">
+        <option value="all">All</option>
+        <option value="unapproved">Unapproved</option>
+        <option value="pending">Pending</option>
+        <option value="rejected">Rejected</option>
+        <option value="accepted">Accepted</option>
+        <option value="negotiation">Negotiation</option>
+        <option value="unsettled">Unsettled</option>
+        <option value="completed">Completed</option>
+    </select>
+</div>
 <div class="ads-container">
     {% for ad in influencer.ads %}
-    <div {% if ad.status=='completed' %}class="ad-container ad-completed" {% else %}class="ad-container" {% endif %}>
+    <div class="ad-container ad-{{ad.status}}">
         <span class="camp-ribbon">
             <h2>Request Status :</h2>
             <h1>{{ ad.status.capitalize() }}</h1>
@@ -63,7 +75,6 @@ My Ad Requests
         </div>
     </div>
     {% endfor %}
-    <button id="Show-completed" class="purple-btn">Show Completed Ad Requests</button>
 </div>
 {% endif %}
 <div class="modal">
@@ -126,28 +137,27 @@ My Ad Requests
         })
     });
 
-    let someAds = Array.from(document.getElementsByClassName("ad-completed"));
-    let adToggle = document.getElementById("Show-completed");
-    let showcomp = false;
+    let allAds = Array.from(document.getElementsByClassName("ad-container"));
+    let selectAds = document.getElementById("ad-status-select");
     window.addEventListener("DOMContentLoaded", () => {
-        if (someAds.length == 0) {
-            adToggle.style.display = "none";
+        if (allAds.length == 0) {
+            selectAds.style.display = "none";
         }
-    })
-    adToggle.addEventListener("click", () => {
-        if (!showcomp) {
-            someAds.forEach(ad => ad.style.display = "block")
-            showcomp = true;
-            adToggle.classList.remove("purple-btn");
-            adToggle.classList.add("red-btn");
-            adToggle.innerText = "Hide Completed Ad Requests";
+    });
+    selectAds.addEventListener("change", (event) => {
+        if (event.target.value == "all") {
+            allAds.forEach((add) => {
+                add.style.display = "block";
+            });
         } else {
-            someAds.forEach(ad => ad.style.display = "none")
-            showcomp = false;
-            adToggle.classList.add("purple-btn");
-            adToggle.classList.remove("red-btn");
-            adToggle.innerText = "Show Completed Ad Requests";
+            allAds.forEach((add) => {
+                if (add.classList.contains(`ad-${event.target.value}`)) {
+                    add.style.display = "block";
+                } else {
+                    add.style.display = "none";
+                }
+            });
         }
-    })
+    });
 </script>
 {% endblock pageScripts %}

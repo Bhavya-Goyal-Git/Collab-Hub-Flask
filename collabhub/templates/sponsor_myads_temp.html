@@ -1,4 +1,4 @@
-<div {% if ad.status=='completed' %}class="ad-container ad-completed" {% else %}class="ad-container" {% endif %}>
+<div class="ad-container ad-{{ad.status}}">
     <span class="camp-ribbon">
         <h2>Request Status :</h2>
         <h1>{{ ad.status.capitalize() }}</h1>

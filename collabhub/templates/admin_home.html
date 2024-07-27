@@ -6,8 +6,267 @@ Admin Home
 
 {% block pageStyles %}
 <link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/admin_home.css')}}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock pageStyles %}
 
 {% block pageBody %}
-<h1>Admin hai hum</h1>
+<div class="counters-cont">
+    <div class="counter">
+        <h1>{{total_users}}</h1>
+        <p>Total Users</p>
+    </div>
+    <div class="counter">
+        <h1>{{ total_campaigns }}</h1>
+        <p>Total Campaigns</p>
+    </div>
+    <div class="counter">
+        <h1>{{ total_transactions }}</h1>
+        <p>Total Transactions</p>
+    </div>
+    <div class="counter">
+        <h1>${{ transactions_worth }}</h1>
+        <p>Net Transactions Worth</p>
+    </div>
+    <div class="counter">
+        <h1>${{ total_funds }}</h1>
+        <p>Total Funds</p>
+    </div>
+    <div class="counter">
+        <h1>{{ flagged_users_percent }}%</h1>
+        <p>Accounts Flagged</p>
+    </div>
+    <div class="counter">
+        <h1>{{ flagged_campaigns_percent }}%</h1>
+        <p>Campaigns Flagged</p>
+    </div>
+    <div class="counter">
+        <h1>{{ total_ads }}</h1>
+        <p>Total Ad Requests</p>
+    </div>
+    <div class="counter">
+        <h1>{{ admin_notifs }}</h1>
+        <p>Pending Notifications</p>
+    </div>
+</div>
+<div class="charts-cont">
+    <div class="chart">
+        <h1>User Role Distribution</h1><canvas id="user-role-dist"></canvas>
+    </div>
+    <div class="chart"><canvas id="user-growth-line"></canvas></div>
+    <div class="chart"><canvas id="campaign-cat"></canvas></div>
+    <div class="chart">
+        <h1>Campaigns' Stats</h1><canvas id="campaign-run"></canvas>
+    </div>
+    <div class="chart">
+        <h1>Influencer Demographic</h1><canvas id="influencer-demo"></canvas>
+    </div>
+    <div class="chart"><canvas id="influencer-cat"></canvas></div>
+    <div class="chart">
+        <h1>Ad Requests' Status</h1><canvas id="adreq-statuses"></canvas>
+    </div>
+</div>
 {% endblock pageBody %}
+
+{% block pageScripts %}
+<script>
+    const BackColors = ['#FF6384ee', '#36A2EBee', '#FFCE56ee', '#4BC0C0ee', '#9966FFee', '#FF9F40ee', '#FF6F61ee', '#6B5B95ee', '#88B04Bee', '#F7CAC9ee', '#92A8D1ee', '#F0B27Aee', '#F5B041ee', '#D5DBDBee'];
+    const PieOptions = {
+        plugins: {
+            legend: {
+                display: true,
+                position: 'right',
+                labels: {
+                    color: 'white',
+                    font: {
+                        size: 18,
+                    },
+                    padding: 10,
+                }
+            },
+        }
+    }
+    const BarOptions = {
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: {
+                    color: 'white',
+                    font: {
+                        size: 18,
+                    }
+                }
+            },
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: 'white',
+                    font: {
+                        size: 16,
+                    }
+                },
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.15)',
+                },
+            },
+            y: {
+                ticks: {
+                    color: 'white',
+                    font: {
+                        size: 16,
+                    }
+                },
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.15)',
+                },
+                beginAtZero: true
+            }
+        }
+    }
+    const userRoles = {{ user_roles| tojson}};
+    const userGrowths = {{ user_growth | tojson}};
+    const campaignCatCounts = {{ campaigncatcounts| tojson}};
+    const campaignRuns = {{ campaign_stats| tojson}};
+    const influencerDemos = {{ influencer_demograpic| tojson}};
+    const influencerCatCounts = {{ influencercatcounts| tojson}};
+    const adRequestStats = {{ adreqs | tojson}};
+
+
+    let UserRoleDist = new Chart(document.getElementById('user-role-dist'), {
+        type: 'pie',
+        data: {
+            labels: Object.keys(userRoles),
+            datasets: [{
+                label: 'User Type Count',
+                data: Object.values(userRoles),
+                backgroundColor: BackColors,
+                borderWidth: 0
+            }]
+        },
+        options: PieOptions
+    });
+    let UserGrowthDIst = new Chart(document.getElementById('user-growth-line'), {
+        type: 'line',
+        data: {
+            labels: Object.keys(userGrowths),
+            datasets: [{
+                label: 'Users Joined',
+                data: Object.values(userGrowths),
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                fill: true,
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    ticks: {
+                        color: 'white',
+                        font: {
+                            size: 16,
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: 'white',
+                        font: {
+                            size: 16,
+                        },
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        color: 'white',
+                        font: {
+                            size: 16,
+                        }
+                    }
+                },
+            }
+        }
+    });
+    let CampaignCategories = new Chart(document.getElementById('campaign-cat'), {
+        type: 'bar',
+        data: {
+            labels: Object.keys(campaignCatCounts),
+            datasets: [{
+                label: 'Campaign Categories',
+                data: Object.values(campaignCatCounts),
+                backgroundColor: BackColors,
+                maxBarThickness: 90,
+            }]
+        },
+        options: BarOptions
+    });
+    let CampaignRunningStatus = new Chart(document.getElementById('campaign-run'), {
+        type: 'pie',
+        data: {
+            labels: Object.keys(campaignRuns).map((val) => {
+                if (val === "true") {
+                    return "Ended";
+                }
+                return "Running";
+            }),
+            datasets: [{
+                label: 'Campaign Count',
+                data: Object.values(campaignRuns),
+                backgroundColor: BackColors,
+                borderWidth: 0
+            }]
+        },
+        options: PieOptions
+    });
+    let InfluencerDemographs = new Chart(document.getElementById('influencer-demo'), {
+        type: 'pie',
+        data: {
+            labels: Object.keys(influencerDemos),
+            datasets: [{
+                label: 'Influencer Count',
+                data: Object.values(influencerDemos),
+                backgroundColor: BackColors,
+                borderWidth: 0
+            }]
+        },
+        options: PieOptions
+    });
+    let InfluencerCategories = new Chart(document.getElementById('influencer-cat'), {
+        type: 'bar',
+        data: {
+            labels: Object.keys(influencerCatCounts),
+            datasets: [{
+                label: 'Influencer Categories',
+                data: Object.values(influencerCatCounts),
+                backgroundColor: BackColors,
+                maxBarThickness: 90,
+            }]
+        },
+        options: BarOptions
+    });
+    let AdReqStat = new Chart(document.getElementById('adreq-statuses'), {
+        type: 'pie',
+        data: {
+            labels: Object.keys(adRequestStats),
+            datasets: [{
+                label: 'User Type Count',
+                data: Object.values(adRequestStats),
+                backgroundColor: BackColors,
+                borderWidth: 0
+            }]
+        },
+        options: PieOptions
+    });
+</script>
+{% endblock pageScripts %}

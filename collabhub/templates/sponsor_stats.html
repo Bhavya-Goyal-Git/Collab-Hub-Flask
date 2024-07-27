@@ -1,0 +1,281 @@
+{% extends 'pagebase.html' %}
+
+{% block pageTitle %}
+My Stats
+{% endblock pageTitle %}
+
+{% block pageStyles %}
+<link rel="stylesheet" href="{{ url_for('static',filename='cssStyles/admin_home.css')}}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock pageStyles %}
+
+{% block pageBody %}
+<div class="counters-cont">
+    <div class="counter">
+        <h1>{{total_campaigns}}</h1>
+        <p>Campaigns Launched</p>
+    </div>
+    <div class="counter">
+        <h1>${{ avg_camp_budget }}</h1>
+        <p>Average Campaign Budget</p>
+    </div>
+    <div class="counter">
+        <h1>${{ total_money_spent }}</h1>
+        <p>Total Money Spent</p>
+    </div>
+    <div class="counter">
+        <h1>{{ total_adreqs }}</h1>
+        <p>Total Ad Requests</p>
+    </div>
+    <div class="counter">
+        <h1>{{ successful_ads }}%</h1>
+        <p>Successful Ad Requests</p>
+    </div>
+</div>
+<div class="charts-cont">
+    <div class="chart">
+        <canvas id="budget-among-camps"></canvas>
+    </div>
+    <div class="chart">
+        <h1>Campaign Categories</h1>
+        <canvas id="camp-cats"></canvas>
+    </div>
+    <div class="chart">
+        <h1>Ad Requests' Status</h1>
+        <canvas id="ad-statuses"></canvas>
+    </div>
+    <div class="chart">
+        <canvas id="adreq-per-camp"></canvas>
+    </div>
+    <div class="chart">
+        <canvas id="budgets-vs-spends"></canvas>
+    </div>
+</div>
+{% endblock pageBody %}
+
+{% block pageScripts %}
+<script>
+    const BackColors = ['#FF6384ee', '#36A2EBee', '#FFCE56ee', '#4BC0C0ee', '#9966FFee', '#FF9F40ee', '#FF6F61ee', '#6B5B95ee', '#88B04Bee', '#F7CAC9ee', '#92A8D1ee', '#F0B27Aee', '#F5B041ee', '#D5DBDBee'];
+    const PieOptions = {
+        plugins: {
+            legend: {
+                display: true,
+                position: 'right',
+                labels: {
+                    color: 'white',
+                    font: {
+                        size: 18,
+                    },
+                    padding: 10,
+                }
+            },
+        }
+    }
+    const BarOptions = {
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: {
+                    color: 'white',
+                    font: {
+                        size: 18,
+                    }
+                }
+            },
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: 'white',
+                    font: {
+                        size: 16,
+                    }
+                },
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.15)',
+                },
+            },
+            y: {
+                ticks: {
+                    color: 'white',
+                    font: {
+                        size: 16,
+                    },
+                    callback: function (value) {
+                        return '$' + value;
+                    }
+                },
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.15)',
+                },
+                beginAtZero: true
+            }
+        }
+    }
+    const LineOptions = {
+        scales: {
+            x: {
+                ticks: {
+                    color: 'white',
+                    font: {
+                        size: 16,
+                    }
+                },
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                }
+            },
+            y: {
+                ticks: {
+                    color: 'white',
+                    font: {
+                        size: 16,
+                    },
+                    callback: function (value) {
+                        return '$' + value;
+                    }
+                },
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                },
+                beginAtZero: true
+            }
+        },
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                    color: 'white',
+                    font: {
+                        size: 16,
+                    }
+                }
+            },
+        }
+    };
+
+    const budgetAmongCampaigns = {{ budget_among_camps| tojson}};
+    const campaignCatCounts = {{ catcounts| tojson}};
+    const adreqPerCampg = {{ adreq_per_camp| tojson}};
+    const adreqStats = {{ ad_stats| tojson}};
+    const bVsSnames = {{ budgetVsSpend_perCamp_names| tojson}};
+    const bVsSbudgets = {{ budgetVsSpend_perCamp_budgets| tojson}};
+    const bVsSspends = {{ budgetVsSpend_perCamp_spends | tojson}};
+
+    let CampBudgetDist = new Chart(document.getElementById('budget-among-camps'), {
+        type: 'line',
+        data: {
+            labels: Object.keys(budgetAmongCampaigns),
+            datasets: [{
+                label: 'Campaign Budget',
+                data: Object.values(budgetAmongCampaigns),
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                fill: true,
+                tension: 0.1
+            }]
+        },
+        options: LineOptions
+    });
+    let CampaignCats = new Chart(document.getElementById('camp-cats'), {
+        type: 'pie',
+        data: {
+            labels: Object.keys(campaignCatCounts),
+            datasets: [{
+                label: 'Campaign Count',
+                data: Object.values(campaignCatCounts),
+                backgroundColor: BackColors,
+                borderWidth: 0
+            }]
+        },
+        options: PieOptions
+    });
+    let AdStats = new Chart(document.getElementById('ad-statuses'), {
+        type: 'pie',
+        data: {
+            labels: Object.keys(adreqStats),
+            datasets: [{
+                label: 'Ad Requests',
+                data: Object.values(adreqStats),
+                backgroundColor: BackColors,
+                borderWidth: 0
+            }]
+        },
+        options: PieOptions
+    });
+    let AdreqPerCamp = new Chart(document.getElementById('adreq-per-camp'), {
+        type: 'line',
+        data: {
+            labels: Object.keys(adreqPerCampg),
+            datasets: [{
+                label: 'Ad Request Per Campaign',
+                data: Object.values(adreqPerCampg),
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                fill: true,
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    ticks: {
+                        color: 'white',
+                        font: {
+                            size: 16,
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: 'white',
+                        font: {
+                            size: 16,
+                        },
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        color: 'white',
+                        font: {
+                            size: 16,
+                        }
+                    }
+                },
+            }
+        }
+    });
+    let CampaignCategories = new Chart(document.getElementById('budgets-vs-spends'), {
+        type: 'bar',
+        data: {
+            labels: bVsSnames,
+            datasets: [{
+                label: 'Campaign Budgets',
+                data: bVsSbudgets,
+                backgroundColor: ['#FF6384ee'],
+                maxBarThickness: 90,
+            },
+            {
+                label: 'Campaign Spends',
+                data: bVsSspends,
+                backgroundColor: ['#36A2EBee'],
+                maxBarThickness: 90,
+            },]
+        },
+        options: BarOptions
+    });
+
+</script>
+{% endblock pageScripts %}

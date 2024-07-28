@@ -141,7 +141,10 @@ def admin_page():
     transactions = db.session.query(func.count(Transaction.id),func.sum(Transaction.amount)).filter(and_(Transaction.sender!=None, Transaction.reciever!=None)).one_or_none()
     if transactions:
         total_transactions = transactions[0]
-        transactions_worth = transactions[1]
+        if transactions[1]:
+            transactions_worth = transactions[1]
+        else:
+            transactions_worth = 0
     else:
         total_transactions = 0
         transactions_worth = 0

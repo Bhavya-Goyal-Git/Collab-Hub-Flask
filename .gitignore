@@ -8,4 +8,7 @@ instance/
 __pycache__
 
 #images
-collabhub/static/uploads/
+collabhub/static/uploads/campaign_pics/*
+collabhub/static/uploads/profile_pics/*
+!collabhub/static/uploads/campaign_pics/.gitkeep
+!collabhub/static/uploads/profile_pics/.gitkeep

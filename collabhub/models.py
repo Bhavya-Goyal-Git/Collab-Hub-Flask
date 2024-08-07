@@ -184,7 +184,7 @@ class Adrequest(db.Model):
 
    ad_campaign:Mapped['Campaign'] = relationship(back_populates="ad_requests")
    ad_influencer:Mapped['Influencerdata'] = relationship(back_populates="ads")
-   messages:Mapped[List['Admessages']] = relationship()
+   messages:Mapped[List['Admessages']] = relationship(cascade='all, delete-orphan')
 
    @property
    def prettypayment(self):
